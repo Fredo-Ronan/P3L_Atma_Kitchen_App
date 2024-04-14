@@ -24,14 +24,14 @@ export async function POST(req: Request){
     // parse result query with custom function for easy acces to attribute
     const final_result = parseResultQuery(rows);
 
-    // check if the user's email is verified or not, if not then response with status of NOT VERIFIED
-    if(JSON.parse(final_result).ACTIVE === 0){
-        return new Response(JSON.stringify({status: "NOT VERIFIED", data: null}));
-    }
-
     // check if the user is found by cheking the final result value, and if it's empty then the user is not found
     if(final_result !== ''){
-        // check if the password is correct or not
+
+        if(JSON.parse(final_result).ACTIVE === 0){
+            return new Response(JSON.stringify({status: "NOT VERIFIED", data: null}));
+        }
+
+        // check if the password is match with the hashed password using bcrypt compare method to compare hash accordig to bcrypt
         const isPasswordMatch = await bcrypt.compare(passwordRequest, JSON.parse(final_result).PASSWORD);
         
         if(isPasswordMatch){
