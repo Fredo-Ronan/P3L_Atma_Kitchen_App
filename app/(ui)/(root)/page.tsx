@@ -1,4 +1,4 @@
-import { getLoggedInUserData, logoutCustomer } from "@/lib";
+import { getLoggedInUserData, getSessionCustomer, logoutCustomer } from "@/lib";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 const CustomerHomePage = async () => {
   const userData = await getLoggedInUserData();
 
-  console.log("Data Fetched from customer home page");
-  console.log(JSON.parse(userData!));
+  // console.log("Data Fetched from customer home page");
+  // console.log(JSON.parse(userData!));
 
   return (
     <div>

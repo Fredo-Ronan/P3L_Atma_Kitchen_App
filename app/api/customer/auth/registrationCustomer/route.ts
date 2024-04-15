@@ -2,7 +2,7 @@ import { connect } from "@/db";
 import MailService from "@/services/mail/mailService";
 import verifyEmail from "@/templates/verifyEmailTemplates";
 import { TableListNames } from "@/constants/tableNames";
-import bcrypt from "bcryptjs";
+import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 
 /*
     API ROUTE FOR CUSTOMER REGISTRATION
@@ -67,5 +67,5 @@ export async function POST(req: Request){
     });
     
 
-    return new Response(JSON.stringify({status: "OK", data: null}));
+    return new Response(JSON.stringify({status: StatusCodesP3L.OK, data: null}));
 }

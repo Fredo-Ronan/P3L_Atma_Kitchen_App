@@ -8,8 +8,12 @@ export async function middleware(request: NextRequest){
     const sessionAdmin = cookies().get(ADMIN_SESSION_NAME);
     const sessionCustomer = cookies().get(CUSTOMER_SESSION_NAME);
 
-    console.log("Session Admin => " + sessionAdmin);
-    console.log("Session Customer => " + sessionCustomer);
+    const authorization = request.headers.get("Authorization");
+    console.log("Authorization => " + authorization);
+
+    // FOR DEBUGGING
+    // console.log("Session Admin => " + sessionAdmin);
+    // console.log("Session Customer => " + sessionCustomer);
     
     // if there is a session of a logged in customer, then update that session so it's not expire
     if(sessionCustomer){

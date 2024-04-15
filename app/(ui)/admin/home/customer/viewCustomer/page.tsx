@@ -13,7 +13,7 @@ const CustomerPage = () => {
     const [dataCustomer, setDataCustomer] = useState<Customer[]>();
 
     async function getCustomer () {
-      const res = await fetch('/api/customer/getCustomer');
+      const res = await fetch('/api/customer/main/getCustomer');
       const data = await res.json();
 
       // console.log(data.data);

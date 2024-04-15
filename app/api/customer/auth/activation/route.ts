@@ -1,3 +1,4 @@
+import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 import { TableListNames } from "@/constants/tableNames";
 import { connect } from "@/db";
 
@@ -15,5 +16,5 @@ export async function POST(req: Request){
     const [resultUpdate, fields] = await connection.execute(query, [body.user_id]);
     connection.end();
 
-    return new Response(JSON.stringify({status: "OK", data: null}));
+    return new Response(JSON.stringify({status: StatusCodesP3L.OK, data: null}));
 }

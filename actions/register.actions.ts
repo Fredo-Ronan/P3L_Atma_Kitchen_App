@@ -17,7 +17,7 @@ export const register = async (formData: FormData) => {
     const password = await hashPassword(formData.get("password") as string); 
 
 
-    const res = await fetch(`${process.env.BASE_URL}/api/customer/registrationCustomer`, {
+    const res = await fetch(`${process.env.BASE_URL}/api/customer/auth/registrationCustomer`, {
         method: "POST",
         body: JSON.stringify({
             nama: nama,

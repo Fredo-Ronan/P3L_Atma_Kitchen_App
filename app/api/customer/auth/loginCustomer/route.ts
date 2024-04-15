@@ -1,3 +1,4 @@
+import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 import { TableListNames } from "@/constants/tableNames";
 import { connect } from "@/db";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
@@ -28,7 +29,7 @@ export async function POST(req: Request){
     if(final_result !== ''){
 
         if(JSON.parse(final_result).ACTIVE === 0){
-            return new Response(JSON.stringify({status: "NOT VERIFIED", data: null}));
+            return new Response(JSON.stringify({status: StatusCodesP3L.NOT_VERIFIED, data: null}));
         }
 
         // check if the password is match with the hashed password using bcrypt compare method to compare hash accordig to bcrypt
@@ -43,10 +44,10 @@ export async function POST(req: Request){
                 saldo: JSON.parse(final_result).SALDO,
                 total_poin: JSON.parse(final_result).TOTAL_POIN
             }
-            return new Response(JSON.stringify({status: "OK", data: user_data_to_send})); 
+            return new Response(JSON.stringify({status: StatusCodesP3L.OK, data: user_data_to_send})); 
         }
     }
 
 
-    return new Response(JSON.stringify({status: "NOT OK", data: null}));
+    return new Response(JSON.stringify({status: StatusCodesP3L.NOT_OK, data: null}));
 }

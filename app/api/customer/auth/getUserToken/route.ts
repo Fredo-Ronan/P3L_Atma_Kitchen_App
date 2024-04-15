@@ -1,3 +1,4 @@
+import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 import { connect } from "@/db";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
 
@@ -18,8 +19,8 @@ export async function POST(req: Request){
     const final_result = parseResultQuery(resultQuery);
 
     if(final_result === ''){
-        return new Response(JSON.stringify({status: "NOT OK", data: null}));
+        return new Response(JSON.stringify({status: StatusCodesP3L.NOT_OK, data: null}));
     }
 
-    return new Response(JSON.stringify({status: "OK", data: resultQuery}));
+    return new Response(JSON.stringify({status: StatusCodesP3L.OK, data: resultQuery}));
 }

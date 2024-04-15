@@ -8,7 +8,7 @@ const EmailVerificationPage = ({ params }: { params: { token: string[] } }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const verifyToken = async () => {
-    const getToken = await fetch("/api/customer/getUserToken", {
+    const getToken = await fetch("/api/customer/auth/getUserToken", {
       method: "POST",
       body: JSON.stringify({
         id_user: url_id_user,

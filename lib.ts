@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
 import { ADMIN_SESSION_NAME, CUSTOMER_SESSION_NAME } from "./constants";
+import { StatusCodesP3L } from "./constants/statusCodesP3L";
 
 const secretKey = process.env.SECRET_APP_KEY;
 const key = new TextEncoder().encode(secretKey);
@@ -42,7 +43,7 @@ export async function loginAdmin(formData: FormData) {
     const result = await loginRes.json();
 
     // make conditional if the login is success then execute the code below, if not then just return error response
-    if(result?.status === "NOT OK"){
+    if(result?.status === StatusCodesP3L.NOT_OK){
         redirect('/admin/sign-in/failed');
     }
 
@@ -93,7 +94,7 @@ export async function loginCustomer(formData: FormData) {
 
     // make login functionaliti here
     // TODO
-    const loginRes = await fetch(`${process.env.BASE_URL}/api/customer/loginCustomer`, {
+    const loginRes = await fetch(`${process.env.BASE_URL}/api/customer/auth/loginCustomer`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -103,16 +104,16 @@ export async function loginCustomer(formData: FormData) {
                             password: user.password
                         })
                     });
-
+    
     const result = await loginRes.json();
 
     // make conditional if the login is success then execute the code below, if not then just return error response
-    if(result?.status === "NOT OK"){
+    if(result?.status === StatusCodesP3L.NOT_OK){
         redirect('/sign-in/failed');
     }
 
     // make conditional if the user is not active yet or not verify email yet, then go to failed because email not verified
-    if(result?.status === "NOT VERIFIED"){
+    if(result?.status === StatusCodesP3L.NOT_VERIFIED){
         redirect('/sign-in/notVerified');
     }
 
