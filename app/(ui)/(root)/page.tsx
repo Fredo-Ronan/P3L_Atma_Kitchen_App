@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import { Button } from "@/components/ui/button";
+import NavbarP3L from "@/components/NavbarP3L";
 
 const CustomerHomePage = async () => {
   const userData = await getLoggedInUserData();
@@ -12,6 +13,7 @@ const CustomerHomePage = async () => {
 
   return (
     <div>
+      <NavbarP3L userData={userData}/>
       <h1>Customer Home Page</h1>
 
       {userData !== null ? (
@@ -34,7 +36,7 @@ const CustomerHomePage = async () => {
       )}
 
 
-      {userData === null ? (
+      {/* {userData === null ? (
         <>
           <Button asChild>
             <Link href={"/sign-up"}>Sign Up</Link>
@@ -45,7 +47,7 @@ const CustomerHomePage = async () => {
         </>
       ) : (
         <></>
-      )}
+      )} */}
     </div>
   );
 };
