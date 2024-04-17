@@ -1,5 +1,8 @@
 "use client";
+import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
 
 const EmailVerificationPage = ({ params }: { params: { token: string[] } }) => {
   const url_token: string = params.token[0];
@@ -39,7 +42,7 @@ const EmailVerificationPage = ({ params }: { params: { token: string[] } }) => {
     const isTokenValid = await verifyToken();
 
     if (isTokenValid) {
-      const resultActivate = await fetch("/api/customer/activation", {
+      const resultActivate = await fetch("/api/customer/auth/activation", {
         method: "POST",
         body: JSON.stringify({
           user_id: url_id_user,
@@ -73,19 +76,28 @@ const EmailVerificationPage = ({ params }: { params: { token: string[] } }) => {
   }, []);
 
   return (
-    <div>
+    <div className="h-screen flex justify-center items-center text-center">
       {isLoading ? (
-        <>
-          <h1>LOADING!</h1>
-        </>
+        <div className="flex flex-col justify-center items-center">
+          <SyncLoader 
+            color="#0094de"
+            size={15}
+          />
+          <p className="text-xl mt-6">Please wait...</p>
+        </div>
       ) : isValid ? (
-        <>
-          <h2>Success! Your Account is activated</h2>
-        </>
+        <div className="flex flex-col justify-center items-center">
+          <Image src="/checklist.svg" alt="" width={100} height={100} className="mb-6"/>
+          <p className="text-2xl">Success! Your Account is activated</p>
+          <Link href="/sign-in" className="mt-6 inline-block rounded bg-indigo-600 px-5 py-3 text-md font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring">Go to Login Page</Link>
+        </div>
       ) : (
-        <>
-          <h2>Email Not Valid or Link is not valid</h2>
-        </>
+        <div className="flex flex-col justify-center items-center">
+          <Image src="/failed.svg" alt="" width={100} height={100} className="mb-6"/>
+          <p className="text-2xl">Failed to activate your account</p>
+          <p className="text-md mt-2">This probably due to the wrong link or simply the link has expired, please register again using your other real email account</p>
+          <Link href="/sign-up" className="mt-6 inline-block rounded bg-indigo-600 px-5 py-3 text-md font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring">Go to Register Page</Link>
+        </div>
       )}
     </div>
   );

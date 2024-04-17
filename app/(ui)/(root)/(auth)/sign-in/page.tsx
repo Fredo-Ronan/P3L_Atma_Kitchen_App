@@ -13,10 +13,10 @@ const CustomerLoginPage = async () => {
       {/* Left Side */}
       <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
         <div className="max-w-md w-full p-6">
-          <h1 className="text-3xl font-semibold mb-6 text-black text-center">
+          <h1 className="text-4xl font-bold mb-6 text-black text-center">
             Log In
           </h1>
-          <h1 className="text-sm font-semibold mb-6 text-gray-500 text-center">
+          <h1 className="text-sm font-semibold mb-10 text-gray-500 text-center">
             Login untuk menemukan produk - produk unggulan Atma Kitchen{" "}
           </h1>
           {/* <div className="mt-4 flex flex-col lg:flex-row items-center justify-between">

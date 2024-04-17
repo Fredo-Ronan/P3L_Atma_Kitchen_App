@@ -241,10 +241,10 @@ const CustomerRegisterPage = () => {
       {/* Right Side */}
       <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
         <div className="max-w-md w-full p-6">
-          <h1 className="text-3xl font-semibold mb-6 text-black text-center">
+          <h1 className="text-4xl font-bold mb-6 text-black text-center">
             Register
           </h1>
-          <h1 className="text-sm font-semibold mb-6 text-gray-500 text-center">
+          <h1 className="text-sm font-semibold mb-10 text-gray-500 text-center">
             Gabung bersama Atma Kitchen dan temukan produk - produk unggulan{" "}
           </h1>
           <form
@@ -264,6 +264,7 @@ const CustomerRegisterPage = () => {
                 type="text"
                 id="nama"
                 name="nama"
+                placeholder='Example'
                 className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
               />
             </div>
@@ -278,6 +279,7 @@ const CustomerRegisterPage = () => {
                 type="text"
                 id="email"
                 name="email"
+                placeholder='example@mail.com'
                 className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
               />
             </div>
@@ -292,6 +294,7 @@ const CustomerRegisterPage = () => {
                 type="date"
                 id="tanggalLahir"
                 name="tanggalLahir"
+                placeholder='DD-MM-YYYY'
                 className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
               />
             </div>
@@ -306,6 +309,7 @@ const CustomerRegisterPage = () => {
                 type="number"
                 id="telepon"
                 name="telepon"
+                placeholder='081234567890'
                 className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
               />
             </div>
@@ -320,6 +324,7 @@ const CustomerRegisterPage = () => {
                 type="text"
                 id="username"
                 name="username"
+                placeholder='Username'
                 className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
               />
             </div>
@@ -334,6 +339,7 @@ const CustomerRegisterPage = () => {
                 type="password"
                 id="password"
                 name="password"
+                placeholder='Password'
                 className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
               />
             </div>
