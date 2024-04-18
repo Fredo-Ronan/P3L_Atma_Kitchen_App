@@ -65,6 +65,9 @@ const CustomerLoginPage = async () => {
                 className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
               />
             </div>
+            <div className="mt-4 text-end">
+              <Link href="/forgot-password" className="font-semibold text-gray-600 hover:text-black transition-all duration-200">Lupa Password?</Link>
+            </div>
             <div className="mt-6">
               <button
                 type="submit"

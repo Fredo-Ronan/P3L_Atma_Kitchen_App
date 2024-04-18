@@ -8,7 +8,7 @@ export async function POST(req: Request){
     const body = await req.json();
     const emailReq = body.email;
 
-    const queryCheckEmail = `SELECT EMAIL_CUSTOMER FROM CUSTOMER WHERE EMAIL_CUSTOMER LIKE ?`;
+    const queryCheckEmail = `SELECT ID_CUSTOMER, EMAIL_CUSTOMER FROM CUSTOMER WHERE EMAIL_CUSTOMER LIKE ?`;
 
     const [resultCheckEmail, fields] = await connection.execute(queryCheckEmail, [emailReq]);
     connection.end();
@@ -16,8 +16,8 @@ export async function POST(req: Request){
     const final_result = parseResultQuery(resultCheckEmail);
 
     if(final_result !== ''){
-        return new Response(JSON.stringify({status: StatusCodesP3L.NOT_OK}));
+        return new Response(JSON.stringify({status: StatusCodesP3L.OK, data: JSON.parse(final_result)}));
     }
 
-    return new Response(JSON.stringify({status: StatusCodesP3L.OK}));
+    return new Response(JSON.stringify({status: StatusCodesP3L.NOT_OK}));
 }

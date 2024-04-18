@@ -20,15 +20,15 @@ const EmailVerificationPage = ({ params }: { params: { token: string[] } }) => {
 
     const result = await getToken.json();
 
-    console.log(result);
+    // console.log(result);
 
     if (result.status === "NOT OK") {
       throw new Error("Error while verify token!");
     }
 
-    console.log(url_token)
-    console.log(result.data[0].TOKEN)
-    console.log(url_token === result.data[0].TOKEN)
+    // console.log(url_token)
+    // console.log(result.data[0].TOKEN)
+    // console.log(url_token === result.data[0].TOKEN)
 
     // check if the user token is valid or same as in the database, then return true
     if (url_token === result.data[0].TOKEN) {

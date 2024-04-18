@@ -27,7 +27,7 @@ export const register = async (formData: FormData) => {
 
     const isEmailExists = await resCheckEmail.json();
 
-    if(isEmailExists.status === StatusCodesP3L.NOT_OK){
+    if(isEmailExists.status === StatusCodesP3L.OK){
         redirect(`/sign-up/failed/${"Email_" + email + "_already_in_use!"}`);
     }
 
