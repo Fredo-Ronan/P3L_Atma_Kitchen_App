@@ -1,15 +1,22 @@
 export interface BAHAN_BAKU {
-    ID_BAHAN: number;
-    NAMA_BAHAN: string;
-    HARGA_BAHAN: number;
-    STOK_BAHAN: number;
-    SATUAN: string;
+  ID_BAHAN: number;
+  NAMA_BAHAN: string;
+  HARGA_BAHAN: number;
+  STOK_BAHAN: number;
+  SATUAN: string;
 }
 
 export interface createBahanBakuParams {
-    nama_bahan: string;
-    harga_bahan: number;
-    stok_bahan: number;
-    satuan: string;
-    path: string;
+  nama_bahan: string;
+  harga_bahan: number;
+  stok_bahan: number;
+  satuan: string;
+  path: string;
+}
+
+export interface QueryParams {
+  q?: string;
+  orderBy?: string;
+  page?: number;
+  filter?: string;
 }

@@ -29,6 +29,7 @@ const TableBahanBaku = ({ data, refreshData, deleteData }: Props) => {
         </TableRow>
       </TableHeader>
       <TableBody>
+        
         {data.map((item: BAHAN_BAKU) => (
           <TableRow key={item.ID_BAHAN}>
             <TableCell>{item.ID_BAHAN}</TableCell>
