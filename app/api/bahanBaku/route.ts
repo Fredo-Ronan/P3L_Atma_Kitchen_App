@@ -24,3 +24,17 @@ export async function POST(req: NextRequest) {
     throw error;
   }
 }
+
+export async function GET() {
+  try {
+    const connection = await connect();
+
+    const [rows, fields] = await connection.execute("Select * from BAHAN");
+
+    connection.end();
+    
+    return NextResponse.json(rows);
+  } catch (error) {
+    
+  }
+}
