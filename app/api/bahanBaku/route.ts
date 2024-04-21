@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     const page = request.nextUrl.searchParams.get("page") || 1;
     const filter = request.nextUrl.searchParams.get("filter");
 
-    console.log(q, orderBy, page);
+    // console.log(q, orderBy, page);
 
     let query = `SELECT * FROM BAHAN`;
 
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
 
     query += ` LIMIT 10 OFFSET ${offset}`;
 
-    console.log(query);
+    // console.log(query);
 
     [rows, fields] = await connection.execute(query);
 
