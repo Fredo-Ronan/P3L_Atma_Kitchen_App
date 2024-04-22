@@ -51,7 +51,7 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
     }
   };
 
-  console.log(isLoading);
+  
 
   return (
     <div className="flex flex-col w-full">

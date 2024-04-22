@@ -6,13 +6,16 @@ export interface BAHAN_BAKU {
   SATUAN: string;
 }
 
-export interface createBahanBakuParams {
-  nama_bahan: string;
-  harga_bahan: number;
-  stok_bahan: number;
-  satuan: string;
-  path: string;
+export interface PENITIP {
+  ID_PENITIP_PRODUK: number
+  NAMA_PENITIP: string
+  EMAIL_PENITIP: string
+  NO_TELP_PENITIP: string
+  ALAMAT_PENITIP: string
 }
+
+
+
 
 export interface QueryParams {
   q?: string;
@@ -20,3 +23,4 @@ export interface QueryParams {
   page?: number;
   filter?: string;
 }
+

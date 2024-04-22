@@ -102,6 +102,8 @@ const CreateEditBahanBaku = ({ data, refreshData }: Props) => {
           }),
         });
 
+        
+
         if (response.status !== 201) {
           throw new Error("Failed to create bahan baku");
         }

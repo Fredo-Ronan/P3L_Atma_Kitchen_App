@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
 
     let [rows, fields] = await connection.execute(query);
 
-    if(Array.isArray(rows)) {
+    if (Array.isArray(rows)) {
       totalData = rows.length;
     }
 
@@ -71,8 +71,14 @@ export async function GET(request: NextRequest) {
 
     connection.end();
 
-    return NextResponse.json({ data: rows, totalData }, {
-      status: 200,
-    });
-  } catch (error) {}
+    return NextResponse.json(
+      { data: rows, totalData },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
