@@ -90,15 +90,14 @@ const CreateEditPenitip = ({ data, refreshData }: Props) => {
           }),
         });
 
-        if (response.data.status !== 200) {
+        if (response.data.status !== 201) {
           return toast.error(response.data.message);
         }
 
         toast.success("Berhasil menambah data penitip");
       }
 
-      if (closeBtn.current) {
-        form.reset();
+      if (closeBtn.current && !isLoading) {
         closeBtn.current.click();
         refreshData();
       }
@@ -116,7 +115,7 @@ const CreateEditPenitip = ({ data, refreshData }: Props) => {
       no_telp_penitip: data?.NO_TELP_PENITIP || "",
       alamat_penitip: data?.ALAMAT_PENITIP || "",
     });
-  },[data])
+  }, [data]);
 
   return (
     <Dialog>

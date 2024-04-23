@@ -15,10 +15,11 @@ const LocalSearchBar = ({ route }: { route: string }) => {
   useEffect(() => {
     const debounce = setTimeout(() => {
       if (search) {
-        const newUrl = urlQueryParams({
+        let newUrl = urlQueryParams({
           params: searchParams.toString(),
           key: "q",
           value: search,
+          removePage: true,
         });
         router.push(newUrl, {
           scroll: false,
@@ -35,7 +36,7 @@ const LocalSearchBar = ({ route }: { route: string }) => {
     }, 300);
 
     return () => clearTimeout(debounce);
-  }, [query, pathname, search, searchParams, router]);
+  }, [query, search]);
 
   return (
     <div className="flex items-center bg-secondary rounded h-[46px] p-2">

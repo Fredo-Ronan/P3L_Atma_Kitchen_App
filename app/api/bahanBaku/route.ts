@@ -30,10 +30,15 @@ export async function GET(request: NextRequest) {
 
     const q = request.nextUrl.searchParams.get("q");
     const orderBy = request.nextUrl.searchParams.get("orderBy");
-    const page = request.nextUrl.searchParams.get("page") || 1;
+    let page = request.nextUrl.searchParams.get("page") || 1;
     const filter = request.nextUrl.searchParams.get("filter");
 
     // console.log(q, orderBy, page);
+
+    if (Number(page) <= 0 || isNaN(Number(page))) {
+      connection.end();
+      return NextResponse.json({ data: [], totalData: 0 });
+    }
 
     let query = `SELECT * FROM BAHAN`;
 
@@ -61,6 +66,11 @@ export async function GET(request: NextRequest) {
 
     if (Array.isArray(rows)) {
       totalData = rows.length;
+    }
+
+    if (totalData === 0) {
+      connection.end();
+      return NextResponse.json({ data: [], totalData });
     }
 
     query += ` LIMIT 10 OFFSET ${offset}`;

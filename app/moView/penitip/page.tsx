@@ -1,35 +1,39 @@
 "use client";
-import CreateEditBahanBaku from "@/components/admin/CreateEditBahanBaku";
 import LocalSearchBar from "@/components/admin/LocalSearchBar";
 import Pagination from "@/components/admin/Pagination";
 import CreateEditPenitip from "@/components/mo/CreateEditPenitip";
 import TablePenitip from "@/components/mo/TablePenitip";
 import { PENITIP, QueryParams } from "@/types";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
 
 const Page = ({ searchParams }: { searchParams: QueryParams }) => {
   const [data, setData] = useState<PENITIP[]>([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [totalData, setTotalData] = useState<number>(0);
 
   const queryParams: QueryParams = {
     q: searchParams.q,
     orderBy: searchParams.orderBy,
-    page:
-      searchParams.page || 1 || Number(searchParams.page) <= 0
-        ? 1
-        : Number(searchParams.page),
+    page: searchParams.page,
     filter: searchParams.filter,
   };
 
   const fetchData = async () => {
+    setIsLoading(true);
     const res = await axios.get("/api/penitip", {
       params: queryParams,
     });
-
-    setTotalData(res.data.totalData);
-    setData(res.data.data);
+    if (res.data.data.length <= 0) {
+      setIsLoading(false);
+      setData(res.data.data);
+      setTotalData(res.data.totalData);
+    } else {
+      setIsLoading(false);
+      setTotalData(res.data.totalData);
+      setData(res.data.data);
+    }
   };
 
   useEffect(() => {
@@ -53,21 +57,23 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
         <CreateEditPenitip refreshData={fetchData} />
       </div>
 
-      <TablePenitip
-        data={data}
-        refreshData={fetchData}
-        deleteData={deleteData}
-      />
+      {isLoading ? (
+        <div className="flex justify-center flex-1 my-10">
+          <SyncLoader color="#2563eb" />
+        </div>
+      ) : (
+        <TablePenitip
+          data={data}
+          refreshData={fetchData}
+          deleteData={deleteData}
+        />
+      )}
 
       <div className="flex items-center justify-center mt-4">
         <Pagination
           totalContent={totalData}
           totalPage={10}
-          currentPage={
-            searchParams.page || 1 || Number(searchParams.page) <= 0
-              ? 1
-              : Number(searchParams.page)
-          }
+          currentPage={Number(searchParams.page) || 1}
         />
       </div>
     </div>

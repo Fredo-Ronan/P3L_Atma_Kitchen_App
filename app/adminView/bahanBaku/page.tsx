@@ -16,7 +16,8 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
   const [data, setData] = useState<BAHAN_BAKU[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const [totalData, setTotalData] = useState(1);
+  const [totalData, setTotalData] = useState(0);
+
   const queryParams: QueryParams = {
     q: searchParams.q,
     orderBy: searchParams.orderBy,
@@ -27,9 +28,16 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
   const fetchData = async () => {
     setIsLoading(true);
     const res = await axios.get("/api/bahanBaku", { params: queryParams });
-    setData(res.data.data);
-    setTotalData(res.data.totalData);
-    setIsLoading(false);
+
+    if (res.data.data.length <= 0) {
+      setIsLoading(false);
+      setData(res.data.data);
+      setTotalData(res.data.totalData);
+    } else {
+      setData(res.data.data);
+      setTotalData(res.data.totalData);
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -51,8 +59,6 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
     }
   };
 
-  
-
   return (
     <div className="flex flex-col w-full">
       <h1 className="text-2xl font-bold">Bahan Baku</h1>
@@ -63,19 +69,23 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
         </div>
         <CreateEditBahanBaku refreshData={refreshData} />
       </div>
-      {isLoading ? 
-        <div className="flex justify-center mb-6">
-          <SyncLoader color="#2563eb"/>
+      {isLoading ? (
+        <div className="flex justify-center flex-1 my-10">
+          <SyncLoader color="#2563eb" />
         </div>
-        :
-      <TableBahanBaku
-        data={data}
-        refreshData={refreshData}
-        deleteData={deleteData}
-      />
-      }
+      ) : (
+        <TableBahanBaku
+          data={data}
+          refreshData={refreshData}
+          deleteData={deleteData}
+        />
+      )}
       <div className="flex items-center justify-center mt-4">
-        <Pagination totalContent={totalData} totalPage={10} currentPage={Number(searchParams.page || 1)}/>
+        <Pagination
+          totalContent={totalData}
+          totalPage={10}
+          currentPage={Number(searchParams.page) || 1}
+        />
       </div>
     </div>
   );

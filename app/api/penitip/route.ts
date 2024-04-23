@@ -24,8 +24,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-   
-
     const [rows] = await connection.execute(
       `INSERT INTO PENITIP_PRODUK (NAMA_PENITIP, EMAIL_PENITIP, NO_TELP_PENITIP, ALAMAT_PENITIP) VALUES (?,?,?,?)`,
       [nama_penitip, email_penitip, no_telp_penitip, alamat_penitip]
@@ -49,6 +47,11 @@ export async function GET(request: NextRequest) {
     const orderBy = request.nextUrl.searchParams.get("orderBy") || "";
     const page = request.nextUrl.searchParams.get("page") || 1;
 
+    if (Number(page) <= 0 || isNaN(Number(page))) {
+      connection.end();
+      return NextResponse.json({ data: [], totalData: 0 });
+    }
+
     let query = "SELECT * FROM PENITIP_PRODUK";
 
     if (q) {
@@ -69,11 +72,17 @@ export async function GET(request: NextRequest) {
       total = rows.length;
     }
 
+    if (total === 0) {
+      connection.end();
+      return NextResponse.json({ data: [], totalData: 0 });
+    }
+
     query += ` LIMIT 10 OFFSET ${offset}`;
 
     [rows, fields] = await connection.execute(query);
 
-    return NextResponse.json({data: rows, totalData: total}, { status: 200 });
+    connection.end();
+    return NextResponse.json({ data: rows, totalData: total }, { status: 200 });
   } catch (error) {
     console.log(error);
     throw error;

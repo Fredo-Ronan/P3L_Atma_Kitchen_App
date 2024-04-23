@@ -31,6 +31,7 @@ const Filter = ({ filter }: Props) => {
         params: searchParams.toString(),
         key: "filter",
         value: selectedFilter,
+        removePage: true,
       });
       router.push(newUrl, {
         scroll: false,

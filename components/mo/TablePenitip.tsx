@@ -1,17 +1,17 @@
-
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { tablePenitip } from "@/constants/mapping";
 import { PENITIP } from "@/types";
 import CreateEditBahanBaku from "../admin/CreateEditBahanBaku";
 import CreateEditPenitip from "./CreateEditPenitip";
 import DeleteBtn from "../admin/DeleteBtn";
+import NotFound from "../shared/NotFound";
 
 interface Props {
   data: PENITIP[];
@@ -20,6 +20,8 @@ interface Props {
 }
 const TablePenitip = ({ data, refreshData, deleteData }: Props) => {
   
+  if (data.length === 0) return <NotFound />;
+
   return (
     <Table>
       <TableHeader>
@@ -39,8 +41,8 @@ const TablePenitip = ({ data, refreshData, deleteData }: Props) => {
             <TableCell>{item.NO_TELP_PENITIP}</TableCell>
             <TableCell>{item.ALAMAT_PENITIP}</TableCell>
             <TableCell className="flex items-center gap-3 justify-center">
-             <CreateEditPenitip data={item} refreshData={refreshData} />
-              <DeleteBtn id={item.ID_PENITIP_PRODUK} hapusData={deleteData}/>
+              <CreateEditPenitip data={item} refreshData={refreshData} />
+              <DeleteBtn id={item.ID_PENITIP_PRODUK} hapusData={deleteData} />
             </TableCell>
           </TableRow>
         ))}

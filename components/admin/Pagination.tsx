@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { urlQueryParams } from "@/lib/utils";
+import { cn, removeUrlQueryParams, urlQueryParams } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -16,28 +16,23 @@ const Pagination = ({ totalPage, currentPage, totalContent }: Props) => {
   const searchParams = useSearchParams();
   const limitPage = Math.ceil(totalContent / totalPage);
   const handlePage = (page: number) => {
-
-    
     const newUrl = urlQueryParams({
       params: searchParams.toString(),
       key: "page",
       value: String(page),
+      removePage: false
     });
     router.push(newUrl, {
       scroll: false,
     });
   };
 
-
-  useEffect(() => {
-    if (currentPage > limitPage) {
-      handlePage(limitPage);
-    }
-  },[currentPage, limitPage, searchParams])
-
-
   return (
-    <div className="flex items-center gap-3">
+    <div
+      className={cn(`flex items-center gap-3 `, {
+        hidden: limitPage <= 1,
+      })}
+    >
       <Button
         variant="secondary"
         className="text-gray-500"

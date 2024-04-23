@@ -11,6 +11,7 @@ import { bahanBakuTable } from "@/constants/mapping";
 import { BAHAN_BAKU } from "@/types";
 import CreateEditBahanBaku from "./CreateEditBahanBaku";
 import DeleteBtn from "./DeleteBtn";
+import NotFound from "../shared/NotFound";
 
 interface Props {
   data: BAHAN_BAKU[];
@@ -18,6 +19,8 @@ interface Props {
   deleteData: (id: number) => void;
 }
 const TableBahanBaku = ({ data, refreshData, deleteData }: Props) => {
+  if (data.length <= 0) return <NotFound />;
+
   return (
     <Table>
       <TableHeader>
@@ -29,7 +32,6 @@ const TableBahanBaku = ({ data, refreshData, deleteData }: Props) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        
         {data.map((item: BAHAN_BAKU) => (
           <TableRow key={item.ID_BAHAN}>
             <TableCell>{item.ID_BAHAN}</TableCell>
@@ -41,7 +43,7 @@ const TableBahanBaku = ({ data, refreshData, deleteData }: Props) => {
             </TableCell>
             <TableCell className="flex items-center gap-3 justify-center">
               <CreateEditBahanBaku data={item} refreshData={refreshData} />
-              <DeleteBtn hapusData={deleteData} id={item.ID_BAHAN}  />
+              <DeleteBtn hapusData={deleteData} id={item.ID_BAHAN} />
             </TableCell>
           </TableRow>
         ))}

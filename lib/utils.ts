@@ -9,6 +9,7 @@ interface urlQueryParams {
   key: string;
   params: string;
   value: string | null;
+  removePage: boolean;
 }
 
 interface removeUrlQueryParams {
@@ -16,10 +17,17 @@ interface removeUrlQueryParams {
   params: string;
 }
 
-export const urlQueryParams = ({ params, key, value }: urlQueryParams) => {
+export const urlQueryParams = ({
+  params,
+  key,
+  value,
+  removePage,
+}: urlQueryParams) => {
   const currentUrl = qs.parse(params);
 
   currentUrl[key] = value;
+
+  if (removePage) delete currentUrl["page"];
 
   return qs.stringifyUrl(
     {
