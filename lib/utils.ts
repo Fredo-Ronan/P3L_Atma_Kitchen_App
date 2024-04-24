@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import qs from "query-string";
+import { date } from "zod";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -57,3 +58,13 @@ export const removeUrlQueryParams = ({ params, key }: removeUrlQueryParams) => {
     }
   );
 };
+
+export function formatTanggal(tanggalIso: string): string {
+  const tanggal = new Date(tanggalIso);
+
+  const hari = tanggal.getDate().toString().padStart(2, "0");
+  const bulan = (tanggal.getMonth() + 1).toString().padStart(2, "0");
+  const tahun = tanggal.getFullYear();
+
+  return `${tahun}-${bulan}-${hari}`;
+}

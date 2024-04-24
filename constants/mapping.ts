@@ -77,3 +77,10 @@ export const tablePenitip = [
   "NO_TELP_PENITIP",
   "ALAMAT_PENITIP",
 ];
+
+export const tablePengeluaranLain = [
+  "ID_PENGELUARAN_LAIN",
+  "NAMA_PENGELUARAN",
+  "BIAYA_PENGELUARAN",
+  "TANGGAL_PENGELUARAN",
+];

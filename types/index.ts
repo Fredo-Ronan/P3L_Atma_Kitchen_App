@@ -7,15 +7,19 @@ export interface BAHAN_BAKU {
 }
 
 export interface PENITIP {
-  ID_PENITIP_PRODUK: number
-  NAMA_PENITIP: string
-  EMAIL_PENITIP: string
-  NO_TELP_PENITIP: string
-  ALAMAT_PENITIP: string
+  ID_PENITIP_PRODUK: number;
+  NAMA_PENITIP: string;
+  EMAIL_PENITIP: string;
+  NO_TELP_PENITIP: string;
+  ALAMAT_PENITIP: string;
 }
 
-
-
+export interface PENGELUARAN_LAIN {
+  ID_PENGELUARAN_LAIN: number;
+  NAMA_PENGELUARAN: string;
+  BIAYA_PENGELUARAN: string;
+  TANGGAL_PENGELUARAN: Date;
+}
 
 export interface QueryParams {
   q?: string;
@@ -23,4 +27,3 @@ export interface QueryParams {
   page?: number;
   filter?: string;
 }
-

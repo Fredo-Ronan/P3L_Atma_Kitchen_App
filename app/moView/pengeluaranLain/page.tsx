@@ -1,17 +1,18 @@
 "use client";
 import LocalSearchBar from "@/components/admin/LocalSearchBar";
 import Pagination from "@/components/admin/Pagination";
+import CreateEditPengeluaranLain from "@/components/mo/CreateEditPengeluaranLain";
 import CreateEditPenitip from "@/components/mo/CreateEditPenitip";
-import TablePenitip from "@/components/mo/TablePenitip";
-import { PENITIP, QueryParams } from "@/types";
+import TablePengeluaranLain from "@/components/mo/TablePengeluaranLain";
+import { QueryParams } from "@/types";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
 
 const Page = ({ searchParams }: { searchParams: QueryParams }) => {
-  const [data, setData] = useState<PENITIP[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [totalData, setTotalData] = useState<number>(0);
+  const [data, setData] = useState([]);
+  const [totalData, setTotalData] = useState(0);
 
   const queryParams: QueryParams = {
     q: searchParams.q,
@@ -22,7 +23,7 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
 
   const fetchData = async () => {
     setIsLoading(true);
-    const res = await axios.get("/api/penitip", {
+    const res = await axios.get("/api/pengeluaranLain", {
       params: queryParams,
     });
     setData(res.data.data);
@@ -30,25 +31,21 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
     setIsLoading(false);
   };
 
+  const deleteData = async (id: number) => {
+    await axios.delete(`/api/pengeluaranLain/${id}`);
+    fetchData();
+  };
+
   useEffect(() => {
     fetchData();
   }, [searchParams]);
 
-  const deleteData = async (id: number) => {
-    try {
-      await axios.delete(`/api/penitip/${id}`);
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div className="flex flex-col">
-      <h2 className="text-2xl font-bold">Penitip</h2>
+      <h2 className="text-2xl font-bold">Pengeluaran Lain</h2>
       <div className="flex justify-between items-center my-10">
         <LocalSearchBar route="/moView/penitip" />
-        <CreateEditPenitip refreshData={fetchData} />
+        <CreateEditPengeluaranLain refreshData={fetchData} />
       </div>
 
       {isLoading ? (
@@ -56,7 +53,7 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
           <SyncLoader color="#2563eb" />
         </div>
       ) : (
-        <TablePenitip
+        <TablePengeluaranLain
           data={data}
           refreshData={fetchData}
           deleteData={deleteData}
