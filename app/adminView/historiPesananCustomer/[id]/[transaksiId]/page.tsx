@@ -1,28 +1,33 @@
 "use client";
 import LocalSearchBar from "@/components/admin/LocalSearchBar";
 import Pagination from "@/components/admin/Pagination";
-import CreateEditPenitip from "@/components/mo/CreateEditPenitip";
-import TablePenitip from "@/components/mo/TablePenitip";
-import { PENITIP, QueryParams } from "@/types";
+import TableDetilTransaksi from "@/components/admin/TableDetilTransaksiHistori";
+import { DetilTransaksiHistori, QueryParams } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
 
-const Page = ({ searchParams }: { searchParams: QueryParams }) => {
-  const [data, setData] = useState<PENITIP[]>([]);
+interface Props {
+  params: {
+    transaksiId: string;
+  };
+  searchParams: QueryParams;
+}
+
+const Page = ({ params, searchParams }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [totalData, setTotalData] = useState<number>(0);
+  const [totalData, setTotalData] = useState(0);
+  const [data, setData] = useState<DetilTransaksiHistori[]>([]);
 
   const queryParams: QueryParams = {
     q: searchParams.q,
     orderBy: searchParams.orderBy,
     page: searchParams.page,
-    filter: searchParams.filter,
   };
 
   const fetchData = async () => {
     setIsLoading(true);
-    const res = await axios.get("/api/penitip", {
+    const res = await axios.get(`/api/detilTransaksi/${params.transaksiId}`, {
       params: queryParams,
     });
     setData(res.data.data);
@@ -34,35 +39,21 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
     fetchData();
   }, [searchParams]);
 
-  const deleteData = async (id: number) => {
-    try {
-      await axios.delete(`/api/penitip/${id}`);
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
-    <div className="flex flex-col">
-      <h2 className="text-2xl font-bold">Penitip</h2>
-      <div className="flex justify-between items-center my-10">
-        <LocalSearchBar />
-        <CreateEditPenitip refreshData={fetchData} />
+    <div className="flex flex-col w-full">
+      <h1 className="text-2xl font-bold">Detil Transaksi Pesanan</h1>
+      <div className="flex items-center justify-between my-10">
+        <div className="flex items-center gap-4">
+          <LocalSearchBar  />
+        </div>
       </div>
-
       {isLoading ? (
         <div className="flex justify-center flex-1 my-10">
           <SyncLoader color="#2563eb" />
         </div>
       ) : (
-        <TablePenitip
-          data={data}
-          refreshData={fetchData}
-          deleteData={deleteData}
-        />
+        <TableDetilTransaksi data={data} />
       )}
-
       <div className="flex items-center justify-center mt-4">
         <Pagination
           totalContent={totalData}

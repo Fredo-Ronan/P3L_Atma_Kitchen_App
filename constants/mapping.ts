@@ -31,6 +31,10 @@ export const sideBarAdmin = [
     label: "Hampers",
     link: "/adminView/hampers",
   },
+  {
+    label: "Histori Pesanan",
+    link: "/adminView/historiPesananCustomer",
+  },
 ];
 
 export const bahanBakuTable = [
@@ -83,4 +87,42 @@ export const tablePengeluaranLain = [
   "NAMA_PENGELUARAN",
   "BIAYA_PENGELUARAN",
   "TANGGAL_PENGELUARAN",
+];
+
+export const tableHistoriPesananCustomer = [
+  "ID_DETIL_TRANSAKSI",
+  "NAMA_CUSTOMER",
+  "PRODUK",
+  "HAMPERS",
+  "STATUS_TRANSAKSI",
+  "STATUS_PESANAN",
+  "TANGGAL_PESANAN",
+];
+
+export const tableCustomerHistori = [
+  "ID_CUSTOMER",
+  "NAMA_CUSTOMER",
+  "EMAIL_CUSTOMER",
+  "HISTORI_PESANAN",
+];
+
+export const tablePesananHistori = [
+  "ID_TRANSAKSI_PESANAN",
+  "TOTAL_ITEM",
+  "TANGGAL_PESANAN",
+  "STATUS_TRANSAKSI",
+  "STATUS_PESANAN",
+  "ALAMAT_PENGIRIMAN",
+  "TIPE_PENGIRIMAN",
+  "TANGGAL_PENGIRIMAN",
+];
+
+export const filterTransaksiPesanan = ["Berhasil", "Gagal", "Pending"];
+
+export const tableDetilTransaksi = [
+  "ID_DETIL_TRANSAKSI",
+  "NAMA_PRODUK",
+  "HAMPERS",
+  "JUMLAH_PESANAN",
+  "SUBTOTAL",
 ];

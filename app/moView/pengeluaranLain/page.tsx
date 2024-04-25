@@ -44,7 +44,7 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
     <div className="flex flex-col">
       <h2 className="text-2xl font-bold">Pengeluaran Lain</h2>
       <div className="flex justify-between items-center my-10">
-        <LocalSearchBar route="/moView/penitip" />
+        <LocalSearchBar />
         <CreateEditPengeluaranLain refreshData={fetchData} />
       </div>
 

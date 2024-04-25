@@ -64,8 +64,8 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
       <h1 className="text-2xl font-bold">Bahan Baku</h1>
       <div className="flex items-center justify-between my-10">
         <div className="flex items-center gap-4">
+          <LocalSearchBar  />
           <Filter filter={satuanFilter} />
-          <LocalSearchBar route="/adminView/bahanBaku" />
         </div>
         <CreateEditBahanBaku refreshData={refreshData} />
       </div>

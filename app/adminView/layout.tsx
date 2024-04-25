@@ -4,12 +4,12 @@ import { PropsWithChildren } from "react";
 
 const Layout = ({ children }: PropsWithChildren) => {
   return (
-    <section className="flex w-full min-h-screen">
+    <section className="flex flex-col w-full min-h-screen p-10">
       <div>
         <SideBar sideBar={sideBarAdmin} heading="Admin" />
       </div>
 
-      <div className="flex-1 p-12">{children}</div>
+      <div className="flex-1 mt-8">{children}</div>
     </section>
   );
 };

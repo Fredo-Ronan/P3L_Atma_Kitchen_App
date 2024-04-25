@@ -27,3 +27,28 @@ export interface QueryParams {
   page?: number;
   filter?: string;
 }
+
+export interface CustomerHistori {
+  ID_CUSTOMER: number;
+  NAMA_CUSTOMER: string;
+  EMAIL_CUSTOMER: string;
+}
+
+export interface PesananHistori {
+  ID_TRANSAKSI_PESANAN: number;
+  TOTAL_ITEM: number;
+  TANGGAL_PESANAN: Date;
+  STATUS_TRANSAKSI: string;
+  STATUS_PESANAN: string;
+  ALAMAT_PENGIRIMAN: string;
+  TIPE_PENGIRIMAN: string;
+  TANGGAL_PENGIRIMAN: Date;
+}
+
+export interface DetilTransaksiHistori {
+  ID_DETIL_TRANSAKSI: number;
+  NAMA_PRODUK: string;
+  HAMPERS: string;
+  JUMLAH_PESANAN: number;
+  SUBTOTAL: number;
+}
