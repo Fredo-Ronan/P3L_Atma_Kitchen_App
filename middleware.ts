@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateSessionAdmin, updateSessionCustomer } from "./lib";
+import { updateSessionAdmin, updateSessionCustomer, updateSessionMO } from "./lib";
 import { cookies } from "next/headers";
-import { ADMIN_SESSION_NAME, CUSTOMER_SESSION_NAME } from "./constants";
+import { ADMIN_SESSION_NAME, CUSTOMER_SESSION_NAME, MO_SESSION_NAME } from "./constants";
 
 export async function middleware(request: NextRequest){
 
     const sessionAdmin = cookies().get(ADMIN_SESSION_NAME);
     const sessionCustomer = cookies().get(CUSTOMER_SESSION_NAME);
+    const sessionMO = cookies().get(MO_SESSION_NAME);
 
-    const authorization = request.headers.get("Authorization");
-    console.log("Authorization => " + authorization);
+    const currentUrl = new URL(request.url);
+    const path = currentUrl.pathname;
+
+    // const authorization = request.headers.get("Authorization");
+    // console.log("Authorization => " + authorization);
 
     // FOR DEBUGGING
     // console.log("Session Admin => " + sessionAdmin);
@@ -20,27 +24,46 @@ export async function middleware(request: NextRequest){
         await updateSessionCustomer(request);
     }
 
-    // if there is no session of e logged in admin/employee, then redirect to the home page as any logged out user can visit
-    // and skip the update for this admin session
-    if(!sessionAdmin){
+    // if the session MO, ADMIN and Customer is not exists, then redirect to sign-in 
+    if(!sessionMO && !sessionAdmin && (path.startsWith("/adminView") || path.startsWith("/moView"))){
         return NextResponse.redirect(
-            new URL('/admin/sign-in', request.url)
+            new URL('/sign-in', request.url)
         )
     }
 
-    // redirect user to go to the admin sign in page if the URL route is /admin
-    if(request.url === '/admin' && !sessionAdmin){
+    // update session expire to MO if the MO is currently logged in
+    if(sessionMO){
+        await updateSessionMO(request);
+    }
+
+    // update session expire to Admin if the Admin is currently logged in
+    if(sessionAdmin){
+        await updateSessionAdmin(request);
+    }
+
+
+    // redirect any user to their role homepage if they have logged in and preventing to go to unauthorize route base on current session name
+    if(sessionCustomer && (path.startsWith('/sign-in') || path.startsWith('/sign-up') || path.startsWith('/adminView') || path.startsWith('/moView'))){
         return NextResponse.redirect(
-            new URL('/admin/sign-in')
+            new URL('/', request.url)
         )
     }
 
-    // this will be skipped if there is no admin logged in
-    await updateSessionAdmin(request);
+    if(sessionAdmin && (path.startsWith('/sign-in') || path.startsWith('/sign-up') || path.startsWith('/moView'))){
+        return NextResponse.redirect(
+            new URL('/adminView', request.url)
+        )
+    }
+
+    if(sessionMO && (path.startsWith('/sign-in') || path.startsWith('/sign-up') || path.startsWith('/adminView'))){
+        return NextResponse.redirect(
+            new URL('/moView', request.url)
+        )
+    }
 
     return NextResponse.next(); 
 }
 
 export const config = {
-    matcher: ['/admin/home/:path*', '/admin']
+    matcher: ['/adminView/:path*', '/moView/:path*', '/sign-in', '/sign-up']
 }

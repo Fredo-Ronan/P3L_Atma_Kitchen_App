@@ -2,7 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-import { ADMIN_SESSION_NAME, CUSTOMER_SESSION_NAME } from "./constants";
+import { ADMIN_SESSION_NAME, CUSTOMER_SESSION_NAME, MO_SESSION_NAME } from "./constants";
 import { StatusCodesP3L } from "./constants/statusCodesP3L";
 
 const secretKey = process.env.SECRET_APP_KEY;
@@ -22,14 +22,14 @@ export async function decrypt(input: string): Promise<any> {
 }
 
 
-// SESSION MANAGEMENT FOR ADMIN ===============================================================================================================
-export async function loginAdmin(formData: FormData) {
+// LOGIN MECHANISM ============================================================================================================================
+export async function login(formData: FormData) {
     // verify credential and get the user
     const user = {username: formData.get("username"), password: formData.get("password")};
 
-    // make login functionaliti here
+    // make login functionality here
     // TODO
-    const loginRes = await fetch(`${process.env.BASE_URL}/api/admin/loginAdmin`, {
+    const loginRes = await fetch(`${process.env.BASE_URL}/api/login`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -39,26 +39,62 @@ export async function loginAdmin(formData: FormData) {
                             password: user.password
                         })
                     });
-
+    
     const result = await loginRes.json();
 
     // make conditional if the login is success then execute the code below, if not then just return error response
     if(result?.status === StatusCodesP3L.NOT_OK){
-        redirect('/admin/sign-in/failed');
+        redirect('/sign-in/failed');
     }
 
-    // create the session
-    const expires = new Date(Date.now() + 2 * 60 * 60 * 1000);
-    const session = await encrypt({user, expires});
+    // make conditional if the user is not active yet or not verify email yet, then go to failed because email not verified
+    if(result?.status === StatusCodesP3L.NOT_VERIFIED){
+        redirect('/sign-in/notVerified');
+    }
 
-    // save the session in a cookie
-    cookies().set(ADMIN_SESSION_NAME, session, {expires, httpOnly: true});
-    redirect("/admin/home");
+    // check what is the role of the user currently logged in
+    if(result?.role === "Customer"){
+        // the logged in user is a customer
+        // create the session
+        const expires = new Date(Date.now() + 2 * 60 * 60 * 1000);
+        const session = await encrypt({user, expires});
+
+        // save the session in a cookie
+        cookies().set(CUSTOMER_SESSION_NAME, session, {expires, httpOnly: true});
+        cookies().set("user_data", JSON.stringify(result.data));
+        redirect("/");
+    }
+
+    if(result?.role === "MO"){
+        // the logged in user is a Manager Operasional
+        // create the session
+        const expires = new Date(Date.now() + 2 * 60 * 60 * 1000);
+        const session = await encrypt({user, expires});
+
+        // save the session in a cookie
+        cookies().set(MO_SESSION_NAME, session, {expires, httpOnly: true});
+        redirect("/moView");
+    }
+
+    if(result?.role === "Admin"){
+        // the logged in user is an Admin
+        // create the session
+        const expires = new Date(Date.now() + 2 * 60 * 60 * 1000);
+        const session = await encrypt({user, expires});
+
+        // save the session in a cookie
+        cookies().set(ADMIN_SESSION_NAME, session, {expires, httpOnly: true});
+        redirect("/adminView");
+    }
 }
 
+
+
+// SESSION MANAGEMENT FOR ADMIN ===============================================================================================================
 export async function logoutAdmin(){
     // destroy the session
     cookies().set(ADMIN_SESSION_NAME, "", {expires: new Date(0)});
+    redirect("/sign-in");
 }
 
 export async function getSessionAdmin(){
@@ -87,46 +123,39 @@ export async function updateSessionAdmin(request: NextRequest){
 }
 
 
-// SESSION MANAGEMENT FOR USERS/CUSTOMER ===============================================================================================================
-export async function loginCustomer(formData: FormData) {
-    // verify credential and get the user
-    const user = {username: formData.get("username"), password: formData.get("password")};
-
-    // make login functionaliti here
-    // TODO
-    const loginRes = await fetch(`${process.env.BASE_URL}/api/customer/auth/loginCustomer`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            username: user.username,
-                            password: user.password
-                        })
-                    });
-    
-    const result = await loginRes.json();
-
-    // make conditional if the login is success then execute the code below, if not then just return error response
-    if(result?.status === StatusCodesP3L.NOT_OK){
-        redirect('/sign-in/failed');
-    }
-
-    // make conditional if the user is not active yet or not verify email yet, then go to failed because email not verified
-    if(result?.status === StatusCodesP3L.NOT_VERIFIED){
-        redirect('/sign-in/notVerified');
-    }
-
-    // create the session
-    const expires = new Date(Date.now() + 2 * 60 * 60 * 1000);
-    const session = await encrypt({user, expires});
-
-    // save the session in a cookie
-    cookies().set(CUSTOMER_SESSION_NAME, session, {expires, httpOnly: true});
-    cookies().set("user_data", JSON.stringify(result.data));
-    redirect("/");
+// SESSION MANAGEMENT FOR MANAGER OPERASIONAL ==========================================================================================================
+export async function logoutMO(){
+    // destroy the session
+    cookies().set(MO_SESSION_NAME, "", {expires: new Date(0)});
 }
 
+export async function getSessionMO(){
+    const session = cookies().get(MO_SESSION_NAME)?.value;
+    if(!session) return null;
+    return await decrypt(session);
+}
+
+export async function updateSessionMO(request: NextRequest){
+    const session = request.cookies.get(MO_SESSION_NAME)?.value;
+    if(!session) return;
+
+    // Refresh the session so it doesn't expire
+
+    const parsed = await decrypt(session);
+    parsed.expires = new Date(Date.now() + 2 * 60 * 60 * 1000);
+    const res = NextResponse.next();
+    res.cookies.set({
+        name: MO_SESSION_NAME,
+        value: await encrypt(parsed),
+        httpOnly: true,
+        expires: parsed.expires,
+    });
+
+    return res;
+}
+
+
+// SESSION MANAGEMENT FOR USERS/CUSTOMER ===============================================================================================================
 export async function logoutCustomer(){
     // destroy the session
     cookies().set(CUSTOMER_SESSION_NAME, "", {expires: new Date(0)});

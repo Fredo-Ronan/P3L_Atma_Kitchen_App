@@ -6,6 +6,9 @@ import { Computer } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
+import { Button } from "../ui/button";
+import { logoutAdmin } from "@/lib";
+import { logoutTriggerAdminMO } from "@/actions/logoutAdminMO.actions";
 interface Props {
   heading: string;
 
@@ -41,6 +44,14 @@ const SideBar = ({ sideBar, heading }: Props) => {
                 {item.label}
               </Link>
             ))}
+          </div>
+          <div className="flex flex-col justify-end h-80 w-1/2">
+            <Button onClick={async () => {
+                await logoutTriggerAdminMO();
+                window.location.reload();
+              }}>
+              Logout
+            </Button>
           </div>
         </SheetContent>
       </Sheet>

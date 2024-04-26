@@ -1,4 +1,4 @@
-import { getSessionCustomer, loginCustomer } from "@/lib";
+import { getSessionCustomer, login } from "@/lib";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -20,7 +20,7 @@ const CustomerLoginPage = async () => {
           <form
             action={async (formData) => {
               'use server';
-              await loginCustomer(formData);
+              await login(formData);
             }}
           >
             <div>
