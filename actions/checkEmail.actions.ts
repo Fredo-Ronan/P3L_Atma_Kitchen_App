@@ -1,9 +1,10 @@
+'use server';
 import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 import { makeToken } from "@/utilities/tokenMaker";
 import { redirect } from "next/navigation";
 
-export const checkEmail = async (formData: FormData) => {
-  const email = formData.get("email");
+export const checkEmail = async (formData: any) => {
+  const email = formData.email;
 
   // check is the email is exists on the database or not for changing/reset customer password
   const resCheckEmail = await fetch(

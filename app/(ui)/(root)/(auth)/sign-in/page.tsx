@@ -8,6 +8,14 @@ import { LoginSchema } from "@/schema/formSchemas";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -33,6 +41,11 @@ const CustomerLoginPage = () => {
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     setIsLoading(true);
     await loginTrigger(data);
+  }
+
+  const forgetPasswordCustomer = () => {
+    console.log("FORGOT");
+    window.location.href = "/forgot-password";
   }
 
   return (
@@ -74,9 +87,21 @@ const CustomerLoginPage = () => {
                   </FormItem>
                 )}
               />
-              <div className="text-end font-semibold text-gray-600 hover:text-black hover:cursor-pointer transition-all duration-200">
-                Lupa Password?
-              </div>
+              <Dialog>
+                <DialogTrigger className="w-full text-end font-semibold text-gray-600 hover:text-black hover:cursor-pointer transition-all duration-200">Lupa Password?</DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl">Lupa Password?</DialogTitle>
+                    <DialogDescription className="text-lg">
+                      Pilih role anda untuk mengubah password akun anda
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex flex-col gap-4 w-full">
+                    <Button type="button" className="text-lg" onClick={() => forgetPasswordCustomer()}>Customer</Button>
+                    <Button type="button" className="text-lg">Admin/MO</Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <Button type="submit" className="w-full">
                 {isLoading ? <ClipLoader color="#ffffff" size={16}/> : "Login"}
               </Button>

@@ -1,4 +1,4 @@
-import { getLoggedInUserData, getSessionCustomer, logoutCustomer } from "@/lib";
+import { getLoggedInUserData, logoutCustomer } from "@/lib";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
