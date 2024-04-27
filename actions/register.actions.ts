@@ -1,3 +1,4 @@
+'use server';
 import { redirect } from 'next/navigation';
 import bcrypt from "bcryptjs";
 import { StatusCodesP3L } from '@/constants/statusCodesP3L';
@@ -9,13 +10,13 @@ const hashPassword = async (password: string) => {
     return hashedPassword;
 }
 
-export const register = async (formData: FormData) => {
-    const nama = formData.get("nama");
-    const tanggalLahir = formData.get("tanggalLahir");
-    const telepon = formData.get("telepon");
-    const email = formData.get("email");
-    const username = formData.get("username");
-    const password = await hashPassword(formData.get("password") as string);
+export const register = async (formData: any) => {
+    const nama = formData.nama;
+    const tanggalLahir = formData.tanggalLahir;
+    const telepon = formData.telepon;
+    const email = formData.email;
+    const username = formData.username;
+    const password = await hashPassword(formData.password as string);
 
 
     const resCheckEmail = await fetch(`${process.env.BASE_URL}/api/customer/auth/checkEmail`, {

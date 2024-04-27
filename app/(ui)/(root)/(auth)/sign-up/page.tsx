@@ -1,10 +1,45 @@
-import React from 'react'
+'use client';
+import React, { useState } from 'react'
 import { register } from '@/actions/register.actions';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useForm } from 'react-hook-form';
+import { RegisterSchema } from '@/schema/formSchemas';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Button } from '@/components/ui/button';
+import { ClipLoader } from 'react-spinners';
 
 const CustomerRegisterPage = () => {
+  const [isLoading, setIsLoading] =  useState(false);
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      nama: "",
+      tanggalLahir: "",
+      telepon: "",
+      email: "",
+      username: "",
+      password: ""
+    }
+  })
+
+  const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
+    setIsLoading(true);
+    console.log(data);
+
+    await register(data);
+  }
 
   return (
     <div className="flex h-screen">
@@ -247,111 +282,91 @@ const CustomerRegisterPage = () => {
           <h1 className="text-sm font-semibold mb-10 text-gray-500 text-center">
             Gabung bersama Atma Kitchen dan temukan produk - produk unggulan{" "}
           </h1>
-          <form
-            action={async (formData) => {
-              'use server';
-              await register(formData);
-            }}
-          >
-            <div className='mt-4'>
-              <Label
-                htmlFor="nama"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Nama
-              </Label>
-              <Input
-                type="text"
-                id="nama"
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
                 name="nama"
-                placeholder='Example'
-                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nama</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="nama" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className='mt-4'>
-              <Label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </Label>
-              <Input
-                type="text"
-                id="email"
-                name="email"
-                placeholder='example@mail.com'
-                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-              />
-            </div>
-            <div className='mt-4'>
-              <Label
-                htmlFor="tanggalLahir"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Tanggal Lahir
-              </Label>
-              <Input
-                type="date"
-                id="tanggalLahir"
+              <FormField
+                control={form.control}
                 name="tanggalLahir"
-                placeholder='DD-MM-YYYY'
-                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tanggal Lahir</FormLabel>
+                    <FormControl>
+                      <Input type="date" placeholder="DD-MM-YYYY" className='text-black' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className='mt-4'>
-              <Label
-                htmlFor="telepon"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Telepon
-              </Label>
-              <Input
-                type="number"
-                id="telepon"
+              <FormField
+                control={form.control}
                 name="telepon"
-                placeholder='081234567890'
-                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Telepon</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="telepon" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className='mt-4'>
-              <Label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Username
-              </Label>
-              <Input
-                type="text"
-                id="username"
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="username"
-                placeholder='Username'
-                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="username" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="mt-4">
-              <Label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </Label>
-              <Input
-                type="password"
-                id="password"
+              <FormField
+                control={form.control}
                 name="password"
-                placeholder='Password'
-                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="mt-6">
-              <button
-                type="submit"
-                className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
-              >
-                Daftar
-              </button>
-            </div>
-          </form>
+              <Button type="submit" className="w-full">
+                {isLoading ? <ClipLoader color="#ffffff" size={16}/> : "Register"}
+              </Button>
+            </form>
+          </Form>
           <div className="mt-4 text-sm text-gray-600 text-center">
             <p>
               Sudah punya akun?{" "}

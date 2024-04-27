@@ -9,6 +9,8 @@ import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import { logoutAdmin } from "@/lib";
 import { logoutTriggerAdminMO } from "@/actions/logoutAdminMO.actions";
+import { useState } from "react";
+import { ClipLoader } from "react-spinners";
 interface Props {
   heading: string;
 
@@ -17,6 +19,7 @@ interface Props {
 
 const SideBar = ({ sideBar, heading }: Props) => {
   const pathname = usePathname();
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>
@@ -47,10 +50,11 @@ const SideBar = ({ sideBar, heading }: Props) => {
           </div>
           <div className="flex flex-col justify-end h-80 w-1/2">
             <Button onClick={async () => {
+                setIsLoading(true);
                 await logoutTriggerAdminMO();
                 window.location.reload();
               }}>
-              Logout
+              {isLoading ? <ClipLoader color="#ffffff" size={16}/> : "Logout"}
             </Button>
           </div>
         </SheetContent>

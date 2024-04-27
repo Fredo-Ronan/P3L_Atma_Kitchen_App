@@ -23,9 +23,9 @@ export async function decrypt(input: string): Promise<any> {
 
 
 // LOGIN MECHANISM ============================================================================================================================
-export async function login(formData: FormData) {
+export async function login(formData: any) {
     // verify credential and get the user
-    const user = {username: formData.get("username"), password: formData.get("password")};
+    const user = {username: formData.username, password: formData.password};
 
     // make login functionality here
     // TODO

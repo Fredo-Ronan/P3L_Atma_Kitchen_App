@@ -1,10 +1,39 @@
-import { getSessionCustomer, login } from "@/lib";
-import { Label } from "@/components/ui/label";
+'use client';
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { loginTrigger } from "@/actions/login.actions";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form";
+import { LoginSchema } from "@/schema/formSchemas";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useState } from "react";
+import { ClipLoader } from "react-spinners";
 
-const CustomerLoginPage = async () => {
-  const session = await getSessionCustomer();
+const CustomerLoginPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  })
+
+  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+    setIsLoading(true);
+    await loginTrigger(data);
+  }
 
   return (
     <div className="flex h-screen">
@@ -17,66 +46,42 @@ const CustomerLoginPage = async () => {
           <h1 className="text-sm font-semibold mb-10 text-gray-500 text-center">
             Login untuk menemukan produk - produk unggulan Atma Kitchen{" "}
           </h1>
-          <form
-            action={async (formData) => {
-              'use server';
-              await login(formData);
-            }}
-          >
-            <div>
-              <Label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Username
-              </Label>
-              <Input
-                type="text"
-                id="username"
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
                 name="username"
-                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="username" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            {/* <div>
-              <Label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </Label>
-              <Input
-                type="text"
-                id="email"
-                name="email"
-                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-              />
-            </div> */}
-            <div className="mt-4">
-              <Label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </Label>
-              <Input
-                type="password"
-                id="password"
+              <FormField
+                control={form.control}
                 name="password"
-                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="mt-4 text-end">
-              <Link href="/forgot-password" className="font-semibold text-gray-600 hover:text-black transition-all duration-200">Lupa Password?</Link>
-            </div>
-            <div className="mt-6">
-              <button
-                type="submit"
-                className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
-              >
-                Login
-              </button>
-            </div>
-          </form>
+              <div className="text-end font-semibold text-gray-600 hover:text-black hover:cursor-pointer transition-all duration-200">
+                Lupa Password?
+              </div>
+              <Button type="submit" className="w-full">
+                {isLoading ? <ClipLoader color="#ffffff" size={16}/> : "Login"}
+              </Button>
+            </form>
+          </Form>
           <div className="mt-4 text-sm text-gray-600 text-center">
             <p>
               Tidak punya akun?{" "}
