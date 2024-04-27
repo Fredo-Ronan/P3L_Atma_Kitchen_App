@@ -48,6 +48,10 @@ const CustomerLoginPage = () => {
     window.location.href = "/forgot-password";
   }
 
+  const forgetPasswordAdmin = () => {
+    window.location.href = "/forgot-password-admin";
+  }
+
   return (
     <div className="flex h-screen">
       {/* Left Side */}
@@ -98,7 +102,7 @@ const CustomerLoginPage = () => {
                   </DialogHeader>
                   <div className="flex flex-col gap-4 w-full">
                     <Button type="button" className="text-lg" onClick={() => forgetPasswordCustomer()}>Customer</Button>
-                    <Button type="button" className="text-lg">Admin/MO</Button>
+                    <Button type="button" className="text-lg" onClick={() => forgetPasswordAdmin()}>Admin/MO</Button>
                   </div>
                 </DialogContent>
               </Dialog>

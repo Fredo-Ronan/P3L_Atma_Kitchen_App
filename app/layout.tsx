@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "sonner";
 import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Atma Kitchen",
-  description: "Rumah Produk Unggulan",
+  description: "Produk Unggulan",
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
       </Head>
       <body className={inter.className}>
         {children}
-        <Toaster />
+        <Toaster richColors/>
       </body>
     </html>
   );
