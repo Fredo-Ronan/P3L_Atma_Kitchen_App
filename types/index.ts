@@ -52,3 +52,14 @@ export interface DetilTransaksiHistori {
   JUMLAH_PESANAN: number;
   SUBTOTAL: number;
 }
+
+export interface PRODUK {
+  ID_PRODUK: number;
+  NAMA_PRODUK: string;
+  HARGA_PRODUK: number;
+  DESKRIPSI_PRODUK: string;
+  STOK: number;
+  STATUS_PRODUK: string;
+  JENIS_PRODUK: string;
+  GAMBAR_PRODUK: string;
+}

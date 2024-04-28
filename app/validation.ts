@@ -19,3 +19,30 @@ export const createPengeluaranLainSchema = z.object({
   biaya_pengeluaran: z.string().min(1),
   tanggal_pengeluaran: z.date(),
 });
+
+export const createProdukSchema = z.object({
+  nama_produk: z.string().min(1, {
+    message: "Nama Produk harus diisi!"
+  }),
+  harga_produk: z.string().min(1, {
+    message: "Harga Produk harus diisi!"
+  }),
+  deskripsi_produk: z.string().min(1, {
+    message: "Deskripsi Produk harus diisi!"
+  }),
+  stok: z.number().optional(),
+  status_produk: z.string().min(1),
+  jenis_produk: z.string().min(1)
+}).refine(
+  (data) => {
+    if(data.jenis_produk === "Titipan"){
+      return data.stok !== undefined && data.stok > 0;
+    }
+
+    return true;
+  },
+  {
+    message: "Stok harus harus diisi jika produk titipan!",
+    path: ["stok"],
+  }
+)

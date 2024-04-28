@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import Head from "next/head";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,10 +22,12 @@ export default function RootLayout({
       <Head>
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
-      <body className={inter.className}>
-        {children}
-        <Toaster richColors/>
-      </body>
+      <EdgeStoreProvider>
+        <body className={inter.className}>
+          {children}
+          <Toaster richColors/>
+        </body>
+      </EdgeStoreProvider>
     </html>
   );
 }

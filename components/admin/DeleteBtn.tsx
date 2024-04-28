@@ -8,8 +8,9 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button } from "../ui/button";
+import { ClipLoader } from "react-spinners";
 
 interface Props {
   hapusData: (id: number) => void;
@@ -18,9 +19,11 @@ interface Props {
 
 const DeleteBtn = ({ hapusData, id }: Props) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
-    hapusData(id);
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    await hapusData(id);
     if (buttonRef.current) {
       buttonRef.current.click();
     }
@@ -44,7 +47,11 @@ const DeleteBtn = ({ hapusData, id }: Props) => {
             onClick={handleSubmit}
            
           >
-            Hapus
+            {
+              isLoading ?
+              <ClipLoader size={16} color="#ffffff"/>
+              : "Hapus"
+            }
           </Button>
           <DialogClose asChild>
             <Button variant="secondary">Batal</Button>
