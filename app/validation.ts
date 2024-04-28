@@ -31,8 +31,15 @@ export const createProdukSchema = z.object({
     message: "Deskripsi Produk harus diisi!"
   }),
   stok: z.number().optional(),
-  status_produk: z.string().min(1),
-  jenis_produk: z.string().min(1)
+  loyang: z.string().min(1, {
+    message: "Jumlah loyang harus dipilih!"
+  }),
+  status_produk: z.string().min(1, {
+    message: "Status Produk harus dipilih!"
+  }),
+  jenis_produk: z.string().min(1, {
+    message: "Jenis Produk harus dipilih!"
+  })
 }).refine(
   (data) => {
     if(data.jenis_produk === "Titipan"){

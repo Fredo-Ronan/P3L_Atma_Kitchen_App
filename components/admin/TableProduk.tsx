@@ -29,6 +29,7 @@ const TableProduk = ({ data, refreshData, deleteData }: Props) => {
                 <TableHead>Harga Produk</TableHead>
                 <TableHead>Deskripsi Produk</TableHead>
                 <TableHead>Stok</TableHead>
+                <TableHead>Loyang</TableHead>
                 <TableHead>Status Produk</TableHead>
                 <TableHead>Jenis Produk</TableHead>
                 <TableHead>Gambar Produk</TableHead>
@@ -43,11 +44,12 @@ const TableProduk = ({ data, refreshData, deleteData }: Props) => {
                             <TableCell>Rp {element.HARGA_PRODUK}</TableCell>
                             <TableCell>{element.DESKRIPSI_PRODUK}</TableCell>
                             <TableCell>{element.STOK}</TableCell>
-                            <TableCell>
+                            <TableCell>{element.LOYANG}</TableCell>
+                            <TableCell className='w-min'>
                                 <Badge variant={element.STATUS_PRODUK === "Kosong" ? "destructive" : "default"}>{element.STATUS_PRODUK}</Badge>
                             </TableCell>
                             <TableCell>{element.JENIS_PRODUK}</TableCell>
-                            <TableCell className='w-min'>
+                            <TableCell className='w-[200px]'>
                                 <img src={element.GAMBAR_PRODUK} width={200} height={200} alt="" />
                             </TableCell>
                             <TableCell className='flex gap-3 justify-center'>

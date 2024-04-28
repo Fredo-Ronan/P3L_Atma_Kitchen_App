@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { filterTersedia, filterJenisProduk } from "@/constants/mapping";
+import { filterTersedia, filterJenisProduk, filterLoyang } from "@/constants/mapping";
 import { cn } from "@/lib/utils";
 import { PRODUK } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,6 +57,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
       harga_produk: String(data?.HARGA_PRODUK) || "",
       deskripsi_produk: data?.DESKRIPSI_PRODUK || "",
       stok: data?.STOK || 0,
+      loyang: data?.LOYANG || "",
       status_produk: data?.STATUS_PRODUK || "",
       jenis_produk: data?.JENIS_PRODUK || ""
     });
@@ -69,6 +70,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
       harga_produk: String(data?.HARGA_PRODUK) || "",
       deskripsi_produk: data?.DESKRIPSI_PRODUK || "",
       stok: data?.STOK || 0,
+      loyang: data?.LOYANG || "",
       status_produk: data?.STATUS_PRODUK || "",
       jenis_produk: data?.JENIS_PRODUK || ""
     },
@@ -103,6 +105,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
             harga_produk: Number(values.harga_produk),
             deskripsi_produk: values.deskripsi_produk,
             stok: values.stok,
+            loyang: values.loyang,
             status_produk: values.status_produk,
             jenis_produk: values.jenis_produk,
             gambar_produk: urlImage
@@ -124,6 +127,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
             harga_produk: Number(values.harga_produk),
             deskripsi_produk: values.deskripsi_produk,
             stok: values.stok,
+            loyang: values.loyang,
             status_produk: values.status_produk,
             jenis_produk: values.jenis_produk,
             gambar_produk: urlImage
@@ -205,75 +209,110 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="status_produk"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) => field.onChange(value)}
-                      defaultValue={data?.STATUS_PRODUK || ""}
-                    >
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder="Tersedia atau Kosong?"
-                          defaultValue={data?.STATUS_PRODUK}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {filterTersedia.map((item: string) => (
-                          <SelectItem key={item} value={item}>
-                            {item}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="jenis_produk"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Jenis Produk</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) => {
-                        if(value === "Titipan"){
-                            setIsTitipan(true)
-                        }
+            <div className="flex justify-between gap-4">
+                <FormField
+                control={form.control}
+                name="status_produk"
+                render={({ field }) => (
+                    <FormItem className="w-full">
+                        <FormLabel>Status</FormLabel>
+                        <FormControl>
+                            <Select
+                            onValueChange={(value) => field.onChange(value)}
+                            defaultValue={data?.STATUS_PRODUK || ""}
+                            >
+                            <SelectTrigger>
+                                <SelectValue
+                                placeholder="Status"
+                                defaultValue={data?.STATUS_PRODUK}
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {filterTersedia.map((item: string) => (
+                                <SelectItem key={item} value={item}>
+                                    {item}
+                                </SelectItem>
+                                ))}
+                            </SelectContent>
+                            </Select>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="jenis_produk"
+                render={({ field }) => (
+                    <FormItem className="w-full">
+                        <FormLabel>Jenis Produk</FormLabel>
+                        <FormControl>
+                            <Select
+                            onValueChange={(value) => {
+                                if(value === "Titipan"){
+                                    setIsTitipan(true)
+                                }
 
-                        if(value === "Pre Order"){
-                            setIsTitipan(false);
-                        }
-                        field.onChange(value)
-                      }}
-                      defaultValue={data?.JENIS_PRODUK || ""}
-                    >
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder="Titipan atau Pre Order?"
-                          defaultValue={data?.JENIS_PRODUK}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {filterJenisProduk.map((item: string) => (
-                          <SelectItem key={item} value={item}>
-                            {item}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                                if(value === "Pre Order"){
+                                    setIsTitipan(false);
+                                }
+                                field.onChange(value)
+                            }}
+                            defaultValue={data?.JENIS_PRODUK || ""}
+                            >
+                            <SelectTrigger>
+                                <SelectValue
+                                placeholder="Jenis"
+                                defaultValue={data?.JENIS_PRODUK}
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {filterJenisProduk.map((item: string) => (
+                                <SelectItem key={item} value={item}>
+                                    {item}
+                                </SelectItem>
+                                ))}
+                            </SelectContent>
+                            </Select>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="loyang"
+                render={({ field }) => (
+                    <FormItem className="w-full">
+                        <FormLabel>Loyang</FormLabel>
+                        <FormControl>
+                            <Select
+                            onValueChange={(value) => {
+                                field.onChange(value)
+                            }}
+                            defaultValue={data?.LOYANG || ""}
+                            >
+                            <SelectTrigger>
+                                <SelectValue
+                                placeholder="Loyang"
+                                defaultValue={data?.LOYANG}
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {filterLoyang.map((item: string) => (
+                                <SelectItem key={item} value={item}>
+                                    {item}
+                                </SelectItem>
+                                ))}
+                            </SelectContent>
+                            </Select>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+            </div>
+            
             {
                 isTitipan ? 
                 <FormField

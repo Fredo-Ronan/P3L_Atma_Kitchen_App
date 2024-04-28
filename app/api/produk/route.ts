@@ -78,16 +78,16 @@ export async function POST(req: NextRequest){
         const connection = await connect();
         const request = await req.json();
         // console.log("WOYYYYYY")
-        console.log(request.body);
+        // console.log(request.body);
 
-        const { nama_produk, harga_produk, deskripsi_produk, stok, status_produk, jenis_produk, gambar_produk } = JSON.parse(
+        const { nama_produk, harga_produk, deskripsi_produk, stok, loyang, status_produk, jenis_produk, gambar_produk } = JSON.parse(
             request.body
         );
 
-        const insertProdukQuery = `INSERT INTO PRODUK (NAMA_PRODUK, HARGA_PRODUK, DESKRIPSI_PRODUK, STOK, STATUS_PRODUK, JENIS_PRODUK, GAMBAR_PRODUK) 
-                                    VALUES(?,?,?,?,?,?,?)`;
+        const insertProdukQuery = `INSERT INTO PRODUK (NAMA_PRODUK, HARGA_PRODUK, DESKRIPSI_PRODUK, STOK, LOYANG, STATUS_PRODUK, JENIS_PRODUK, GAMBAR_PRODUK) 
+                                    VALUES(?,?,?,?,?,?,?,?)`;
 
-        const [resultInsert, fields] = await connection.execute(insertProdukQuery, [nama_produk, harga_produk, deskripsi_produk, stok, status_produk, jenis_produk, gambar_produk]);
+        const [resultInsert, fields] = await connection.execute(insertProdukQuery, [nama_produk, harga_produk, deskripsi_produk, stok, loyang, status_produk, jenis_produk, gambar_produk]);
         connection.end();
 
         const final_result_insert = parseResultQuery(resultInsert);
