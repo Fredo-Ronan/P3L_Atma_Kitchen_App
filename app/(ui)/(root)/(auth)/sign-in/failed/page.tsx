@@ -1,10 +1,10 @@
+import NotifPage from '@/components/NotifPage'
 import React from 'react'
-import LoginFailed from '@/components/LoginFailed'
 
 const FailedLoginPage = () => {
   return (
     <div>
-        <LoginFailed/>
+        <NotifPage params={{iconText: "/failed.svg", notificationText: "Failed To Login!", description: "Your username or password is incorrect", navigationBtnText: "Back to Login", route: "/sign-in"}}/>
     </div>
   )
 }
