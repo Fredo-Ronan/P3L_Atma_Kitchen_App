@@ -48,7 +48,7 @@ const SideBar = ({ sideBar, heading }: Props) => {
               </Link>
             ))}
           </div>
-          <div className="flex flex-col justify-end h-80 w-1/2">
+          <div className="flex flex-col justify-end mt-20 w-1/2">
             <Button onClick={async () => {
                 setIsLoading(true);
                 await logoutTriggerAdminMO();

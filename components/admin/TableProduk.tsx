@@ -28,6 +28,7 @@ const TableProduk = ({ data, refreshData, deleteData }: Props) => {
                 <TableHead>Nama Produk</TableHead>
                 <TableHead>Harga Produk</TableHead>
                 <TableHead>Deskripsi Produk</TableHead>
+                <TableHead>Stok</TableHead>
                 <TableHead>Status Produk</TableHead>
                 <TableHead>Jenis Produk</TableHead>
                 <TableHead>Gambar Produk</TableHead>
@@ -41,6 +42,7 @@ const TableProduk = ({ data, refreshData, deleteData }: Props) => {
                             <TableCell className="font-medium">{element.NAMA_PRODUK}</TableCell>
                             <TableCell>Rp {element.HARGA_PRODUK}</TableCell>
                             <TableCell>{element.DESKRIPSI_PRODUK}</TableCell>
+                            <TableCell>{element.STOK}</TableCell>
                             <TableCell>
                                 <Badge variant={element.STATUS_PRODUK === "Kosong" ? "destructive" : "default"}>{element.STATUS_PRODUK}</Badge>
                             </TableCell>
