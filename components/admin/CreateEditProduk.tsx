@@ -352,7 +352,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
                         <FormItem>
                         <FormLabel>Stok</FormLabel>
                         <FormControl>
-                            <Input {...field} type="number" />
+                            <Input {...field} type="number" onChange={(e) => field.onChange(Number(e.target.value))} value={field.value === 0 ? "" : field.value}/>
                         </FormControl>
                         <FormMessage />
                         </FormItem>
