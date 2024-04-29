@@ -55,7 +55,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
   useEffect(() => {
     form.reset({
       nama_produk: data?.NAMA_PRODUK || "",
-      harga_produk: String(data?.HARGA_PRODUK) || "",
+      harga_produk: data?.HARGA_PRODUK || 0,
       deskripsi_produk: data?.DESKRIPSI_PRODUK || "",
       stok: data?.STOK || 0,
       loyang: data?.LOYANG || "",
@@ -68,7 +68,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
     resolver: zodResolver(createProdukSchema),
     defaultValues: {
       nama_produk: data?.NAMA_PRODUK || "",
-      harga_produk: String(data?.HARGA_PRODUK) || "",
+      harga_produk: data?.HARGA_PRODUK || 0,
       deskripsi_produk: data?.DESKRIPSI_PRODUK || "",
       stok: data?.STOK || 0,
       loyang: data?.LOYANG || "",

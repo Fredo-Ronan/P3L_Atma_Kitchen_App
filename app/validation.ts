@@ -24,7 +24,7 @@ export const createProdukSchema = z.object({
   nama_produk: z.string().min(1, {
     message: "Nama Produk harus diisi!"
   }),
-  harga_produk: z.string().min(1, {
+  harga_produk: z.number().min(1, {
     message: "Harga Produk harus diisi!"
   }),
   deskripsi_produk: z.string().min(1, {
