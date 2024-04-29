@@ -1,7 +1,36 @@
 import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 import { connect } from "@/db";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }){
+    try {
+        const connection = await connect();
+
+        const request = await req.json();
+
+        // console.log(request.body);
+
+        const { nama_produk, harga_produk, deskripsi_produk, stok, loyang, status_produk, jenis_produk, gambar_produk } = JSON.parse(
+            request.body
+        );
+
+        const updateQuery = `UPDATE PRODUK SET NAMA_PRODUK = ?, HARGA_PRODUK = ?, DESKRIPSI_PRODUK = ?, STOK = ?, LOYANG = ?, STATUS_PRODUK = ?, JENIS_PRODUK = ?, GAMBAR_PRODUK = ? 
+                            WHERE ID_PRODUK = ?`;
+
+        const [resultUpdate, fields] = await connection.execute(updateQuery, [nama_produk, harga_produk, deskripsi_produk, stok, loyang, status_produk, jenis_produk, gambar_produk, params.id]);
+
+        connection.end();
+
+        return NextResponse.json({
+            status: 200,
+            message: "Berhasil mengubah bahan baku",
+        });
+    }catch(error){
+        console.log(error);
+        throw error;
+    }
+}
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }){
     try {

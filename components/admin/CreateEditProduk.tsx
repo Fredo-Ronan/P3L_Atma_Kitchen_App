@@ -47,9 +47,10 @@ interface Props {
 const CreateEditProduk = ({ data, refreshData }: Props) => {
     const [file, setFile] = useState<File>();
     const { edgestore } = useEdgeStore();
-    const [urlImage, setUrlImage] = useState<String>();
+    const [urlImage, setUrlImage] = useState<String>("");
     const [isTitipan, setIsTitipan] = useState(false);
     const [errorFile, setErrorFile] = useState(false);
+    const [isEditGambar, setIsEditGambar] = useState(false);
 
   useEffect(() => {
     form.reset({
@@ -84,18 +85,25 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
     try {
       setIsLoading(true);
 
-      // upload image to edge store first
-      if(file){
-        setErrorFile(false);
-        const resultUploadImage = await edgestore.publicFiles.upload({ file });
-
-        setUrlImage(resultUploadImage.url);
-      } else {
-        setErrorFile(true);
-        return
-      }
-
       if (data) {
+        // console.log(data?.GAMBAR_PRODUK);
+        let resultUploadImage;
+        // store image to edge store first
+        if(file && isEditGambar){
+          setErrorFile(false);
+          await edgestore.publicFiles.delete({ url: data?.GAMBAR_PRODUK });
+          resultUploadImage = await edgestore.publicFiles.upload({ file });
+  
+          // console.log("FUCKING UPLOAD IMAGE!");
+          // console.log(resultUploadImage)
+  
+          // console.log(resultUploadImage.url);
+        } else if(!file && isEditGambar) {
+          setErrorFile(true);
+          setIsLoading(false);
+          return
+        }
+        
         const response = await axios.put(`/api/produk/${data.ID_PRODUK}`, {
           headers: {
             "Content-Type": "application/json",
@@ -105,10 +113,10 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
             harga_produk: Number(values.harga_produk),
             deskripsi_produk: values.deskripsi_produk,
             stok: values.stok,
-            loyang: values.loyang,
+            loyang: values.loyang || "",
             status_produk: values.status_produk,
             jenis_produk: values.jenis_produk,
-            gambar_produk: urlImage
+            gambar_produk: isEditGambar && resultUploadImage !== undefined ? resultUploadImage.url : data?.GAMBAR_PRODUK
           }),
         });
 
@@ -118,6 +126,24 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
 
         toast.success("Berhasil mengubah produk");
       } else {
+        let resultUploadImage;
+        // store image to edge store first
+        if(file){
+          setErrorFile(false);
+          resultUploadImage = await edgestore.publicFiles.upload({ file });
+  
+          // console.log("FUCKING UPLOAD IMAGE!");
+          // console.log(resultUploadImage)
+  
+          // console.log(resultUploadImage.url);
+        } else {
+          setErrorFile(true);
+          setIsLoading(false);
+          return
+        }
+
+
+        // then store the data to MYSQL database
         const response = await axios.post("/api/produk", {
           headers: {
             "Content-Type": "application/json",
@@ -127,10 +153,10 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
             harga_produk: Number(values.harga_produk),
             deskripsi_produk: values.deskripsi_produk,
             stok: values.stok,
-            loyang: values.loyang,
+            loyang: values.loyang || "",
             status_produk: values.status_produk,
             jenis_produk: values.jenis_produk,
-            gambar_produk: urlImage
+            gambar_produk: resultUploadImage.url
           }),
         });
 
@@ -279,38 +305,42 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
                     </FormItem>
                 )}
                 />
-                <FormField
-                control={form.control}
-                name="loyang"
-                render={({ field }) => (
-                    <FormItem className="w-full">
-                        <FormLabel>Loyang</FormLabel>
-                        <FormControl>
-                            <Select
-                            onValueChange={(value) => {
-                                field.onChange(value)
-                            }}
-                            defaultValue={data?.LOYANG || ""}
-                            >
-                            <SelectTrigger>
-                                <SelectValue
-                                placeholder="Loyang"
-                                defaultValue={data?.LOYANG}
-                                />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {filterLoyang.map((item: string) => (
-                                <SelectItem key={item} value={item}>
-                                    {item}
-                                </SelectItem>
-                                ))}
-                            </SelectContent>
-                            </Select>
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-                />
+                {
+                  isTitipan ?
+                  <></> :
+                  <FormField
+                  control={form.control}
+                  name="loyang"
+                  render={({ field }) => (
+                      <FormItem className="w-full">
+                          <FormLabel>Loyang</FormLabel>
+                          <FormControl>
+                              <Select
+                              onValueChange={(value) => {
+                                  field.onChange(value)
+                              }}
+                              defaultValue={data?.LOYANG || ""}
+                              >
+                              <SelectTrigger>
+                                  <SelectValue
+                                  placeholder="Loyang"
+                                  defaultValue={data?.LOYANG}
+                                  />
+                              </SelectTrigger>
+                              <SelectContent>
+                                  {filterLoyang.map((item: string) => (
+                                  <SelectItem key={item} value={item}>
+                                      {item}
+                                  </SelectItem>
+                                  ))}
+                              </SelectContent>
+                              </Select>
+                          </FormControl>
+                          <FormMessage />
+                      </FormItem>
+                  )}
+                  />
+                }
             </div>
             
             {
@@ -353,7 +383,33 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
                 : 
                 <div className="flex flex-col justify-center items-center">
                     <p className="text-md">Gambar Produk</p>
-                    <img src={data?.GAMBAR_PRODUK} alt="" width={200} height={200} />
+
+                    {
+                      isEditGambar ?
+                      <>
+                        <SingleImageDropzone
+                            width={200}
+                            height={200}
+                            value={file}
+                            dropzoneOptions={{
+                                maxSize: 1024 * 1024 * 1 // 1 MB
+                            }}
+                            onChange={(file) => {
+                                setFile(file);
+                            }}
+                        />
+                        {errorFile ? 
+                        <p className="text-md text-red-500">Gambar Produk harus diisi!</p>
+                        : <></>
+                        }
+                        <Button className="mt-4" variant="destructive" onClick={() => setIsEditGambar(!isEditGambar)}>Batal Edit Gambar</Button>
+                      </>
+                      :
+                      <>
+                        <img src={data?.GAMBAR_PRODUK} alt="" width={200} height={200} />
+                        <Button className="mt-4" onClick={() => setIsEditGambar(!isEditGambar)}>Edit Gambar Produk</Button>
+                      </>
+                    }
                 </div>
             }
             <Button
