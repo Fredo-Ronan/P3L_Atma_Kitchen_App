@@ -55,7 +55,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
   useEffect(() => {
     form.reset({
       nama_produk: data?.NAMA_PRODUK || "",
-      harga_produk: data?.HARGA_PRODUK || 0,
+      harga_produk: data?.HARGA_PRODUK || undefined,
       deskripsi_produk: data?.DESKRIPSI_PRODUK || "",
       stok: data?.STOK || 0,
       loyang: data?.LOYANG || "",
@@ -68,7 +68,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
     resolver: zodResolver(createProdukSchema),
     defaultValues: {
       nama_produk: data?.NAMA_PRODUK || "",
-      harga_produk: data?.HARGA_PRODUK || 0,
+      harga_produk: data?.HARGA_PRODUK || undefined,
       deskripsi_produk: data?.DESKRIPSI_PRODUK || "",
       stok: data?.STOK || 0,
       loyang: data?.LOYANG || "",
@@ -110,7 +110,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
           },
           body: JSON.stringify({
             nama_produk: values.nama_produk,
-            harga_produk: Number(values.harga_produk),
+            harga_produk: values.harga_produk,
             deskripsi_produk: values.deskripsi_produk,
             stok: values.stok,
             loyang: values.loyang || "",
@@ -150,7 +150,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
           },
           body: JSON.stringify({
             nama_produk: values.nama_produk,
-            harga_produk: Number(values.harga_produk),
+            harga_produk: values.harga_produk,
             deskripsi_produk: values.deskripsi_produk,
             stok: values.stok,
             loyang: values.loyang || "",
@@ -216,7 +216,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
                 <FormItem>
                   <FormLabel>Harga Produk</FormLabel>
                   <FormControl>
-                    <Input {...field} type="number" />
+                    <Input {...field} onChange={(e) => field.onChange(Number(e.target.value))} type="number" value={field.value === 0 ? "" : field.value} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
