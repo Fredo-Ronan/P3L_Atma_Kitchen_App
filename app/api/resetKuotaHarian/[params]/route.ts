@@ -40,7 +40,7 @@ export async function GET(req: NextRequest, { params }: { params: { params: stri
         //     "Cache-Control": "no-cache, no-store, must-revalidate",
         // }, });
 
-        if(isSame){
+        if(isSame && !isLastEarlier){
             // get all produk
             const getAllProdukQuery = `SELECT ID_PRODUK FROM PRODUK`;
     
@@ -75,7 +75,16 @@ export async function GET(req: NextRequest, { params }: { params: { params: stri
                   console.log(resultInsertKuota);
                 })
             })
+
+
+            // update last tanggal harus reset lagi
+            const updateNewTanggalResetQuery = `UPDATE TANGGAL_LAST_KUOTA SET LAST_TANGGAL = ? WHERE ID = 1`;
+            const tanggalNextUpdate = next7days[next7days.length - 1];
+
+            const [resultUpdate, fieldsUpdate] = await connection.execute(updateNewTanggalResetQuery, [tanggalNextUpdate]);
         }
+
+        connection.end();
 
 
         return new Response(JSON.stringify({status: StatusCodesP3L.OK}))
