@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { filterTersedia, filterJenisProduk, filterLoyang } from "@/constants/mapping";
+import { filterTersedia, filterLoyang, jenisProduk, jenisMakanan } from "@/constants/mapping";
 import { cn } from "@/lib/utils";
 import { PRODUK } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,6 +49,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
     const { edgestore } = useEdgeStore();
     const [urlImage, setUrlImage] = useState<String>("");
     const [isTitipan, setIsTitipan] = useState(false);
+    const [isCake, setIsCake] = useState(false);
     const [errorFile, setErrorFile] = useState(false);
     const [isEditGambar, setIsEditGambar] = useState(false);
 
@@ -56,6 +57,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
     form.reset({
       nama_produk: data?.NAMA_PRODUK || "",
       harga_produk: data?.HARGA_PRODUK || undefined,
+      jenis_makanan: data?.JENIS_MAKANAN || "",
       deskripsi_produk: data?.DESKRIPSI_PRODUK || "",
       stok: data?.STOK || 0,
       loyang: data?.LOYANG || "",
@@ -69,6 +71,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
     defaultValues: {
       nama_produk: data?.NAMA_PRODUK || "",
       harga_produk: data?.HARGA_PRODUK || undefined,
+      jenis_makanan: data?.JENIS_MAKANAN || "",
       deskripsi_produk: data?.DESKRIPSI_PRODUK || "",
       stok: data?.STOK || 0,
       loyang: data?.LOYANG || "",
@@ -111,6 +114,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
           body: JSON.stringify({
             nama_produk: values.nama_produk,
             harga_produk: values.harga_produk,
+            jenis_makanan: values.jenis_makanan,
             deskripsi_produk: values.deskripsi_produk,
             stok: values.stok,
             loyang: values.loyang || "",
@@ -151,6 +155,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
           body: JSON.stringify({
             nama_produk: values.nama_produk,
             harga_produk: values.harga_produk,
+            jenis_makanan: values.jenis_makanan,
             deskripsi_produk: values.deskripsi_produk,
             stok: values.stok,
             loyang: values.loyang || "",
@@ -293,7 +298,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
                                 />
                             </SelectTrigger>
                             <SelectContent>
-                                {filterJenisProduk.map((item: string) => (
+                                {jenisProduk.map((item: string) => (
                                 <SelectItem key={item} value={item}>
                                     {item}
                                 </SelectItem>
@@ -305,46 +310,83 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
                     </FormItem>
                 )}
                 />
-                {
-                  isTitipan ?
-                  <></> :
-                  <FormField
-                  control={form.control}
-                  name="loyang"
-                  render={({ field }) => (
-                      <FormItem className="w-full">
-                          <FormLabel>Loyang</FormLabel>
-                          <FormControl>
-                              <Select
-                              onValueChange={(value) => {
-                                  field.onChange(value)
-                              }}
-                              defaultValue={data?.LOYANG || ""}
-                              >
-                              <SelectTrigger>
-                                  <SelectValue
-                                  placeholder="Loyang"
-                                  defaultValue={data?.LOYANG}
-                                  />
-                              </SelectTrigger>
-                              <SelectContent>
-                                  {filterLoyang.map((item: string) => (
-                                  <SelectItem key={item} value={item}>
-                                      {item}
-                                  </SelectItem>
-                                  ))}
-                              </SelectContent>
-                              </Select>
-                          </FormControl>
-                          <FormMessage />
-                      </FormItem>
-                  )}
-                  />
-                }
+                <FormField
+                control={form.control}
+                name="jenis_makanan"
+                render={({ field }) => (
+                    <FormItem className="w-full">
+                        <FormLabel>Jenis Makanan</FormLabel>
+                        <FormControl>
+                            <Select
+                            onValueChange={(value) => {
+                                if(value === "Cake"){
+                                  setIsCake(true);
+                                } else {
+                                  setIsCake(false);
+                                }
+                                field.onChange(value)
+                            }}
+                            defaultValue={data?.JENIS_MAKANAN || ""}
+                            >
+                            <SelectTrigger>
+                                <SelectValue
+                                placeholder="Jenis"
+                                defaultValue={data?.JENIS_MAKANAN}
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {jenisMakanan.map((item: string) => (
+                                <SelectItem key={item} value={item}>
+                                    {item}
+                                </SelectItem>
+                                ))}
+                            </SelectContent>
+                            </Select>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
             </div>
-            
             {
-                isTitipan ? 
+              isTitipan ?
+              <></> :
+              isCake ?
+              <FormField
+              control={form.control}
+              name="loyang"
+              render={({ field }) => (
+                  <FormItem className="w-full">
+                      <FormLabel>Loyang</FormLabel>
+                      <FormControl>
+                          <Select
+                          onValueChange={(value) => {
+                              field.onChange(value)
+                          }}
+                          defaultValue={data?.LOYANG || ""}
+                          >
+                          <SelectTrigger>
+                              <SelectValue
+                              placeholder="Loyang"
+                              defaultValue={data?.LOYANG}
+                              />
+                          </SelectTrigger>
+                          <SelectContent>
+                              {filterLoyang.map((item: string) => (
+                              <SelectItem key={item} value={item}>
+                                  {item}
+                              </SelectItem>
+                              ))}
+                          </SelectContent>
+                          </Select>
+                      </FormControl>
+                      <FormMessage />
+                  </FormItem>
+              )}
+              /> : <></>
+            }
+            {
+                isTitipan || data ? 
                 <FormField
                     control={form.control}
                     name="stok"

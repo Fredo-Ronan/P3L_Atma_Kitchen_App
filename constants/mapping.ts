@@ -46,7 +46,9 @@ export const bahanBakuTable = [
 ];
 
 export const satuanFilter = ["kg", "gram", "pcs", "ltr", "ml"];
-export const filterJenisProduk = ["Titipan", "Pre Order"];
+export const filterProduk = ["Titipan", "Pre Order", "Pre Order + 1 Loyang", "Pre Order + 1/2 Loyang", "Tersedia", "Kosong"];
+export const jenisProduk = ["Titipan", "Pre Order"];
+export const jenisMakanan = ["Cake", "Roti", "Minuman"];
 export const filterTersedia = ["Tersedia", "Kosong"];
 export const filterLoyang = ["1 Loyang", "1/2 Loyang"];
 

@@ -35,6 +35,9 @@ export const createProdukSchema = z.object({
   status_produk: z.string().min(1, {
     message: "Status Produk harus dipilih!"
   }),
+  jenis_makanan: z.string().min(1, {
+    message: "Jenis Makanan harus dipilih!"
+  }),
   jenis_produk: z.string().min(1, {
     message: "Jenis Produk harus dipilih!"
   })
@@ -52,14 +55,14 @@ export const createProdukSchema = z.object({
   }
 ).refine(
   (data) => {
-    if (data.jenis_produk === "Pre Order") {
+    if (data.jenis_makanan === "Cake") {
       // If jenis_produk is "Pre Order", then loyang must be non-empty
       return data.loyang && data.loyang.trim().length > 0;
     }
     return true;
   },
   {
-    message: "Loyang harus diisi jika jenis produk Pre Order!",
+    message: "Loyang harus diisi jika jenis makanan Cake!",
     path: ["loyang"],
   }
 );

@@ -4,7 +4,7 @@ import Filter from '@/components/admin/Filter';
 import LocalSearchBar from '@/components/admin/LocalSearchBar'
 import Pagination from '@/components/admin/Pagination';
 import TableProduk from '@/components/admin/TableProduk'
-import { filterJenisProduk } from '@/constants/mapping';
+import { filterProduk, filterLoyang } from '@/constants/mapping';
 import { PRODUK, QueryParams } from '@/types'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -77,7 +77,7 @@ const ProdukAdminPage = ({ searchParams }: { searchParams: QueryParams }) => {
             <div className='flex mb-6'>
                 <LocalSearchBar />
                 <div className='w-9'></div>
-                <Filter filter={filterJenisProduk}/>
+                <Filter filter={filterProduk}/>
             </div>
             <CreateEditProduk refreshData={refreshDataProduk}/>
         </div>

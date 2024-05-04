@@ -57,6 +57,7 @@ export interface PRODUK {
   ID_PRODUK: number;
   NAMA_PRODUK: string;
   HARGA_PRODUK: number;
+  JENIS_MAKANAN: string;
   DESKRIPSI_PRODUK: string;
   STOK: number;
   LOYANG: string;

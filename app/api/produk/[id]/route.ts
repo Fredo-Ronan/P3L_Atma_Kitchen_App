@@ -11,14 +11,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
         // console.log(request.body);
 
-        const { nama_produk, harga_produk, deskripsi_produk, stok, loyang, status_produk, jenis_produk, gambar_produk } = JSON.parse(
+        const { nama_produk, harga_produk, jenis_makanan, deskripsi_produk, stok, loyang, status_produk, jenis_produk, gambar_produk } = JSON.parse(
             request.body
         );
 
-        const updateQuery = `UPDATE PRODUK SET NAMA_PRODUK = ?, HARGA_PRODUK = ?, DESKRIPSI_PRODUK = ?, STOK = ?, LOYANG = ?, STATUS_PRODUK = ?, JENIS_PRODUK = ?, GAMBAR_PRODUK = ? 
+        const updateQuery = `UPDATE PRODUK SET NAMA_PRODUK = ?, HARGA_PRODUK = ?, JENIS_MAKANAN = ?, DESKRIPSI_PRODUK = ?, STOK = ?, LOYANG = ?, STATUS_PRODUK = ?, JENIS_PRODUK = ?, GAMBAR_PRODUK = ? 
                             WHERE ID_PRODUK = ?`;
 
-        const [resultUpdate, fields] = await connection.execute(updateQuery, [nama_produk, harga_produk, deskripsi_produk, stok, loyang, status_produk, jenis_produk, gambar_produk, params.id]);
+        const [resultUpdate, fields] = await connection.execute(updateQuery, [nama_produk, harga_produk, jenis_makanan, deskripsi_produk, stok, loyang, status_produk, jenis_produk, gambar_produk, params.id]);
 
         connection.end();
 
