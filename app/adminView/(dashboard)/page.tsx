@@ -7,7 +7,7 @@ const Page = () => {
 
   const checkResetKuotaProduk = async () => {
     setIsLoading(true);
-    const res = await fetch(`${process.env.BASE_URL}/api/resetKuotaHarian/1`);
+    const res = await fetch(`/api/resetKuotaHarian/1`);
     setIsLoading(false);
   }
 
