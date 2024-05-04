@@ -33,7 +33,9 @@ export async function GET(req: NextRequest){
         console.log(`Current date : ${dayNow}`);
         const isSame = dayToReset === dayNow;
 
-        return NextResponse.json({data: { dayToRest: dayToReset, dayNow: dayNow, isSame:  isSame}}, { status: 200 });
+        return NextResponse.json({data: { dayToRest: dayToReset, dayNow: dayNow, isSame:  isSame}}, { status: 200, headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+          }, });
 
         // get all produk
         const getAllProdukQuery = `SELECT ID_PRODUK FROM PRODUK`;
