@@ -16,15 +16,19 @@ export async function POST(req: NextRequest){
         const next7days = getNext7Days();
 
         // inserting default kuota to KUOTA_HARIAN for the next 7 days for each produk
-        arrayOfIdProduk.forEach((dataIdProduk: number, index: number) => {
-            next7days.forEach(async (date, index) => {
-              const insertKuotaSeminggu = `INSERT INTO KUOTA_HARIAN (ID_PRODUK, TANGGAL_KUOTA, KUOTA) VALUES (?,?,?)`;
-      
-              const [resultInsertKuota, fieldsKuota] = await connection.execute(insertKuotaSeminggu, [dataIdProduk, date.toISOString().split("T")[0], 20]);
+        const values: object[] = [];
 
-            //   console.log(resultInsertKuota);
-            })
-        })
+        arrayOfIdProduk.forEach((dataIdProduk: any) => {
+            next7days.forEach((date) => {
+                values.push([dataIdProduk, date.toISOString().split("T")[0], 20]);
+            });
+        });
+
+        // Generate the SQL query for batch insertion
+        const insertKuotaSeminggu = `INSERT INTO KUOTA_HARIAN (ID_PRODUK, TANGGAL_KUOTA, KUOTA) VALUES ?`;
+
+        // Execute the batch insert
+        await connection.execute(insertKuotaSeminggu, [values]);
         connection.end();
 
 

@@ -28,6 +28,8 @@ const Page = () => {
       const finalArrayIdProduk = await resArrayIdProduk.json();
       const arrayIdProduk = finalArrayIdProduk.data
 
+      console.log(arrayIdProduk)
+
       const resReset = await axios.post("/api/resetKuotaHarian/reset", {
         headers: {
           "Content-Type": "application/json",
