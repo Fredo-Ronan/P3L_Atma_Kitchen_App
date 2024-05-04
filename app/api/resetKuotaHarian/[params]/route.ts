@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/db";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
 import { StatusCodesP3L } from "@/constants/statusCodesP3L";
-
-function parseDateToDay(date: string):string {
-    return date.split("-")[2];
-}
+import { getNext7Days } from "@/utilities/next7days";
+import { parseDateToDay } from "@/utilities/dateParser";
 
 export async function GET(req: NextRequest, { params }: { params: { params: string } }){
     try {
@@ -22,36 +20,61 @@ export async function GET(req: NextRequest, { params }: { params: { params: stri
             return new Response(JSON.stringify({status: StatusCodesP3L.OK}));
         }
 
-        console.log(final_result_last_date);
+        // console.log(final_result_last_date);
         const last_date_to_reset = JSON.parse(final_result_last_date).LAST_TANGGAL.split("T")[0];
         const currentDate = new Date();
-        const dayToReset = parseInt(parseDateToDay(last_date_to_reset)); // still testing for different time zones
-        const dayNow = parseInt(parseDateToDay(currentDate.toISOString().split("T")[0]));
-        console.log(last_date_to_reset);
-        console.log(`Last date on database : ${dayToReset}`);
-        console.log(`Current date : ${dayNow}`);
-        const isSame = dayToReset === dayNow;
+        // const dayToReset = parseInt(parseDateToDay(last_date_to_reset)); // still testing for different time zones
+        // const dayNow = parseInt(parseDateToDay(currentDate.toISOString().split("T")[0]));
+        // const isSame = dayToReset === dayNow;
 
-        return NextResponse.json({data: { dayToRest: dayToReset, dayNow: dayNow, isSame:  isSame}}, { status: 200, headers: {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-          }, });
-
-        // get all produk
-        const getAllProdukQuery = `SELECT ID_PRODUK FROM PRODUK`;
-
-        const [resultAllProduk, fieldsProduk] = await connection.execute(getAllProdukQuery);
-
-        const final_result_all_produk = parseResultQuery(resultAllProduk);
-        const arrayOfIdProdukJSON = final_result_all_produk.split(",");
-        let arrayOfIdProdukFinal: number[] = [];
+        const lastDate = new Date(last_date_to_reset);
+        const isLastEarlier = lastDate < currentDate;
+        const isSame = lastDate.getTime() === currentDate.getTime();
         
-        arrayOfIdProdukJSON.forEach((element, index) => {
-            arrayOfIdProdukFinal.push(
-                parseInt(element.split(":")[1].split("}")[0])
-            );
-        })
+        // console.log(last_date_to_reset);
+        // console.log(`Last date on database : ${dayToReset}`);
+        // console.log(`Current date : ${dayNow}`);
+        return NextResponse.json({data: { last: lastDate, current: currentDate, isEarlier: isLastEarlier, isSame: isSame }}, { status: 200, headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+        }, });
 
-        console.log(arrayOfIdProdukFinal);
+        if(isSame){
+            // get all produk
+            const getAllProdukQuery = `SELECT ID_PRODUK FROM PRODUK`;
+    
+            const [resultAllProduk, fieldsProduk] = await connection.execute(getAllProdukQuery);
+    
+            const final_result_all_produk = parseResultQuery(resultAllProduk);
+            const arrayOfIdProdukJSON = final_result_all_produk.split(",");
+            let arrayOfIdProdukFinal: number[] = [];
+            
+            arrayOfIdProdukJSON.forEach((element, index) => {
+                arrayOfIdProdukFinal.push(
+                    parseInt(element.split(":")[1].split("}")[0])
+                );
+            })
+    
+            console.log(arrayOfIdProdukFinal);
+
+            // hapus semua data di tabel kuota harian
+            const deleteAllKuotaQuery = `DELETE FROM KUOTA_HARIAN`;
+            const [resultDelete, fieldsDelete] = await connection.execute(deleteAllKuotaQuery);
+
+            // get next 7 days dates
+            const next7days = getNext7Days();
+
+            // inserting default kuota to KUOTA_HARIAN for the next 7 days for each produk
+            arrayOfIdProdukFinal.forEach((dataIdProduk, index) => {
+                next7days.forEach(async (date, index) => {
+                  const insertKuotaSeminggu = `INSERT INTO KUOTA_HARIAN (ID_PRODUK, TANGGAL_KUOTA, KUOTA) VALUES (?,?,?)`;
+          
+                  const [resultInsertKuota, fieldsKuota] = await connection.execute(insertKuotaSeminggu, [dataIdProduk, date.toISOString().split("T")[0], 20]);
+    
+                  console.log(resultInsertKuota);
+                })
+            })
+        }
+
 
         return new Response(JSON.stringify({status: StatusCodesP3L.OK}))
     }catch(error){

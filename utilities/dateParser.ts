@@ -8,3 +8,7 @@ export const dateParser = (date: string) => {
 
     return formattedDate;
 }
+
+export function parseDateToDay(date: string):string {
+    return date.split("-")[2];
+}
