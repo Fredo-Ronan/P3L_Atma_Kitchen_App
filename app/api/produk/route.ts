@@ -1,7 +1,7 @@
 import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 import { connect } from "@/db";
 import { filterParser } from "@/utilities/filterParser";
-import { getNext7Days } from "@/utilities/next7days";
+import { calculateDays, getNext7Days, getNextNDays } from "@/utilities/nextNdays";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -124,25 +124,21 @@ export async function POST(req: NextRequest){
 
         const final_result_last_date = parseResultQuery(resultLastDate);
 
-
         if(final_result_last_date !== ""){
           const lastDateOnDatabase = new Date(JSON.parse(final_result_last_date).LAST_TANGGAL.split("T")[0]);
           const currentDate = new Date();
-          const currentDateReal = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-          
-          // if last date to reset kuota harian in database same as now date
-          if(lastDateOnDatabase.getTime() === currentDateReal.getTime()){
-            const next7days = getNext7Days();
+          const numberOfDaysToReset = calculateDays(currentDate, lastDateOnDatabase);
 
-            // inserting default kuota to KUOTA_HARIAN for the next 7 days
-            next7days.forEach(async (date, index) => {
-              const insertKuotaSeminggu = `INSERT INTO KUOTA_HARIAN (ID_PRODUK, TANGGAL_KUOTA, KUOTA) VALUES (?,?,?)`;
-      
-              const [resultInsertKuota, fieldsKuota] = await connection.execute(insertKuotaSeminggu, [insertID, date.toISOString().split("T")[0], 20]);
+          const nextNdays = getNextNDays(numberOfDaysToReset);
 
-              console.log(resultInsertKuota);
-            })
-          }
+          // inserting default kuota to KUOTA_HARIAN for the next 7 days
+          nextNdays.forEach(async (date, index) => {
+            const insertKuotaSeminggu = `INSERT INTO KUOTA_HARIAN (ID_PRODUK, TANGGAL_KUOTA, KUOTA) VALUES (?,?,?)`;
+    
+            const [resultInsertKuota, fieldsKuota] = await connection.execute(insertKuotaSeminggu, [insertID, date.toISOString().split("T")[0], 20]);
+
+            console.log(resultInsertKuota);
+          })
         }
 
 

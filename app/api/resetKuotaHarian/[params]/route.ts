@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/db";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
 import { StatusCodesP3L } from "@/constants/statusCodesP3L";
-import { getNext7Days } from "@/utilities/next7days";
+import { getNext7Days } from "@/utilities/nextNdays";
 
 export async function GET(req: NextRequest, { params }: { params: { params: string } }){
     try {
@@ -36,9 +36,9 @@ export async function GET(req: NextRequest, { params }: { params: { params: stri
         // console.log(last_date_to_reset);
         // console.log(`Last date on database : ${dayToReset}`);
         // console.log(`Current date : ${dayNow}`);
-        return NextResponse.json({data: { last: lastDate, current: currentDate, isEarlier: isLastEarlier, isSame: isSame }}, { status: 200, headers: {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-        }, });
+        // return NextResponse.json({data: { last: lastDate, current: currentDate, isEarlier: isLastEarlier, isSame: isSame }}, { status: 200, headers: {
+        //     "Cache-Control": "no-cache, no-store, must-revalidate",
+        // }, });
 
         if(isSame){
             // get all produk
