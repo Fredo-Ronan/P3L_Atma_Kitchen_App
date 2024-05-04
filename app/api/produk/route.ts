@@ -129,7 +129,9 @@ export async function POST(req: NextRequest){
           const currentDate = new Date();
           const numberOfDaysToReset = calculateDays(currentDate, lastDateOnDatabase);
 
-          const nextNdays = getNextNDays(numberOfDaysToReset);
+          // console.log(numberOfDaysToReset);
+
+          const nextNdays = getNextNDays(numberOfDaysToReset + 1);
 
           // inserting default kuota to KUOTA_HARIAN for the next 7 days
           nextNdays.forEach(async (date, index) => {
@@ -137,7 +139,7 @@ export async function POST(req: NextRequest){
     
             const [resultInsertKuota, fieldsKuota] = await connection.execute(insertKuotaSeminggu, [insertID, date.toISOString().split("T")[0], 20]);
 
-            console.log(resultInsertKuota);
+            // console.log(resultInsertKuota);
           })
         }
 

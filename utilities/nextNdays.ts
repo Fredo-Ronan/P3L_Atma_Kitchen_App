@@ -34,11 +34,11 @@ export function calculateDays(fromDate: Date, toDate: Date): number{
   const toDateOnly = new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate());
 
   // calculate the differents in miliseconds
-  const diffMilis = fromDateOnly.getTime() - toDateOnly.getTime();
+  const diffMilis = toDateOnly.getTime() - fromDateOnly.getTime();
 
   // calculate day differences
   const milisPerDay = 24 * 60 * 60 * 1000;
-  const daysDiff = Math.round(diffMilis / milisPerDay);
+  const daysDiff = Math.floor(diffMilis / milisPerDay);
 
   return daysDiff;
 }
