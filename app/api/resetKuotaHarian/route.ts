@@ -1,3 +1,4 @@
+'use server';
 import { NextRequest } from "next/server";
 import { connect } from "@/db";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
