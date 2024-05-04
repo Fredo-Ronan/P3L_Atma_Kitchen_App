@@ -22,7 +22,7 @@ export async function POST(req: NextRequest){
       
               const [resultInsertKuota, fieldsKuota] = await connection.execute(insertKuotaSeminggu, [dataIdProduk, date.toISOString().split("T")[0], 20]);
 
-              console.log(resultInsertKuota);
+            //   console.log(resultInsertKuota);
             })
         })
         connection.end();

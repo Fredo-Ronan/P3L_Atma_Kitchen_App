@@ -5,7 +5,7 @@ export async function GET(req: Request){
     try {
         const connection = await connect();
 
-        const queryAlter = `ALTER TABLE TANGGAL_LAST_KUOTA AUTO_INCREMENT = 1`;
+        const queryAlter = `ALTER TABLE KUOTA_HARIAN AUTO_INCREMENT = 1`;
 
         const [resultAlter, fields] = await connection.execute(queryAlter);
         connection.end();
