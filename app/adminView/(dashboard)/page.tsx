@@ -13,7 +13,7 @@ const Page = () => {
 
   useEffect(() => {
     checkResetKuotaProduk();
-  }, [])
+  }, [checkResetKuotaProduk])
 
   return (
     <div>
