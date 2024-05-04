@@ -1,4 +1,3 @@
-'use server';
 import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/db";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
@@ -8,7 +7,7 @@ function parseDateToDay(date: string):string {
     return date.split("-")[2];
 }
 
-export async function GET(req: NextRequest){
+export async function GET(req: NextRequest, { params }: { params: { params: string } }){
     try {
         const connection = await connect();
 
