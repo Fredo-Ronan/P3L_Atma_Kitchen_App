@@ -25,7 +25,7 @@ export async function GET(req: NextRequest){
         console.log(final_result_last_date);
         const last_date_to_reset = JSON.parse(final_result_last_date).LAST_TANGGAL.split("T")[0];
         const currentDate = new Date();
-        const dayToReset = parseInt(parseDateToDay(last_date_to_reset)) + 1; // still testing for different time zones
+        const dayToReset = parseInt(parseDateToDay(last_date_to_reset)); // still testing for different time zones
         const dayNow = parseInt(parseDateToDay(currentDate.toISOString().split("T")[0]));
         console.log(last_date_to_reset);
         console.log(`Last date on database : ${dayToReset}`);
