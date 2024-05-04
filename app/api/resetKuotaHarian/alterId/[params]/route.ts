@@ -1,7 +1,7 @@
 import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 import { connect } from "@/db";
 
-export async function GET(req: Request){
+export async function GET(req: Request, { params }: { params: { params: string } }){
     try {
         const connection = await connect();
 

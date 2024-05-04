@@ -21,10 +21,10 @@ const Page = () => {
       })
 
       // kedua alter semua id auto increment menjadi balik ke 1 untuk tabel KUOTA_HARIAN
-      const resAlterTable = await fetch(`/api/resetKuotaHarian/alterId`);
+      const resAlterTable = await fetch(`/api/resetKuotaHarian/alterId/1`);
 
       // get all id produk
-      const resArrayIdProduk = await fetch(`/api/resetKuotaHarian/getAllProdukId`);
+      const resArrayIdProduk = await fetch(`/api/resetKuotaHarian/getAllProdukId/1`);
       const finalArrayIdProduk = await resArrayIdProduk.json();
       const arrayIdProduk = finalArrayIdProduk.data
 
