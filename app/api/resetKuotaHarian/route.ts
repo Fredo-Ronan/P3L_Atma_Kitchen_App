@@ -30,9 +30,9 @@ export async function GET(req: NextRequest){
         console.log(last_date_to_reset);
         console.log(`Last date on database : ${dayToReset}`);
         console.log(`Current date : ${dayNow}`);
-        console.log(dayToReset === dayNow);
+        const isSame = dayToReset === dayNow;
 
-        return new Response(JSON.stringify({status: StatusCodesP3L.OK}));
+        return new Response(JSON.stringify({status: StatusCodesP3L.OK, data: { dayToRest: dayToReset, dayNow: dayNow, isSame:  isSame}}));
 
         // get all produk
         const getAllProdukQuery = `SELECT ID_PRODUK FROM PRODUK`;
