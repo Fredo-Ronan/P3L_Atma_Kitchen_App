@@ -38,7 +38,7 @@ export async function GET(req: Request, { params }: { params: { params: string }
         //     "Cache-Control": "no-cache, no-store, must-revalidate",
         // }, });
 
-        return new Response(JSON.stringify({status: StatusCodesP3L.OK, isEarlier: isLastEarlier, isSame: isSame}));
+        return new Response(JSON.stringify({status: StatusCodesP3L.OK, dateDatabase: lastDateOnly, current: currentDateOnly, isEarlier: isLastEarlier, isSame: isSame}));
     }catch(error){
         console.log(error);
         throw error;
