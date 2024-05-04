@@ -1,5 +1,5 @@
 'use server';
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/db";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
 import { StatusCodesP3L } from "@/constants/statusCodesP3L";
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest){
         console.log(`Current date : ${dayNow}`);
         const isSame = dayToReset === dayNow;
 
-        return new Response(JSON.stringify({status: StatusCodesP3L.OK, data: { dayToRest: dayToReset, dayNow: dayNow, isSame:  isSame}}));
+        return NextResponse.json({data: { dayToRest: dayToReset, dayNow: dayNow, isSame:  isSame}}, { status: 200 });
 
         // get all produk
         const getAllProdukQuery = `SELECT ID_PRODUK FROM PRODUK`;
