@@ -3,7 +3,6 @@ import { connect } from "@/db";
 import { parseResultQuery } from "@/utilities/resultQueryParser";
 import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 import { getNext7Days } from "@/utilities/next7days";
-import { parseDateToDay } from "@/utilities/dateParser";
 
 export async function GET(req: NextRequest, { params }: { params: { params: string } }){
     try {
@@ -26,10 +25,13 @@ export async function GET(req: NextRequest, { params }: { params: { params: stri
         // const dayToReset = parseInt(parseDateToDay(last_date_to_reset)); // still testing for different time zones
         // const dayNow = parseInt(parseDateToDay(currentDate.toISOString().split("T")[0]));
         // const isSame = dayToReset === dayNow;
-
         const lastDate = new Date(last_date_to_reset);
-        const isLastEarlier = lastDate < currentDate;
-        const isSame = lastDate.getTime() === currentDate.getTime();
+
+        const lastDateOnly = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate());
+        const currentDateOnly = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
+
+        const isLastEarlier = lastDateOnly < currentDateOnly;
+        const isSame = lastDateOnly.getTime() === currentDateOnly.getTime();
         
         // console.log(last_date_to_reset);
         // console.log(`Last date on database : ${dayToReset}`);
