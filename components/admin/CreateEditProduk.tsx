@@ -471,9 +471,13 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
               >
                 {isLoading ? <Spinner /> : data ? "Edit Produk" : "Tambah"}
               </Button>
-              <Button type="button" onClick={() => editKuotaProduksiTrigger()} className={cn({"mx-2": data, "hidden": !data})}>
-                {isLoadingEditKuota ? <Spinner/> : "Edit Kuota Produksi"}
-              </Button>
+              {
+                data?.JENIS_PRODUK === "Pre Order" ?
+                <Button type="button" onClick={() => editKuotaProduksiTrigger()} className={cn({"mx-2": data, "hidden": !data})}>
+                  {isLoadingEditKuota ? <Spinner/> : "Edit Kuota Produksi"}
+                </Button>
+                : <></>
+              }
             </div>
             <DialogClose hidden ref={closeBtn} />
           </form>

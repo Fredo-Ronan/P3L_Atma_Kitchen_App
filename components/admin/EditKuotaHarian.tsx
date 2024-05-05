@@ -91,22 +91,32 @@ const EditKuotaHarian = ({ data, earlier, refreshData }: Props) => {
 
   return (
     <Dialog>
-        <HoverCard>
-            <HoverCardTrigger asChild>
+        {
+            earlier ?
+            <HoverCard>
+                <HoverCardTrigger asChild>
+                    <DialogTrigger
+                        className={`rounded shadow text-white py-1 px-3 bg-slate-400`}
+                        disabled={true}
+                        onClick={() => form.reset()}
+                    >
+                        Edit
+                    </DialogTrigger>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80 bg-red-500">
+                <div className="text-white">
+                    <p>Tidak bisa di edit karena tanggal sudah lewat</p>
+                </div>
+                </HoverCardContent>
+            </HoverCard>
+            :
             <DialogTrigger
-                className={`rounded shadow text-white py-1 px-3 bg-orange-500 ${earlier ? "bg-slate-400" : "hover:bg-orange-500/50"}`}
-                disabled={earlier}
-                onClick={() => form.reset()}
-            >
-                Edit
-            </DialogTrigger>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-80 bg-red-500">
-            <div className="text-white">
-                <p>Tidak bisa di edit karena tanggal sudah lewat</p>
-            </div>
-            </HoverCardContent>
-        </HoverCard>
+                        className={`rounded shadow text-white py-1 px-3 bg-orange-500 hover:bg-orange-500/50`}
+                        onClick={() => form.reset()}
+                    >
+                        Edit
+                    </DialogTrigger>
+        }
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center">

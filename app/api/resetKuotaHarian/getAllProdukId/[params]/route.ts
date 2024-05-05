@@ -7,7 +7,7 @@ export async function GET(req: Request, { params }: { params: { params: string }
         const connection = await connect();
 
         // get all produk
-        const getAllProdukQuery = `SELECT ID_PRODUK FROM PRODUK`;
+        const getAllProdukQuery = `SELECT ID_PRODUK FROM PRODUK WHERE JENIS_PRODUK LIKE 'Pre Order'`;
     
         const [resultAllProduk, fieldsProduk] = await connection.execute(getAllProdukQuery);
         connection.end();
