@@ -52,6 +52,7 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
     const [isCake, setIsCake] = useState(false);
     const [errorFile, setErrorFile] = useState(false);
     const [isEditGambar, setIsEditGambar] = useState(false);
+    const [isLoadingEditKuota, setIsLoadingEditKuota] = useState(false);
 
   useEffect(() => {
     form.reset({
@@ -180,6 +181,11 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  const editKuotaProduksiTrigger = () => {
+    setIsLoadingEditKuota(true);
+    window.location.href = `/adminView/produk/editKuotaProduk/${data?.NAMA_PRODUK}/${data?.ID_PRODUK}`
   }
 
 //   console.log(data?.GAMBAR_PRODUK)
@@ -454,16 +460,21 @@ const CreateEditProduk = ({ data, refreshData }: Props) => {
                     }
                 </div>
             }
-            <Button
-              type="submit"
-              className={cn({
-                "bg-blue-500 hover:bg-blue-500/50": !data,
-                "bg-orange-500 hover:bg-orange-500/50": data,
-              })}
-              disabled={isLoading}
-            >
-              {isLoading ? <Spinner /> : data ? "Edit Bahan" : "Tambah"}
-            </Button>
+            <div className="flex justify-between">
+              <Button
+                type="submit"
+                className={cn({
+                  "bg-blue-500 hover:bg-blue-500/50": !data,
+                  "bg-orange-500 hover:bg-orange-500/50": data,
+                })}
+                disabled={isLoading}
+              >
+                {isLoading ? <Spinner /> : data ? "Edit Produk" : "Tambah"}
+              </Button>
+              <Button type="button" onClick={() => editKuotaProduksiTrigger()} className={cn({"mx-2": data, "hidden": !data})}>
+                {isLoadingEditKuota ? <Spinner/> : "Edit Kuota Produksi"}
+              </Button>
+            </div>
             <DialogClose hidden ref={closeBtn} />
           </form>
         </Form>

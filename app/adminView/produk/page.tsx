@@ -73,6 +73,7 @@ const ProdukAdminPage = ({ searchParams }: { searchParams: QueryParams }) => {
     }
   return (
     <div>
+        <h1 className="text-2xl font-bold">Produk</h1>
         <div className='flex justify-between items-center'>
             <div className='flex mb-6'>
                 <LocalSearchBar />

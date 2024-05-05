@@ -65,3 +65,11 @@ export interface PRODUK {
   JENIS_PRODUK: string;
   GAMBAR_PRODUK: string;
 }
+
+export interface KUOTA_HARIAN {
+  ID_KUOTA_HARIAN: number;
+  ID_PRODUK: number;
+  TANGGAL_KUOTA: string;
+  KUOTA: number;
+  KETERANGAN: string;
+}

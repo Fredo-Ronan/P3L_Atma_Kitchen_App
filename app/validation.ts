@@ -66,3 +66,10 @@ export const createProdukSchema = z.object({
     path: ["loyang"],
   }
 );
+
+export const editKuotaHarianSchema = z.object({
+  kuota: z.number().min(0, {
+    message: "Kuota Harus Diisi!"
+  }),
+  keterangan: z.string().optional()
+})
