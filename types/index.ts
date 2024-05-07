@@ -73,3 +73,10 @@ export interface KUOTA_HARIAN {
   KUOTA: number;
   KETERANGAN: string;
 }
+
+export interface HAMPERS {
+  ID_HAMPERS: number;
+  NAMA_HAMPERS: string;
+  HARGA_HAMPERS: number;
+  DESKRIPSI_HAMPERS: string;
+}

@@ -73,3 +73,13 @@ export const editKuotaHarianSchema = z.object({
   }),
   keterangan: z.string().optional()
 })
+
+
+export const createEditHampersSchema = z.object({
+  nama_hampers: z.string().min(1, {
+    message: "Nama Hampers harus diisi!"
+  }),
+  deskripsi_hampers: z.string().min(1, {
+    message: "Deskripsi Hampers harus diisi!"
+  })
+})
