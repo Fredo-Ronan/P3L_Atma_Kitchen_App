@@ -11,7 +11,7 @@ const DetailHampersAdminPage = ({ params }: { params: { detail_hampers: string[]
 
   const router = useRouter();
   const id_hampers = params.detail_hampers[1];
-  const nama_hampers = params.detail_hampers[0];
+  const nama_hampers = params.detail_hampers[0].replace('%20', ' ');
   const [isLoading, setIsLoading] = useState(false);
   const [dataDetilHampers, setDataDetilHampers] = useState<PRODUK[]>([]);
   const [dataHampers, setDataHampers] = useState<HAMPERS>();
@@ -45,7 +45,7 @@ const DetailHampersAdminPage = ({ params }: { params: { detail_hampers: string[]
 
   return (
     <div>
-        <h1 className="text-2xl font-bold">Detail Hampers "{nama_hampers.replace('%20', ' ')}"</h1>
+        <h1 className="text-2xl font-bold">Detail Hampers "{nama_hampers}"</h1>
         <div className='mt-2 mb-4'>
           <p className='text-lg opacity-70 italic'>Keterangan : </p>
           <p className='text-lg'>Exclusive box and Card : {dataHampers?.DESKRIPSI_HAMPERS.includes('+ Exclusive box and Card') ? "Ya (+ Rp. 50.000)" : "Tidak"}</p>
