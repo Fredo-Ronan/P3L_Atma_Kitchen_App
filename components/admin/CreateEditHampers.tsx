@@ -285,7 +285,7 @@ const CreateEditHampers = ({
             <div className="flex gap-2 flex-wrap border p-2">
               {produkTerpilih.length !== 0 ? (
                 produkTerpilih.map((data) => (
-                  <HoverCard>
+                  <HoverCard key={data.ID_PRODUK}>
                     <HoverCardTrigger>
                       <Button
                         key={data.ID_PRODUK}
