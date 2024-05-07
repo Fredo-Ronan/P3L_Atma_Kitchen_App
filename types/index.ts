@@ -21,6 +21,15 @@ export interface PENGELUARAN_LAIN {
   TANGGAL_PENGELUARAN: Date;
 }
 
+export interface PENGADAAN_BAHAN {
+  ID_PENGADAAN_BAHAN: number;
+  ID_BAHAN: number;
+  NAMA_BAHAN: string;
+  HARGA_BELI_BAHAN: number;
+  TANGGAL_BELI: string;
+  JUMLAH_BELI: number;
+}
+
 export interface QueryParams {
   q?: string;
   orderBy?: string;

@@ -20,6 +20,16 @@ export const createPengeluaranLainSchema = z.object({
   tanggal_pengeluaran: z.date(),
 });
 
+export const createPengadaanBahanSchema = z.object({
+  harga_beli: z.number().min(1, {
+    message: "Harga Beli harus diisi!"
+  }),
+  tanggal_beli: z.date(),
+  jumlah_beli: z.number().min(1, {
+    message: "Jumlah Beli harus diisi!"
+  })
+})
+
 export const createProdukSchema = z.object({
   nama_produk: z.string().min(1, {
     message: "Nama Produk harus diisi!"
