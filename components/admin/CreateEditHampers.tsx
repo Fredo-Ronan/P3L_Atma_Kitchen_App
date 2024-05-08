@@ -314,8 +314,8 @@ const CreateEditHampers = ({
 
             <Accordion type="single" collapsible>
               <AccordionItem
-                value="item-1"
-                className="bg-slate-200 px-4 rounded-lg"
+                value="1"
+                className="bg-slate-200 px-4 rounded-lg mb-2"
               >
                 <AccordionTrigger>Cake</AccordionTrigger>
                 <AccordionContent
@@ -363,9 +363,95 @@ const CreateEditHampers = ({
                   )}
                 </AccordionContent>
               </AccordionItem>
+
+              <AccordionItem
+                value="2"
+                className="bg-slate-200 px-4 rounded-lg mb-2"
+              >
+                <AccordionTrigger>Roti</AccordionTrigger>
+                <AccordionContent
+                  className="overflow-y-scroll max-h-80"
+                  key={"roti"}
+                >
+                  {dataProduk?.map((data) =>
+                    data.JENIS_MAKANAN === "Roti" ? (
+                      <div
+                        className="bg-white mb-2 px-4 py-2 flex justify-between items-center rounded"
+                        key={data.ID_PRODUK}
+                      >
+                        <div>
+                          <div className="text-lg">{data.NAMA_PRODUK}</div>
+                          <img
+                            src={data.GAMBAR_PRODUK}
+                            width={100}
+                            height={100}
+                          />
+                        </div>
+                        <div>
+                          <Button
+                            type="button"
+                            className="bg-blue-500"
+                            onClick={() => {
+                              setProdukTerpilih([...produkTerpilih, data]);
+                              setTotalHarga(totalHarga + data.HARGA_PRODUK);
+                            }}
+                          >
+                            ADD
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <></>
+                    )
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem
+                value="3"
+                className="bg-slate-200 px-4 rounded-lg mb-2"
+              >
+                <AccordionTrigger>Minuman</AccordionTrigger>
+                <AccordionContent
+                  className="overflow-y-scroll max-h-80"
+                  key={"minuman"}
+                >
+                  {dataProduk?.map((data) =>
+                    data.JENIS_MAKANAN === "Minuman" ? (
+                      <div
+                        className="bg-white mb-2 px-4 py-2 flex justify-between items-center rounded"
+                        key={data.ID_PRODUK}
+                      >
+                        <div>
+                          <div className="text-lg">{data.NAMA_PRODUK}</div>
+                          <img
+                            src={data.GAMBAR_PRODUK}
+                            width={100}
+                            height={100}
+                          />
+                        </div>
+                        <div>
+                          <Button
+                            type="button"
+                            className="bg-blue-500"
+                            onClick={() => {
+                              setProdukTerpilih([...produkTerpilih, data]);
+                              setTotalHarga(totalHarga + data.HARGA_PRODUK);
+                            }}
+                          >
+                            ADD
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <></>
+                    )
+                  )}
+                </AccordionContent>
+              </AccordionItem>
             </Accordion>
 
-            <Accordion type="single" collapsible>
+            {/* <Accordion type="single" collapsible>
               <AccordionItem
                 value="item-1"
                 className="bg-slate-200 px-4 rounded-lg"
@@ -453,7 +539,7 @@ const CreateEditHampers = ({
                   )}
                 </AccordionContent>
               </AccordionItem>
-            </Accordion>
+            </Accordion> */}
 
             <div className="flex items-center gap-2">
               <Checkbox
