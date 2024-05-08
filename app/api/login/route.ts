@@ -40,6 +40,7 @@ export async function POST(req: Request){
                 const final_customer_result = parseResultQuery(resultCustomer);
 
                 const user_data_to_send = {
+                    role: "Customer",
                     id_customer: JSON.parse(final_customer_result).ID_CUSTOMER,
                     nama_customer: JSON.parse(final_customer_result).NAMA_CUSTOMER,
                     email_customer: JSON.parse(final_customer_result).EMAIL_CUSTOMER,
