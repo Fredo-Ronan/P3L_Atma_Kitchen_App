@@ -72,7 +72,7 @@ const DetailResep = ({ params, searchParams }: Props) => {
     <>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">List Detail Resep</h1>
-        <LocalSearchBar route="/adminView/bahanBaku" />
+        <LocalSearchBar />
       </div>
       <h1 className="text-2xl font-bold">
         {
