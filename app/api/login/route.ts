@@ -30,7 +30,7 @@ export async function POST(req: Request){
         if(isPasswordMatch){
             if(JSON.parse(final_result).ID_CUSTOMER !== null){
                 // berarti yang login customer
-                const queryCustomer = `SELECT ID_CUSTOMER, NAMA_CUSTOMER, EMAIL_CUSTOMER, TANGGAL_LAHIR, SALDO, TOTAL_POIN 
+                const queryCustomer = `SELECT ID_CUSTOMER, NAMA_CUSTOMER, EMAIL_CUSTOMER, TANGGAL_LAHIR, TELEPON, SALDO, TOTAL_POIN 
                                         FROM ${TableListNames.CUSTOMER} WHERE ID_CUSTOMER = ?`;
                 const id_customer = JSON.parse(final_result).ID_CUSTOMER;
 
@@ -44,7 +44,8 @@ export async function POST(req: Request){
                     id_customer: JSON.parse(final_customer_result).ID_CUSTOMER,
                     nama_customer: JSON.parse(final_customer_result).NAMA_CUSTOMER,
                     email_customer: JSON.parse(final_customer_result).EMAIL_CUSTOMER,
-                    tanggal_lahir: JSON.parse(final_customer_result).TANGGAL_LAHIR,
+                    tanggal_lahir: JSON.parse(final_customer_result).TANGGAL_LAHIR.split("T")[0],
+                    telepon: JSON.parse(final_customer_result).TELEPON,
                     saldo: JSON.parse(final_customer_result).SALDO,
                     total_poin: JSON.parse(final_customer_result).TOTAL_POIN
                 }
