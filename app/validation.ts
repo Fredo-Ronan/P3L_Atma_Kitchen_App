@@ -93,3 +93,51 @@ export const createEditHampersSchema = z.object({
     message: "Deskripsi Hampers harus diisi!"
   })
 })
+
+export const createResepSchma = z.object({
+  nama_resep: z.string().min(1, {
+    message: "Nama Resep Harus Diisi!"
+  }),
+});
+
+export const createDetailResepSchma = z.object({
+  id_bahan: z.string().min(1,{
+    message:"Bahan Harus Dipilih!"
+  }),  
+  jumlah_dibutuhkan: z.number().min(1),
+  satuan: z.string().min(1, {
+    message:"Satuan Harus Dipilih!"
+  }),
+});
+
+export const createKaryawanSchema = z.object({
+  id_role: z.string().min(1,{
+    message:"Role Harus Dipilih!"
+  }),
+  nama_karyawan: z.string().min(1,{
+    message:"Nama Karyawan Harus Diisi!"
+  }),
+  email_karyawan: z.string().email(),
+  alamat_karyawan: z.string().min(3,{
+    message:"Alamat Karyawan Harus Diisi!"
+  }),
+  no_telp_karyawan: z.string().min(10,{
+    message:"Nomor Telp Karyawan Minimal 10 Digit!"
+  }).max(14),
+});
+
+export const editGajiKaryawanSchema = z.object({
+  id_role: z.string().min(1),
+  nama_role: z.string().min(1),
+  nominal_gaji: z.string().min(1),
+});
+
+export const createBonusKaryawanSchema = z.object({
+  id_karyawan: z.string().min(1,{
+    message:"Nama Karyawan Harus Dipilih!"
+  }),
+  tanggal_pemberian: z.date(),
+  bonus: z.number().min(1,{
+    message: "Bonus Harus Diisi!"
+  }),
+});

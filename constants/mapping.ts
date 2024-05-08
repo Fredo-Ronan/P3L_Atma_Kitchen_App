@@ -131,3 +131,55 @@ export const tableDetilTransaksi = [
   "JUMLAH_PESANAN",
   "SUBTOTAL",
 ];
+
+export const sideBarOwner = [
+  {
+    label: "Dashboard",
+    link: "/ownerView",
+  },
+  {
+    label: "Gaji Karyawan",
+    link: "/ownerView/gajiKaryawan",
+  },
+  {
+    label: "Bonus Karyawan",
+    link: "/ownerView/bonusKaryawan",
+  },
+];
+
+
+export const tabelKaryawan = [
+  "ID KARYAWAN",
+  "NAMA KARYAWAN",
+  "EMAIL KARYAWAN",
+  "ALAMAT KARYAWAN",
+  "NO TELP KARYAWAN",
+]
+
+export const tableGajiKaryawan = [
+  "ID ROLE",
+  "ROLE KARYAWAN",
+  "NOMINAL GAJI",
+]
+
+export const tableBonusKaryawan = [
+  "ID BONUS",
+  "NAMA KARYAWAN",
+  "TANGGAL PEMBERIAN",
+  "BONUS",
+]
+
+export const resepTable = [
+  "NO",
+  "NAMA RESEP",
+  "DETAIL RESEP",
+]
+
+export const detailResepTable = [
+  "ID DETAIL RESEP",
+  "NAMA BAHAN",
+  "JUMLAH DIBUTUHKAN",
+  "SATUAN",
+]
+
+

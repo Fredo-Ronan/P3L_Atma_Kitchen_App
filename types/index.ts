@@ -89,3 +89,48 @@ export interface HAMPERS {
   HARGA_HAMPERS: number;
   DESKRIPSI_HAMPERS: string;
 }
+
+
+export interface KARYAWAN {
+  ID_KARYAWAN: number;
+  ID_ROLE: number;
+  NAMA_KARYAWAN: string;
+  EMAIL_KARYAWAN: string;
+  ALAMAT_KARYAWAN: string;
+  NO_TELP_KARYAWAN: string;
+}
+
+export interface GAJI_KARYAWAN {
+  ID_ROLE: number;
+  NAMA_ROLE: string;
+  NOMINAL_GAJI: string;
+}
+
+export interface BONUS_KARYAWAN{
+  ID_BONUS: number;
+  ID_KARYAWAN: number;
+  NAMA_KARYAWAN: string;
+  TANGGAL_PEMBERIAN: string;
+  BONUS: number;
+}
+
+export interface ROLE {
+  ID_ROLE: number,
+  NAMA_ROLE: string,
+}
+
+export interface RESEP{
+  ID_RESEP: number;
+  NAMA_RESEP: string;
+  DETAIL_RESEP: string;
+}
+
+export interface DETAIL_RESEP{
+  ID_RELASI_BAHAN_RESEP: number;
+  ID_BAHAN: number;
+  ID_RESEP: number;
+  NAMA_BAHAN: string;
+  JUMLAH_DIBUTUHKAN: number;
+  STOK_TERSEDIA: number;
+  SATUAN: string;
+}
