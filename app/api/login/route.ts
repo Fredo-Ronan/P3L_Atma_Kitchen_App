@@ -57,15 +57,15 @@ export async function POST(req: Request){
                                         FROM ${TableListNames.KARYAWAN} k JOIN ${TableListNames.ROLE} r 
                                         ON k.ID_ROLE=r.ID_ROLE WHERE k.ID_KARYAWAN = ?`;
                 
-                const id_karayawan = JSON.parse(final_result).ID_KARYAWAN;
+                const id_karyawan = JSON.parse(final_result).ID_KARYAWAN;
 
-                const [resultKaryawan, fieldsKaryawan] = await connection.execute(queryKaryawan, [id_karayawan]);
+                const [resultKaryawan, fieldsKaryawan] = await connection.execute(queryKaryawan, [id_karyawan]);
 
                 const final_karyawan_result = parseResultQuery(resultKaryawan);
 
                 const data_karyawan_to_send = {
                     role: JSON.parse(final_karyawan_result).NAMA_ROLE,
-                    id_karayawan: id_karayawan,
+                    id_karyawan: id_karyawan,
                     nama_karyawan: JSON.parse(final_karyawan_result).NAMA_KARYAWAN,
                     email_karyawan: JSON.parse(final_karyawan_result).EMAIL_KARYAWAN,
                     alamat_karyawan: JSON.parse(final_karyawan_result).ALAMAT_KARYAWAN,
