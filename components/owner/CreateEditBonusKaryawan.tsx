@@ -42,11 +42,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import Spinner from "../shared/Spinner";
-import { Textarea } from "../ui/textarea";
 import { KARYAWAN } from "@/types";
-import { Label } from "@/components/ui/label";
-// import { Select } from "@radix-ui/react-select";
-import Dropdown from "react-dropdown";
 
 interface Props {
   data?: BONUS_KARYAWAN;
