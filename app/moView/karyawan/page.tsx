@@ -48,7 +48,7 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
     <div className="flex flex-col">
       <h2 className="text-2xl font-bold">List Karyawan</h2>
       <div className="flex justify-between items-center my-10">
-        <LocalSearchBar route="/moView/karyawan" />
+        <LocalSearchBar/>
         <CreateEditKaryawan refreshData={fetchData} />
       </div>
 

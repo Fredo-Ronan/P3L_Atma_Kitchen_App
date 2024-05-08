@@ -1,13 +1,11 @@
 "use client";
 import React from "react";
-// import LocalSearchBar from "@/components/admin/LocalSearchBar";
 import Pagination from "@/components/admin/Pagination";
 import TableGajiKaryawan from "@/components/owner/TableGajiKaryawan";
 import { GAJI_KARYAWAN, QueryParams } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
-// import CreateEditKaryawan from "@/components/mo/CreateEditKaryawan";
 
 const Page = ({ searchParams }: { searchParams: QueryParams }) => {
   const [data, setData] = useState<GAJI_KARYAWAN[]>([]);
@@ -35,21 +33,10 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
     fetchData();
   }, [searchParams]);
 
-//   const deleteData = async (id: number) => {
-//     try {
-//       await axios.delete(`/api/karyawan/${id}`);
-//       fetchData();
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-
   return (
     <div className="flex flex-col">
       <h2 className="text-2xl font-bold">List Gaji Karyawan</h2>
       <div className="flex justify-between items-center my-10">
-        {/* <LocalSearchBar route="/moView/karyawan" />
-        <CreateEditKaryawan refreshData={fetchData} /> */}
       </div>
 
       {isLoading ? (
@@ -60,7 +47,6 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
         <TableGajiKaryawan
           data={data}
           refreshData={fetchData}
-        //   deleteData={deleteData}
         />
       )}
 

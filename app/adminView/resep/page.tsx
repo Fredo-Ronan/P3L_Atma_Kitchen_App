@@ -61,7 +61,7 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
     <>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">List Resep</h1>
-        <LocalSearchBar route="/adminView/bahanBaku" />
+        <LocalSearchBar/>
       </div>
       <CreateEditResep refreshData={refreshData} />
       <div className="mt-9">
