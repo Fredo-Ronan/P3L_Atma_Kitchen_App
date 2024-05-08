@@ -65,6 +65,7 @@ export async function POST(req: Request){
 
                 const data_karyawan_to_send = {
                     role: JSON.parse(final_karyawan_result).NAMA_ROLE,
+                    id_karayawan: id_karayawan,
                     nama_karyawan: JSON.parse(final_karyawan_result).NAMA_KARYAWAN,
                     email_karyawan: JSON.parse(final_karyawan_result).EMAIL_KARYAWAN,
                     alamat_karyawan: JSON.parse(final_karyawan_result).ALAMAT_KARYAWAN,
