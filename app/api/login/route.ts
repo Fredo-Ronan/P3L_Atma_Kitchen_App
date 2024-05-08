@@ -72,9 +72,11 @@ export async function POST(req: Request){
                 if(JSON.parse(final_karyawan_result).NAMA_ROLE === 'Manager Operasional'){
                     // berarti yang login karayawan bagian manager operasional dan set sessionnya nanti sebagai manager operasional
                     return new Response(JSON.stringify({status: StatusCodesP3L.OK, role: "MO", data: data_karyawan_to_send}));
-                } else {
+                } else if(JSON.parse(final_karyawan_result).NAMA_ROLE === 'Admin') {
                     // berarti yang login karyawan bagian admin dan set sessionnya nanti sebagai admin
                     return new Response(JSON.stringify({status: StatusCodesP3L.OK, role: "Admin", data: data_karyawan_to_send}));
+                } else {
+                    return new Response(JSON.stringify({status: StatusCodesP3L.OK, role: "Owner", data: data_karyawan_to_send}));
                 }
             }
         }

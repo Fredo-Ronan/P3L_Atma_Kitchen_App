@@ -2,7 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-import { ADMIN_SESSION_NAME, CUSTOMER_SESSION_NAME, MO_SESSION_NAME } from "./constants";
+import { ADMIN_SESSION_NAME, CUSTOMER_SESSION_NAME, MO_SESSION_NAME, OWNER_SESSION_NAME } from "./constants";
 import { StatusCodesP3L } from "./constants/statusCodesP3L";
 
 const secretKey = process.env.SECRET_APP_KEY;
@@ -86,6 +86,17 @@ export async function login(formData: any) {
         cookies().set(ADMIN_SESSION_NAME, session, {expires, httpOnly: true});
         redirect("/adminView");
     }
+
+    if(result?.role === "Owner"){
+        // the logged in user is an Admin
+        // create the session
+        const expires = new Date(Date.now() + 2 * 60 * 60 * 1000);
+        const session = await encrypt({user, expires});
+
+        // save the session in a cookie
+        cookies().set(OWNER_SESSION_NAME, session, {expires, httpOnly: true});
+        redirect("/ownerView");
+    }
 }
 
 
@@ -146,6 +157,37 @@ export async function updateSessionMO(request: NextRequest){
     const res = NextResponse.next();
     res.cookies.set({
         name: MO_SESSION_NAME,
+        value: await encrypt(parsed),
+        httpOnly: true,
+        expires: parsed.expires,
+    });
+
+    return res;
+}
+
+// SESSION MANAGEMENT FOR OWNER ========================================================================================================================
+export async function logoutOwner(){
+    // destroy the session
+    cookies().set(OWNER_SESSION_NAME, "", {expires: new Date(0)});
+}
+
+export async function getSessionOwner(){
+    const session = cookies().get(OWNER_SESSION_NAME)?.value;
+    if(!session) return null;
+    return await decrypt(session);
+}
+
+export async function updateSessionOwner(request: NextRequest){
+    const session = request.cookies.get(OWNER_SESSION_NAME)?.value;
+    if(!session) return;
+
+    // Refresh the session so it doesn't expire
+
+    const parsed = await decrypt(session);
+    parsed.expires = new Date(Date.now() + 2 * 60 * 60 * 1000);
+    const res = NextResponse.next();
+    res.cookies.set({
+        name: OWNER_SESSION_NAME,
         value: await encrypt(parsed),
         httpOnly: true,
         expires: parsed.expires,

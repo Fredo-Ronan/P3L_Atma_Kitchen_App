@@ -1,5 +1,5 @@
 'use server';
-import { getSessionAdmin, getSessionMO, logoutAdmin, logoutMO } from "@/lib";
+import { getSessionAdmin, getSessionMO, getSessionOwner, logoutAdmin, logoutMO, logoutOwner } from "@/lib";
 
 export async function logoutTriggerAdminMO() {
     if(await getSessionAdmin() !== null){
@@ -8,5 +8,9 @@ export async function logoutTriggerAdminMO() {
 
     if(await getSessionMO() !== null){
         await logoutMO();
+    }
+
+    if(await getSessionOwner() !== null){
+        await logoutOwner();
     }
 }
