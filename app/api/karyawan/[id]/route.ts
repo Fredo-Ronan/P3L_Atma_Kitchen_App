@@ -60,7 +60,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }){
   try {
     const connection = await connect();
 
-    const queryGetKaryawan = `SELECT r.NAMA_ROLE, k.NAMA_KARYAWAN, k.EMAIL_KARYAWAN, k.ALAMAT_KARYAWAN, k.NO_TELP_KARYAWAN 
+    const queryGetKaryawan = `SELECT r.NAMA_ROLE, k.ID_KARYAWAN, k.NAMA_KARYAWAN, k.EMAIL_KARYAWAN, k.ALAMAT_KARYAWAN, k.NO_TELP_KARYAWAN 
                               FROM ${TableListNames.KARYAWAN} k JOIN ${TableListNames.ROLE} r 
                               ON k.ID_ROLE=r.ID_ROLE WHERE k.ID_KARYAWAN = ?`
     
