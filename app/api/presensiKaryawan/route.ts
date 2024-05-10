@@ -6,14 +6,35 @@ import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 export async function POST(req: NextRequest) {
   try {
     const connection = await connect();
-    const [karyawanRows] = await connection.query("SELECT * FROM KARYAWAN");
 
+    const [karyawanRows] = await connection.query("SELECT * FROM KARYAWAN");
     const karyawanData = karyawanRows as any[];
-    const values = karyawanData.map((row: any) => [row.ID_KARYAWAN, "Hadir"]);
+
+    const values: any[] = [];
+
+    for (const row of karyawanData) {
+      const karyawanId = row.ID_KARYAWAN;
+      
+      const existingRowsResult = await connection.query(
+        "SELECT * FROM PRESENSI_KARYAWAN WHERE ID_KARYAWAN = ? AND TANGGAL_PRESENSI = CURDATE()",
+        [karyawanId]
+      );
+
+      const existingRows = existingRowsResult[0] as any[];
+
+      if (Array.isArray(existingRows) && existingRows.length === 0) {
+        values.push([karyawanId, "Hadir"]);
+      }
+    }
+
+    if (values.length === 0) {
+      return new Response(JSON.stringify({ message: "Data presensi sudah ada" }), {
+        status: 400,
+      });
+    }
 
     const placeholders = values.map(() => "(?, CURDATE(), ?)");
     const flattenedValues = values.flat();
-
     const query = `INSERT INTO PRESENSI_KARYAWAN (ID_KARYAWAN, TANGGAL_PRESENSI, STATUS_PRESENSI) VALUES ${placeholders}`;
 
     const [rows] = await connection.query(query, flattenedValues);
@@ -28,6 +49,7 @@ export async function POST(req: NextRequest) {
     throw error;
   }
 }
+
 
 export async function GET(req: Request) {
   try {
