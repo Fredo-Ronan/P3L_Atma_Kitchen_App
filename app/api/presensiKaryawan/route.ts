@@ -29,10 +29,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: Request) {
   try {
     const connection = await connect();
 
