@@ -40,24 +40,26 @@ export async function GET(req: Request) {
     );
     connection.end();
 
-    const final_result_presensi = parseResultQuery(resultGetPresensi);
+    const resultGetPresensiArray = resultGetPresensi as any[];
 
-    const data_presensi = {
-      id_presensi_karyawan: JSON.parse(final_result_presensi)
-        .ID_PRESENSI_KARYAWAN,
-      id_karyawan: JSON.parse(final_result_presensi).ID_KARYAWAN,
-      nama_karyawan: JSON.parse(final_result_presensi).NAMA_KARYAWAN,
-      tanggal_presensi: JSON.parse(
-        final_result_presensi
-      ).TANGGAL_PRESENSI.split("T")[0],
-      status_presensi: JSON.parse(final_result_presensi).STATUS_PRESENSI,
-    };
+    const presensiData = resultGetPresensiArray.map((row) => {
+      const jsonString = JSON.stringify(row);
+      const parsedRow = JSON.parse(jsonString);
+      return {
+        id_presensi_karyawan: parsedRow.ID_PRESENSI_KARYAWAN,
+        id_karyawan: parsedRow.ID_KARYAWAN,
+        nama_karyawan: parsedRow.NAMA_KARYAWAN,
+        tanggal_presensi: parsedRow.TANGGAL_PRESENSI.split("T")[0],
+        status_presensi: parsedRow.STATUS_PRESENSI,
+      };
+    });
 
     return new Response(
-      JSON.stringify({ status: StatusCodesP3L.OK, data: data_presensi })
+      JSON.stringify({ status: StatusCodesP3L.OK, data: presensiData })
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
+
