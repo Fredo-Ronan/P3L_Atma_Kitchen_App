@@ -7,11 +7,8 @@ export async function PUT(
 ) {
   try {
     const connection = await connect();
-    const res = await req.json();
-    const { status_presensi } = JSON.parse(
-      res.body
-    );
-    
+    const { status_presensi } = await req.json();
+
     const [rows, fields] = await connection.execute(
       `UPDATE PRESENSI_KARYAWAN SET STATUS_PRESENSI = '${status_presensi}' WHERE ID_PRESENSI_KARYAWAN = ${params.id}`
     );
@@ -20,7 +17,7 @@ export async function PUT(
 
     return NextResponse.json({
       status: 200,
-      message: "Berhasil Mengubah Karyawan",
+      message: "Berhasil Mengubah Presensi Karyawan",
     });
   } catch (error) {
     console.log(error);
