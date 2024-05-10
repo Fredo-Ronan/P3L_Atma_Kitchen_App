@@ -7,7 +7,8 @@ export async function PUT(
 ) {
   try {
     const connection = await connect();
-    const { status_presensi } = await req.json();
+    const res = await req.json();
+    const { status_presensi } = JSON.parse(res.body);
 
     const [rows, fields] = await connection.execute(
       `UPDATE PRESENSI_KARYAWAN SET STATUS_PRESENSI = '${status_presensi}' WHERE ID_PRESENSI_KARYAWAN = ${params.id}`
