@@ -142,7 +142,7 @@ const CustomerLoginPage = () => {
         </div>
       </div>
       {/* Right Side */}
-      <div className="left-side lg:flex items-center justify-center flex-1 bg-gradient-to-r from-blue-600 to-blue-400 text-white">
+      <div className="hidden left-side lg:flex items-center justify-center flex-1 bg-gradient-to-r from-blue-600 to-blue-400 text-white">
         <div className="left-side-content">
           <h1 className="text-4xl font-bold mb-6 text-yellow-300">
             Welcome To
