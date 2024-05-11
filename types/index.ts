@@ -134,3 +134,11 @@ export interface DETAIL_RESEP{
   STOK_TERSEDIA: number;
   SATUAN: string;
 }
+
+export interface CUSTOMER{
+  ID_CUSTOMER: number;
+  NAMA_CUSTOMER: string;
+  EMAIL_CUSTOMER: string;
+  TANGGAL_LAHIR: string;
+  TELEPON: string;
+}

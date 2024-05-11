@@ -29,3 +29,25 @@ export async function GET(req: Request, { params }: { params: { id: string } }){
         throw error;
     }
 }
+
+export async function PUT(req: Request, { params, body }: { params: { id: string }, body: any }){
+    try {
+        const connection = await connect();
+
+        const { nama_customer, email_customer, tanggal_lahir, telepon} = body;
+
+        const queryUpdateCustomer = `
+            UPDATE CUSTOMER 
+            SET NAMA_CUSTOMER = ?, EMAIL_CUSTOMER = ?, TANGGAL_LAHIR = ?, TELEPON = ?
+            WHERE ID_CUSTOMER = ?
+        `;
+        
+        await connection.execute(queryUpdateCustomer, [nama_customer, email_customer, tanggal_lahir, telepon, params.id]);
+        connection.end();
+
+        return new Response(JSON.stringify({status: StatusCodesP3L.OK, message: "Data customer berhasil diupdate"}));
+    } catch(error) {
+        console.log(error);
+        throw error;
+    }
+}

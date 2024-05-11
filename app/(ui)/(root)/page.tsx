@@ -18,7 +18,7 @@ const CustomerHomePage = async () => {
 
       {userData !== null ? (
         <>
-          <p>{userData}</p>
+          {/* <p>{userData}</p> */}
           <Button asChild>
             <form
               action={async () => {

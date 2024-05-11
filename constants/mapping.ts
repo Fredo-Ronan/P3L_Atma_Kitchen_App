@@ -182,4 +182,11 @@ export const detailResepTable = [
   "SATUAN",
 ]
 
+export const customer = [
+  "ID CUSTOMER",
+  "NAMA CUSTOMER",
+  "EMAIL CUSTOMER",
+  "TANGGAL LAHIR",
+  "TELEPON",
+]
 
