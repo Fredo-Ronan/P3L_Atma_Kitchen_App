@@ -3,12 +3,14 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { NavbarRouteMap } from "@/constants/mainNavbarMap";
+import { usePathname } from "next/navigation";
 
 const NavbarP3L = ({ userData }: { userData: any }) => {
   const [openNavMobile, setOpenNavMobile] = useState(false);
+  const currentPath = usePathname();
 
   return (
-    <div>
+    <div className={currentPath === "/sign-in" || currentPath === "/sign-up" ? "hidden" : ""}>
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
         <Link
           className="text-3xl font-bold leading-none flex gap-4 items-center"

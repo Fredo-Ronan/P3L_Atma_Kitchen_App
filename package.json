@@ -27,6 +27,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",
+    "embla-carousel-autoplay": "^8.1.1",
+    "embla-carousel-react": "^8.1.1",
     "jose": "^5.2.4",
     "lucide-react": "^0.365.0",
     "mysql2": "^3.9.3",

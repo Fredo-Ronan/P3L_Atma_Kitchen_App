@@ -1,8 +1,20 @@
+'use client';
+import { logoutTrigger } from "@/actions/logoutCustomer.actions";
+import { Button } from "../ui/button";
+import { useState } from "react";
+import { ClipLoader } from "react-spinners";
+
 const Profile = ({ data }: any) => {
   const customerData = data;
+  const [isLoading, setIsLoading] = useState(false);
 
   const { id_customer, nama_customer, email_customer, tanggal_lahir, telepon } =
     customerData;
+
+  const logout = () => {
+    setIsLoading(true);
+    logoutTrigger();
+  }
 
   return (
     <div className="flex justify-center mt-20 h-screen">
@@ -12,6 +24,9 @@ const Profile = ({ data }: any) => {
         <p className="mb-2 ml-7 text-lg">Email  : {email_customer}</p>
         <p className="mb-2 ml-7 text-lg">No Telepon : {telepon}</p>
         <p className="mb-2 ml-7 text-lg">Tanggal Lahir  : {tanggal_lahir}</p>
+        <Button onClick={logout}>
+          {isLoading ? <ClipLoader color="#fffff"/> : "Logout"}
+        </Button>
       </div>
     </div>
   );
