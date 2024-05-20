@@ -14,8 +14,8 @@ import { HAMPERS, PRODUK } from "@/types";
 import { formatNumber } from "@/utilities/formatAngkaHarga";
 
 interface DETIL_GAMBAR {
-  nama_hampers: string;
-  gambar_produk: PRODUK[];
+    nama_hampers: string;
+    gambar_produk: PRODUK[];
 }
 
 const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
@@ -26,6 +26,7 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
   const [gambar, setGambar] = useState<DETIL_GAMBAR[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Fetch gambar produk
   const getGambar = async () => {
     setIsLoading(true);
     try {
@@ -57,12 +58,12 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
         onMouseLeave={plugin.current.reset}
       >
         <CarouselContent>
-          {dataHampers.map((data, index) => (
+          {dataHampers?.map((data, index) => (
             <CarouselItem key={index}>
               {isLoading ? (
                 <Skeleton className="w-full h-96" />
               ) : (
-                <div className="bg-slate-400 relative">
+                <div className="bg-slate-400 relative" key={index}>
                   <img src="/assets/images/banner hampers.png" alt="" />
                   <h1 className="absolute top-36 bottom-0 left-16 right-0 text-5xl font-poetsen font-bold">
                     {data.NAMA_HAMPERS}
@@ -84,26 +85,17 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
                   </div>
 
                   <div className="absolute top-0 bottom-0 right-52">
-                    {gambar.map((dataGambar, dataGambarIndex) =>
-                      dataGambar.nama_hampers === data.NAMA_HAMPERS ? (
-                        dataGambar.gambar_produk.map((gambarItem, gambarIndex) =>
-                          gambarIndex % 2 === 0 ? (
+                    {gambar.map((dataGambar, dataGambarIndex) => {
+                      console.log(dataGambar);
+                      if (dataGambar.nama_hampers === data.NAMA_HAMPERS) {
+                        return dataGambar.gambar_produk.map(
+                          (gambarItem, gambarItemIndex) => (
                             <div
-                              className="relative transform rotate-6 top-16 shadow-xl group w-[250px]"
-                              key={`${dataGambarIndex}-${gambarItem.ID_PRODUK}`}
-                            >
-                              <div className="absolute text-black text-center p-2 text-2xl w-full font-bold font-poetsen bg-white transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-                                {gambarItem.NAMA_PRODUK}
-                              </div>
-                              <img
-                                src={gambarItem.GAMBAR_PRODUK}
-                                className="border-8 border-white"
-                                alt=""
-                              />
-                            </div>
-                          ) : (
-                            <div
-                              className="relative transform -rotate-6 -top-20 right-48 shadow-xl group w-[210px]"
+                              className={`relative transform ${
+                                gambarItemIndex % 2 === 0 ? "rotate-6 top-16" : "-rotate-6 -top-20 right-48"
+                              } shadow-xl group ${
+                                gambarItemIndex % 2 === 0 ? "w-[250px]" : "w-[210px]"
+                              }`}
                               key={`${dataGambarIndex}-${gambarItem.ID_PRODUK}`}
                             >
                               <div className="absolute text-black text-center p-2 text-2xl w-full font-bold font-poetsen bg-white transition-opacity duration-300 opacity-0 group-hover:opacity-100">
@@ -116,9 +108,10 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
                               />
                             </div>
                           )
-                        )
-                      ) : null
-                    )}
+                        );
+                      }
+                      return null;
+                    })}
                   </div>
                 </div>
               )}
