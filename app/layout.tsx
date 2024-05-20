@@ -6,6 +6,7 @@ import Head from "next/head";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import NavbarP3L from "@/components/NavbarP3L";
 import { getCustomerDataTrigger } from "@/actions/getCustomerData.actions";
+import Footer from "@/components/customer/homeComponents/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default async function RootLayout({
           <NavbarP3L userData={userData}/>
           {children}
           <Toaster richColors/>
+          <Footer/>
         </body>
       </EdgeStoreProvider>
     </html>

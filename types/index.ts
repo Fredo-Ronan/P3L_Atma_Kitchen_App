@@ -75,6 +75,19 @@ export interface PRODUK {
   GAMBAR_PRODUK: string;
 }
 
+export interface PRODUK_FOR_CUSTOMER_UI {
+  ID_PRODUK: number;
+  NAMA_PRODUK: string;
+  HARGA_PRODUK: number[];
+  JENIS_MAKANAN: string;
+  DESKRIPSI_PRODUK: string;
+  STOK: number;
+  LOYANG: string[];
+  STATUS_PRODUK: string;
+  JENIS_PRODUK: string;
+  GAMBAR_PRODUK: string;
+}
+
 export interface KUOTA_HARIAN {
   ID_KUOTA_HARIAN: number;
   ID_PRODUK: number;
