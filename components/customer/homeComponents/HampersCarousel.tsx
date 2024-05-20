@@ -36,7 +36,7 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
           throw new Error(`Failed to fetch: ${resGambar.statusText}`);
         }
         const resFinal = await resGambar.json();
-        console.log(`Fetched data for hampers ID ${data.ID_HAMPERS}:`, resFinal);
+        // console.log(`Fetched data for hampers ID ${data.ID_HAMPERS}:`, resFinal);
         return { nama_hampers: data.NAMA_HAMPERS, gambar_produk: resFinal.detilHampers };
       });
   
@@ -91,7 +91,7 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
 
                   <div className="absolute top-0 bottom-0 right-52">
                     {gambar.map((dataGambar, dataGambarIndex) => {
-                      console.log(dataGambar);
+                      // console.log(dataGambar);
                       if (dataGambar.nama_hampers === data.NAMA_HAMPERS) {
                         return dataGambar.gambar_produk.map(
                           (gambarItem, gambarItemIndex) => (
