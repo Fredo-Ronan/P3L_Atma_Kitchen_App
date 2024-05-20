@@ -78,19 +78,19 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
                         <p className="text-white text-2xl font-bold font-poetsen">Rp. {formatNumber(data.HARGA_HAMPERS)}</p>
                     </div>
 
-                    <div className="absolute top-0 bottom-0 right-52" key={index}>
+                    <div className="absolute top-0 bottom-0 right-52" key={data.ID_HAMPERS}>
                         {gambar.map((dataGambar, index) => (
                             dataGambar.nama_hampers === data.NAMA_HAMPERS ? 
                             dataGambar.gambar_produk.map((gambar, indexGambar) => (
                                 indexGambar % 2 === 0 ?
-                                <div className="relative transform rotate-6 top-16 shadow-xl group w-[250px]" key={index + 1}>
+                                <div className="relative transform rotate-6 top-16 shadow-xl group w-[250px]" key={gambar.GAMBAR_PRODUK}>
                                     <div className="absolute text-black text-center p-2 text-2xl w-full font-bold font-poetsen bg-white transition-opacity duration-300 opacity-0 group-hover:opacity-100">
                                         {gambar.NAMA_PRODUK}
                                     </div>
                                     <img src={gambar.GAMBAR_PRODUK} className="border-8 border-white" alt=""/>
                                 </div>
                                 :
-                                <div className="relative transform -rotate-6 -top-20 right-48 shadow-xl group w-[210px]" key={index + 2}>
+                                <div className="relative transform -rotate-6 -top-20 right-48 shadow-xl group w-[210px]" key={gambar.GAMBAR_PRODUK}>
                                     <div className="absolute text-black text-center p-2 text-2xl w-full font-bold font-poetsen bg-white transition-opacity duration-300 opacity-0 group-hover:opacity-100">
                                         {gambar.NAMA_PRODUK}
                                     </div>
