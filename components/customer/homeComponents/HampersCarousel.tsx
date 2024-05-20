@@ -52,7 +52,7 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
 
   useEffect(() => {
     getGambar();
-  }, []);
+  }, [dataHampers]);
 
   return (
     <div>
