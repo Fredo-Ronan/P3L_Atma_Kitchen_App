@@ -32,10 +32,14 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
     try {
       const gambarPromises = dataHampers.map(async (data) => {
         const resGambar = await fetch(`/api/hampers/${data.ID_HAMPERS}`);
+        if (!resGambar.ok) {
+          throw new Error(`Failed to fetch: ${resGambar.statusText}`);
+        }
         const resFinal = await resGambar.json();
+        console.log(`Fetched data for hampers ID ${data.ID_HAMPERS}:`, resFinal);
         return { nama_hampers: data.NAMA_HAMPERS, gambar_produk: resFinal.detilHampers };
       });
-
+  
       const allGambar = await Promise.all(gambarPromises);
       setGambar(allGambar);
     } catch (error) {
@@ -44,6 +48,7 @@ const HampersCarousel = ({ dataHampers }: { dataHampers: HAMPERS[] }) => {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     getGambar();
