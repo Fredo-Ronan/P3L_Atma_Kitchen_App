@@ -27,10 +27,10 @@ const ProdukPreorderCarousel = ({ dataProdukPreorder }: { dataProdukPreorder: PR
                                     </div>
                                     <div>
                                         <h1 className='my-2 font-poetsen font-bold text-2xl'>{data.NAMA_PRODUK}</h1>
-                                        {data.HARGA_PRODUK.map((harga, _) => (
+                                        {data.HARGA_PRODUK.map((harga, indexHarga) => (
                                             <div className='flex' key={harga + 1}>
                                                 <p key={harga + 2} className='font-poetsen text-lg'>Rp. {harga.toLocaleString('id-ID')}</p>
-                                                <p key={harga + 3} className='mx-2 font-poetsen opacity-50 text-lg'>{"/ " + data.LOYANG[index]}</p>
+                                                <p key={harga + 3} className='mx-2 font-poetsen opacity-50 text-lg'>{"/ " + data.LOYANG[indexHarga]}</p>
                                             </div>
                                         ))}
                                     </div>
