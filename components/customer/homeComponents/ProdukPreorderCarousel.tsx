@@ -39,7 +39,7 @@ const ProdukPreorderCarousel = ({ dataProdukPreorder }: { dataProdukPreorder: PR
 
             const allDataKuota = await Promise.all(kuotaPromises);
             setDataKuotaProdukToday(allDataKuota);
-            console.log(allDataKuota);
+            // console.log(allDataKuota);
         }catch(error){
             console.log("Error while fetch kuota produk " + error);
             throw error;
@@ -101,10 +101,10 @@ const ProdukPreorderCarousel = ({ dataProdukPreorder }: { dataProdukPreorder: PR
                                             if (kuota.nama_produk === data.NAMA_PRODUK) {
                                                 if(kuota.kuotaProduk[0].KUOTA > 0){
                                                     return (
-                                                        <Button className='bg-blue-500'>Pesan Sekarang</Button>
+                                                        <Button key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} className='bg-blue-500'>Pesan Sekarang</Button>
                                                     );
                                                 } else {
-                                                    return <Button className='bg-blue-500' disabled>Pesan Sekarang</Button>
+                                                    return <Button key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} className='bg-blue-500' disabled>Pesan Sekarang</Button>
                                                 }
                                             } else {
                                                 return null;  // No key needed for null
