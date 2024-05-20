@@ -83,9 +83,9 @@ const ProdukPreorderCarousel = ({ dataProdukPreorder }: { dataProdukPreorder: PR
                                                 return (
                                                     <div key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} className='mt-6'>
                                                         <div className='flex'>
-                                                            <p className='font-poetsen text-lg'>Tersisa&nbsp;</p>
+                                                            <p className='font-poetsen text-lg'>Sisa&nbsp;</p>
                                                             <p className='font-poetsen font-bold text-lg'>{kuota.kuotaProduk[0].KUOTA}</p>
-                                                            <p className='font-poetsen text-lg'>&nbsp;kuota pre order hari ini</p>
+                                                            <p className='font-poetsen text-lg'>&nbsp;kuota hari ini</p>
                                                         </div>
                                                         <p className='font-poetsen opacity-50 italic'>Di update hari ini pukul {new Date().toTimeString().split(' ')[0]}</p>
                                                     </div>
@@ -97,7 +97,19 @@ const ProdukPreorderCarousel = ({ dataProdukPreorder }: { dataProdukPreorder: PR
                                     </div>
 
                                     <div className='mt-4'>
-                                        <Button className='bg-blue-500'>Pesan Sekarang</Button>
+                                        {dataKuotaProdukToday.map((kuota, indexKuota) => {
+                                            if (kuota.nama_produk === data.NAMA_PRODUK) {
+                                                if(kuota.kuotaProduk[0].KUOTA > 0){
+                                                    return (
+                                                        <Button className='bg-blue-500'>Pesan Sekarang</Button>
+                                                    );
+                                                } else {
+                                                    return <Button className='bg-blue-500' disabled>Pesan Sekarang</Button>
+                                                }
+                                            } else {
+                                                return null;  // No key needed for null
+                                            }
+                                        })}
                                     </div>
                                 </CardContent>
                             </Card>
