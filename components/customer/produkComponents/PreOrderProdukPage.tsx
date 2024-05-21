@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ClipLoader } from "react-spinners";
+import DetilProdukPage from "./DetilProdukPage";
 
 interface DATA_KUOTA {
   nama_produk: string;
@@ -133,12 +134,7 @@ const PreOrderProdukPage = ({
                         if (kuota.nama_produk === data.NAMA_PRODUK) {
                           if (kuota.kuotaProduk[0].KUOTA > 0) {
                             return (
-                              <Button
-                                key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`}
-                                className="bg-blue-500"
-                              >
-                                Pesan Sekarang
-                              </Button>
+                              <DetilProdukPage key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} produk={data}/>
                             );
                           } else {
                             return (

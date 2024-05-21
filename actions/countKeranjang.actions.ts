@@ -7,7 +7,9 @@ export async function countItemKeranjang() {
     const keranjang = cookies().get(KERANJANG);
 
     if(keranjang){
-        return 1;
+        // console.log(keranjang.value);
+        // console.log(JSON.parse(keranjang.value).length);
+        return JSON.parse(keranjang.value).length;
     }
 
     return 0;

@@ -94,7 +94,7 @@ const NavbarP3L = ({ userData }: { userData: any }) => {
           </>
         ) : (
           <div className="hidden lg:flex lg:items-center lg:gap-4">
-            <Link href={``}>
+            <Link href={`/keranjang`}>
               <div className="relative">
                 <FaCartShopping size={30} />
                 {itemKeranjang > 0 ?

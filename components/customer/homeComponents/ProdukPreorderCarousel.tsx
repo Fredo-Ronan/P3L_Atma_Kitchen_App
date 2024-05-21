@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel"
 import { KUOTA_HARIAN, PRODUK_FOR_CUSTOMER_UI } from '@/types'
 import { Button } from '@/components/ui/button'
+import DetilProdukPage from '../produkComponents/DetilProdukPage'
 
 interface DATA_KUOTA {
     nama_produk: string;
@@ -101,7 +102,7 @@ const ProdukPreorderCarousel = ({ dataProdukPreorder }: { dataProdukPreorder: PR
                                             if (kuota.nama_produk === data.NAMA_PRODUK) {
                                                 if(kuota.kuotaProduk[0].KUOTA > 0){
                                                     return (
-                                                        <Button key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} className='bg-blue-500'>Pesan Sekarang</Button>
+                                                        <DetilProdukPage key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} produk={data}/>
                                                     );
                                                 } else {
                                                     return <Button key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} className='bg-blue-500' disabled>Pesan Sekarang</Button>
