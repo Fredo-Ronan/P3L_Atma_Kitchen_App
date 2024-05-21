@@ -3,6 +3,7 @@ import { logoutTrigger } from "@/actions/logoutCustomer.actions";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { ClipLoader } from "react-spinners";
+import Link from "next/link";
 
 const Profile = ({ data }: any) => {
   const customerData = data;
@@ -24,6 +25,10 @@ const Profile = ({ data }: any) => {
         <p className="mb-2 ml-7 text-lg">Email  : {email_customer}</p>
         <p className="mb-2 ml-7 text-lg">No Telepon : {telepon}</p>
         <p className="mb-2 ml-7 text-lg">Tanggal Lahir  : {tanggal_lahir}</p>
+        <Link
+              href={`/customerView/historyCustomer/${id_customer}`}
+              className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200 m-4"
+            >History Pesanan</Link>
         <Button onClick={logout}>
           {isLoading ? <ClipLoader color="#fffff"/> : "Logout"}
         </Button>

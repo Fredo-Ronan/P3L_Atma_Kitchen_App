@@ -1,13 +1,26 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { NavbarRouteMap } from "@/constants/mainNavbarMap";
 import { usePathname } from "next/navigation";
+import { FaCartShopping } from "react-icons/fa6";
+import { Badge } from "./ui/badge";
+import { countItemKeranjang } from "@/actions/countKeranjang.actions";
 
 const NavbarP3L = ({ userData }: { userData: any }) => {
   const [openNavMobile, setOpenNavMobile] = useState(false);
   const currentPath = usePathname();
+  const [itemKeranjang, setItemKeranjang] = useState(0);
+
+  const getItemKeranjang = async () => {
+    const jumlahItem = await countItemKeranjang();
+    setItemKeranjang(jumlahItem);
+  }
+
+  useEffect(() => {
+    getItemKeranjang();
+  }, [])
 
   return (
     <div className={currentPath === "/sign-in" || currentPath === "/sign-up" ? "hidden" : ""}>
@@ -80,16 +93,25 @@ const NavbarP3L = ({ userData }: { userData: any }) => {
             </Link>
           </>
         ) : (
-          <div className="hidden lg:inline-block">
+          <div className="hidden lg:flex lg:items-center lg:gap-4">
+            <Link href={``}>
+              <div className="relative">
+                <FaCartShopping size={30} />
+                {itemKeranjang > 0 ?
+                  <Badge className="absolute top-0 right-0 -mt-4 -mr-2 bg-red-600 text-white rounded-full h-6 w-6 flex items-center justify-center hover:bg-red-600">
+                  {itemKeranjang}
+                </Badge>  
+                : <></>  
+              }
+              </div>
+            </Link>
             <Link
               href={`/customerView/profile/${JSON.parse(userData).id_customer}`}
               className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200"
-            >Profile</Link>
+            >
+              {JSON.parse(userData).nama_customer}
+            </Link>
 
-            <Link
-              href={`/customerView/historyCustomer/${JSON.parse(userData).id_customer}`}
-              className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200 m-4"
-            >History Pesanan</Link>
             {/* <Button>{JSON.parse(userData).nama_customer}</Button> */}
           </div>
         )}

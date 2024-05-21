@@ -5,7 +5,7 @@ export async function GET(req: NextRequest){
     try {
         const connection = await connect();
 
-        const queryGetReadyStock = `SELECT * FROM PRODUK WHERE (JENIS_PRODUK = 'Titipan' AND STOK > 0) OR STOK > 0 LIMIT 10`;
+        const queryGetReadyStock = `SELECT * FROM PRODUK WHERE (JENIS_PRODUK = 'Titipan' AND STOK > 0) OR STOK > 0`;
 
         const [resultGetReadyStock, fields] = await connection.execute(queryGetReadyStock);
         connection.end();

@@ -84,7 +84,7 @@ const CustomerHomePage = () => {
           <div className="h-20"></div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl mb-2 font-poetsen">Ready Stock</h1>
-            <a href="" className="text-xl mb-2 font-bold relative before:absolute before:inset-0 before:transition-all before:duration-300 duration-300 transition-all before:w-0 hover:before:w-full hover:text-white before:-z-10 hover:before:bg-blue-500">Lihat Semua</a>
+            <a href="/produkReady" className="text-xl mb-2 font-bold relative before:absolute before:inset-0 before:transition-all before:duration-300 duration-300 transition-all before:w-0 hover:before:w-full hover:text-white before:-z-10 hover:before:bg-blue-500">Lihat Semua</a>
           </div>
           <ProdukReadyCarousel dataProdukReady={dataProdukReady}/>
         </div>
