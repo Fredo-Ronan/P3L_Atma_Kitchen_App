@@ -9,7 +9,7 @@ export const NavbarRouteMap = [
     },
     {
         label: "Pre Order",
-        route: ""
+        route: "/produkPreOrder"
     },
     {
         label: "Contact",

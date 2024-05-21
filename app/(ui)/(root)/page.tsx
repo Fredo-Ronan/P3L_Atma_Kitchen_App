@@ -1,8 +1,9 @@
 'use client';
 import HampersCarousel from "@/components/customer/homeComponents/HampersCarousel";
 import ProdukPreorderCarousel from "@/components/customer/homeComponents/ProdukPreorderCarousel";
+import ProdukReadyCarousel from "@/components/customer/homeComponents/ProdukReadyCarousel";
 import { HAMPERS, PRODUK, PRODUK_FOR_CUSTOMER_UI } from "@/types";
-import axios from "axios";
+import { mergeDuplicates } from "@/utilities/mergeProdukPreorder";
 import React, { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
 
@@ -12,30 +13,8 @@ const CustomerHomePage = () => {
 
   const [dataHampers, setDataHampers] = useState<HAMPERS[]>([]);
   const [dataProdukPreorder, setDataProdukPreorder] = useState<PRODUK_FOR_CUSTOMER_UI[]>([]);
+  const [dataProdukReady, setDataProdukReady] = useState<PRODUK[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  // Function to merge duplicates based on NAMA_PRODUK
-  const mergeDuplicates = (products: PRODUK[]): PRODUK_FOR_CUSTOMER_UI[] => {
-    const productMap: { [key: string]: PRODUK_FOR_CUSTOMER_UI } = {};
-
-    products.forEach((product) => {
-      if (!productMap[product.NAMA_PRODUK]) {
-        // If the product does not exist in the map, add it
-        productMap[product.NAMA_PRODUK] = {
-          ...product,
-          LOYANG: [product.LOYANG],
-          HARGA_PRODUK: [product.HARGA_PRODUK]
-        };
-      } else {
-        // If it exists, merge the LOYANG and HARGA_PRODUK attributes
-        productMap[product.NAMA_PRODUK].LOYANG.push(product.LOYANG);
-        productMap[product.NAMA_PRODUK].HARGA_PRODUK.push(product.HARGA_PRODUK);
-      }
-    });
-
-    // Convert the map back to an array
-    return Object.values(productMap);
-  };
 
   const fetchDataHampers = async () => {
     setIsLoading(true);
@@ -65,13 +44,24 @@ const CustomerHomePage = () => {
     const merged = mergeDuplicates(resFinalProdukPreorder.dataProdukPreorder);
     // console.log(merged);
 
-    setDataProdukPreorder(merged)
+    setDataProdukPreorder(merged);
+  }
+
+  const fetchDataProdukReadyStock = async () => {
+    const resDataProdukReadyStock = await fetch(`/api/produk/getReadyStock`);
+
+    const resFinalProdukReadyStock = await resDataProdukReadyStock.json();
+
+    // console.log(resFinalProdukReadyStock.produkReadyStock);
+
+    setDataProdukReady(resFinalProdukReadyStock.produkReadyStock);
     setIsLoading(false);
   }
 
   useEffect(() => {
     fetchDataHampers();
     fetchDataProdukPreorder();
+    fetchDataProdukReadyStock();
   },[]);
 
   return (
@@ -82,12 +72,21 @@ const CustomerHomePage = () => {
             <ClipLoader size={60}/>
           </div>
         : 
-        <div>
+        <div className="font-poetsen">
           <h1 className="text-xl mb-2 font-poetsen">Paket Hampers</h1>
           <HampersCarousel dataHampers={dataHampers}/>
           <div className="h-20"></div>
-          <h1 className="text-xl mb-2 font-poetsen">Pre Order</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl mb-2 font-poetsen">Pre Order |</h1>
+            <a href="/produkPreOrder" className="text-xl mb-2 font-bold relative before:absolute before:inset-0 before:transition-all before:duration-300 duration-300 transition-all before:w-0 hover:before:w-full hover:text-white before:-z-10 hover:before:bg-blue-500">Lihat Semua</a>
+          </div>
           <ProdukPreorderCarousel dataProdukPreorder={dataProdukPreorder}/>
+          <div className="h-20"></div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl mb-2 font-poetsen">Ready Stock</h1>
+            <a href="" className="text-xl mb-2 font-bold relative before:absolute before:inset-0 before:transition-all before:duration-300 duration-300 transition-all before:w-0 hover:before:w-full hover:text-white before:-z-10 hover:before:bg-blue-500">Lihat Semua</a>
+          </div>
+          <ProdukReadyCarousel dataProdukReady={dataProdukReady}/>
         </div>
         }
       </div>
