@@ -1,4 +1,4 @@
-import { PRODUK, PRODUK_FOR_CUSTOMER_UI } from '@/types'
+import { PRODUK, PRODUK_FOR_CUSTOMER_UI, PRODUK_FOR_KERANJANG } from '@/types'
 import {
     Dialog,
     DialogClose,
@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input'
 import { addToKeranjang } from '@/actions/addToKeranjang.actions'
 import { getCustomerDataTrigger } from '@/actions/getCustomerData.actions'
 
-const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
+const DetilProdukPage = ({ produk, dateDeliver }: { produk: PRODUK_FOR_CUSTOMER_UI, dateDeliver?: string }) => {
   const [customerData, setCustomerData] = useState<string | null>(null);
     const [jumlahSatuLoyang, setJumlahSatuLoyang] = useState(0);
     const [jumlahSetengahLoyang, setJumlahSetengahLoyang] = useState(0);
@@ -42,7 +42,7 @@ const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
 
     const addToKeranjangTrigger = async () => {
 
-        let produkToAdd: PRODUK[] = [];
+        let produkToAdd: PRODUK_FOR_KERANJANG[] = [];
 
         if(checkSatuLoyang && checkSetengahLoyang){
             // brarti customer ambil 1 loyang dan 1/2 loyang
@@ -57,7 +57,8 @@ const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
                     HARGA_PRODUK: produk.HARGA_PRODUK[0],
                     LOYANG: produk.LOYANG[0],
                     STATUS_PRODUK: produk.STATUS_PRODUK,
-                    STOK: produk.STOK
+                    STOK: produk.STOK,
+                    TANGGAL_PENGIRIMAN: dateDeliver!
                 });
             }
 
@@ -72,7 +73,8 @@ const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
                     HARGA_PRODUK: produk.HARGA_PRODUK[1],
                     LOYANG: produk.LOYANG[1],
                     STATUS_PRODUK: produk.STATUS_PRODUK,
-                    STOK: produk.STOK
+                    STOK: produk.STOK,
+                    TANGGAL_PENGIRIMAN: dateDeliver!
                 });
             }
 
@@ -89,7 +91,8 @@ const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
                     HARGA_PRODUK: produk.HARGA_PRODUK[0],
                     LOYANG: produk.LOYANG[0],
                     STATUS_PRODUK: produk.STATUS_PRODUK,
-                    STOK: produk.STOK
+                    STOK: produk.STOK,
+                    TANGGAL_PENGIRIMAN: dateDeliver!
                 });
             }
         } else if(checkSetengahLoyang){
@@ -105,9 +108,26 @@ const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
                     HARGA_PRODUK: produk.HARGA_PRODUK[1],
                     LOYANG: produk.LOYANG[1],
                     STATUS_PRODUK: produk.STATUS_PRODUK,
-                    STOK: produk.STOK
+                    STOK: produk.STOK,
+                    TANGGAL_PENGIRIMAN: dateDeliver!
                 });
             }
+        } else {
+          for(let i = 0; i < jumlah; i++) {
+            produkToAdd.push({
+              ID_PRODUK: produk.ID_PRODUK,
+              NAMA_PRODUK: produk.NAMA_PRODUK,
+              DESKRIPSI_PRODUK: produk.DESKRIPSI_PRODUK,
+              JENIS_PRODUK: produk.JENIS_PRODUK,
+              JENIS_MAKANAN: produk.JENIS_MAKANAN,
+              GAMBAR_PRODUK: produk.GAMBAR_PRODUK,
+              HARGA_PRODUK: produk.HARGA_PRODUK[0],
+              LOYANG: produk.LOYANG[0],
+              STATUS_PRODUK: produk.STATUS_PRODUK,
+              STOK: produk.STOK,
+              TANGGAL_PENGIRIMAN: dateDeliver!
+            })
+          }
         }
 
         // console.log(produkToAdd);
@@ -179,6 +199,11 @@ const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
                     </div>
                 </div> : <>
                     {/* Untuk yang bukan cake */}
+                    <div className='flex'>
+                        <Button className='bg-red-500' disabled={jumlah === 0 ? true : false} onClick={() => {setJumlah(jumlah > 0 ? jumlah - 1 : jumlah); setHargaTotal(hargaTotal - produk.HARGA_PRODUK[0])}}>-</Button>
+                        <Input type='text' className='w-12 text-center' value={jumlah}/>
+                        <Button className='bg-green-500' onClick={() => {setJumlah(jumlah + 1); setHargaTotal(hargaTotal + produk.HARGA_PRODUK[0])}}>+</Button>
+                    </div>
                 </>
               }
             </div>
@@ -189,7 +214,7 @@ const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
 
             <div>
                 <DialogClose asChild>
-                    <Button className='bg-blue-500' disabled={(checkSatuLoyang || checkSetengahLoyang) && (jumlahSatuLoyang > 0 || jumlahSetengahLoyang > 0) ? false : true} onClick={() => addToKeranjangTrigger()}>Tambah ke Keranjang</Button>
+                    <Button className='bg-blue-500' disabled={(checkSatuLoyang || checkSetengahLoyang) && (jumlahSatuLoyang > 0 || jumlahSetengahLoyang > 0) || jumlah > 0 ? false : true} onClick={() => addToKeranjangTrigger()}>Tambah ke Keranjang</Button>
                 </DialogClose>
             </div>
           </div>

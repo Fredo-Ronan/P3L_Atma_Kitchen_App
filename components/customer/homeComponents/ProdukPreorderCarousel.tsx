@@ -18,39 +18,6 @@ interface DATA_KUOTA {
 
 const ProdukPreorderCarousel = ({ dataProdukPreorder }: { dataProdukPreorder: PRODUK_FOR_CUSTOMER_UI[] }) => {
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [dataKuotaProdukToday, setDataKuotaProdukToday] = useState<DATA_KUOTA[]>([]);
-
-
-    const fetchKuotaProduk = async () => {
-        try {
-            const kuotaPromises = dataProdukPreorder.map(async (data) => {
-                if(data.JENIS_PRODUK === "Pre Order"){
-                    const resKuotaProduk = await fetch(`/api/kuotaProduk/${data.ID_PRODUK}`);
-                    if(!resKuotaProduk.ok){
-                        throw new Error('Failed to fetch kuota produk');
-                    }
-    
-                    const resKuotaProdukFinal = await resKuotaProduk.json();
-                    return { nama_produk: data.NAMA_PRODUK, kuotaProduk: resKuotaProdukFinal.kuotaProdukToday }
-                }
-
-                return { nama_produk: "", kuotaProduk: null };
-            });
-
-            const allDataKuota = await Promise.all(kuotaPromises);
-            setDataKuotaProdukToday(allDataKuota);
-            // console.log(allDataKuota);
-        }catch(error){
-            console.log("Error while fetch kuota produk " + error);
-            throw error;
-        }
-    }
-
-    useEffect(() => {
-        fetchKuotaProduk();
-    }, [dataProdukPreorder]);
-
   return (
     <div>
         <Carousel className="w-full">

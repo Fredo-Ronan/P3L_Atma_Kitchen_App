@@ -87,7 +87,6 @@ const PreOrderProdukPage = ({
 
   return (
     <div>
-      <div className="font-poetsen italic text-red-500">Silahkan pilih tanggal pengiriman untuk mengetahui kuota pre order dan melakukan pre order</div>
       <FilterDate filter={dates}/>
       <div className="mt-2">
         <div className="font-poetsen italic opacity-50">FAQ: Kuota ini di update seminggu sekali dan jika hanya tertera 1 tanggal saja, maka keesokan harinya otomatis akan reset/ditambah tanggal untuk seminggu ke depannya lagi</div>
@@ -169,7 +168,7 @@ const PreOrderProdukPage = ({
                           if (kuota.nama_produk === data.NAMA_PRODUK) {
                             if (kuota.kuotaProduk[0].KUOTA > 0) {
                               return (
-                                <DetilProdukPage key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} produk={data}/>
+                                <DetilProdukPage key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} produk={data} dateDeliver={queryParams.filter}/>
                               );
                             } else {
                               return (
