@@ -10,13 +10,15 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog"
   
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { addToKeranjang } from '@/actions/addToKeranjang.actions'
+import { getCustomerDataTrigger } from '@/actions/getCustomerData.actions'
 
 const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
+  const [customerData, setCustomerData] = useState<string | null>(null);
     const [jumlahSatuLoyang, setJumlahSatuLoyang] = useState(0);
     const [jumlahSetengahLoyang, setJumlahSetengahLoyang] = useState(0);
     const [jumlah, setJumlah] = useState(0); // untuk tracking jumlah produk selain cake termasuk produk titipan/ready stock
@@ -31,6 +33,11 @@ const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
         setJumlahSetengahLoyang(0);
         setJumlah(0);
         setHargaTotal(0);
+    }
+
+    const isCustomerLoggedIn = async () => {
+      const customer = await getCustomerDataTrigger();
+      setCustomerData(customer);
     }
 
     const addToKeranjangTrigger = async () => {
@@ -108,11 +115,20 @@ const DetilProdukPage = ({ produk }: { produk: PRODUK_FOR_CUSTOMER_UI }) => {
         window.location.reload();
     }
 
+    useEffect(() => {
+      isCustomerLoggedIn();
+    }, [produk]);
+
   return (
     <Dialog>
+      {customerData !== null ? 
       <DialogTrigger asChild>
         <Button className='bg-blue-500' onClick={() => resetAll()}>Pesan Sekarang</Button>
       </DialogTrigger>
+      : <div>
+        <p className='font-bold text-red-500'>Login untuk memesan</p>
+      </div>
+      }
       <DialogContent className="max-w-3xl w-auto p-4">
         <DialogHeader>
           <DialogTitle>{produk.NAMA_PRODUK}</DialogTitle>

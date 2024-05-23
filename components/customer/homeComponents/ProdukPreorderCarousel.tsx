@@ -78,40 +78,8 @@ const ProdukPreorderCarousel = ({ dataProdukPreorder }: { dataProdukPreorder: PR
                                             </div>
                                         ))}
                                     </div>
-                                    <div key={index}>
-                                        {dataKuotaProdukToday.map((kuota, indexKuota) => {
-                                            if (kuota.nama_produk === data.NAMA_PRODUK) {
-                                                return (
-                                                    <div key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} className='mt-6'>
-                                                        <div className='flex'>
-                                                            <p className='font-poetsen text-lg'>Sisa&nbsp;</p>
-                                                            <p className='font-poetsen font-bold text-lg'>{kuota.kuotaProduk[0].KUOTA}</p>
-                                                            <p className='font-poetsen text-lg'>&nbsp;kuota hari ini</p>
-                                                        </div>
-                                                        <p className='font-poetsen opacity-50 italic'>Di update hari ini pukul {new Date().toTimeString().split(' ')[0]}</p>
-                                                    </div>
-                                                );
-                                            } else {
-                                                return null; // No key needed for null
-                                            }
-                                        })}
-                                    </div>
 
-                                    <div className='mt-4'>
-                                        {dataKuotaProdukToday.map((kuota, indexKuota) => {
-                                            if (kuota.nama_produk === data.NAMA_PRODUK) {
-                                                if(kuota.kuotaProduk[0].KUOTA > 0){
-                                                    return (
-                                                        <DetilProdukPage key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} produk={data}/>
-                                                    );
-                                                } else {
-                                                    return <Button key={`${index}-${indexKuota}-${data.NAMA_PRODUK}`} className='bg-blue-500' disabled>Pesan Sekarang</Button>
-                                                }
-                                            } else {
-                                                return null;  // No key needed for null
-                                            }
-                                        })}
-                                    </div>
+                                    {/* <Button className='bg-blue-500 mt-4'>Lihat Produk</Button> */}
                                 </CardContent>
                             </Card>
                         </div>

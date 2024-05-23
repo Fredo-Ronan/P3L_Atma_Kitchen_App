@@ -2,11 +2,11 @@
 import PreOrderProdukPage from "@/components/customer/produkComponents/PreOrderProdukPage";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PRODUK_FOR_CUSTOMER_UI } from "@/types";
+import { PRODUK_FOR_CUSTOMER_UI, QueryParams } from "@/types";
 import { mergeDuplicates } from "@/utilities/mergeProdukPreorder";
 import React, { useEffect, useState } from "react";
 
-const ProdukPreOrderPage = () => {
+const ProdukPreOrderPage = ({ searchParams }: { searchParams: QueryParams }) => {
   const [dataProdukPreOrder, setDataProdukPreOrder] = useState<
     PRODUK_FOR_CUSTOMER_UI[]
   >([]);
@@ -60,7 +60,7 @@ const ProdukPreOrderPage = () => {
           ))}
         </div>
       ) : (
-        <PreOrderProdukPage dataProdukPreOrder={dataProdukPreOrder} />
+        <PreOrderProdukPage dataProdukPreOrder={dataProdukPreOrder} searchParams={searchParams}/>
       )}
     </div>
   );

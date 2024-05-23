@@ -34,4 +34,24 @@ export function formatDateToYYYYMMDD(date: Date): string {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
+
+// get dates after today to a certain date
+export function getDatesAfterTodayToN(endDate: Date): string[] {
+    // Get today's date
+    let currentDate = new Date();
+    let dates: string[] = [];
+
+    // Loop through the dates starting from tomorrow until reaching the end date
+    while (currentDate <= endDate) {
+        // console.log(currentDate.toLocaleDateString());
+        
+        // Move to the next day
+        currentDate.setDate(currentDate.getDate() + 1);
+
+        dates.push(formatDateToYYYYMMDD(currentDate));
+    }
+
+    // console.log(dates);
+    return dates;
+}
   
