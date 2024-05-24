@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { KUOTA_HARIAN, PRODUK_FOR_CUSTOMER_UI, QueryParams } from "@/types";
+import { KUOTA_HARIAN, PRODUK_FOR_CUSTOMER_UI, PRODUK_FOR_KERANJANG, QueryParams } from "@/types";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,9 @@ import DetilProdukPage from "./DetilProdukPage";
 import axios from "axios";
 import FilterDate from "./FilterDate";
 import { getDatesAfterTodayToN } from "@/utilities/dateParser";
+import { getItemsFromKeranjang } from "@/actions/getItemFromKeranjang.actions";
+import { urlQueryParams } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface DATA_KUOTA {
   nama_produk: string;
@@ -21,11 +24,14 @@ const PreOrderProdukPage = ({
   dataProdukPreOrder: PRODUK_FOR_CUSTOMER_UI[];
   searchParams: QueryParams;
 }) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [dates, setDates] = useState<string[]>([]);
   const [dataKuotaProdukToday, setDataKuotaProdukToday] = useState<
     DATA_KUOTA[]
   >([]);
+  const [isKeranjang, setIsKeranjang] = useState(false);
+  const [selectedDateInKeranjang, setSelectedDateInKeranjang] = useState<string | undefined>("");
 
   const queryParams: QueryParams = {
     q: searchParams.q,
@@ -33,6 +39,28 @@ const PreOrderProdukPage = ({
     page: searchParams.page,
     filter: searchParams.filter,
   };
+
+  const getItemsKeranjang = async () => {
+    const items = await getItemsFromKeranjang();
+
+    if(items.length === 0){
+      return;
+    }
+
+    setSelectedDateInKeranjang(items.at(0)?.TANGGAL_PENGIRIMAN);
+
+    const newUrl = urlQueryParams({
+      params: searchParams.toString(),
+      key: "filter",
+      value: items.at(0)?.TANGGAL_PENGIRIMAN!,
+      removePage: true,
+    });
+    router.push(newUrl, {
+      scroll: false,
+    });
+
+    setIsKeranjang(true);
+  }
 
   const getDates = async () => {
     try {
@@ -81,13 +109,20 @@ const PreOrderProdukPage = ({
   };
 
   useEffect(() => {
+    getItemsKeranjang();
     getDates();
     fetchKuotaProduk();
   }, [dataProdukPreOrder, searchParams]);
 
   return (
     <div>
-      <FilterDate filter={dates}/>
+      {isKeranjang ? 
+        <div>
+          <div className="font-poetsen italic">Tanggal Pengiriman : {selectedDateInKeranjang}</div>
+          <div className="font-poetsen italic text-red-500">Anda sudah tidak bisa mengubah tanggal pengiriman jika sudah ada produk di dalam keranjang, silahkan kosongkan keranjang anda terlebih dahulu</div> 
+        </div> 
+        : <FilterDate filter={dates} selectedDate={selectedDateInKeranjang}/>
+      }
       <div className="mt-2">
         <div className="font-poetsen italic opacity-50">FAQ: Kuota ini di update seminggu sekali dan jika hanya tertera 1 tanggal saja, maka keesokan harinya otomatis akan reset/ditambah tanggal untuk seminggu ke depannya lagi</div>
       </div>

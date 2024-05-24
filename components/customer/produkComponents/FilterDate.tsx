@@ -11,50 +11,27 @@ import { removeUrlQueryParams, urlQueryParams } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getItemsFromKeranjang } from "@/actions/getItemFromKeranjang.actions";
-import { PRODUK_FOR_KERANJANG } from "@/types";
 
 interface Props {
   filter: string[];
+  selectedDate?: string;
 }
 
-const FilterDate = ({ filter }: Props) => {
+const FilterDate = ({ filter, selectedDate }: Props) => {
   const searchParams = useSearchParams();
-  const [itemsInKeranjang, setItemsInKeranjang] = useState<PRODUK_FOR_KERANJANG[]>([]);
 
   const query = searchParams.get("filter");
 
-  const [selectedFilter, setSelectedFilter] = useState(query || "today");
+  const [selectedFilter, setSelectedFilter] = useState(query || selectedDate || "today");
 
   const router = useRouter();
 
-  const getItemsKeranjang = async () => {
-    const items = await getItemsFromKeranjang();
-
-    if(items.length === 0){
-      return;
-    }
-    setItemsInKeranjang(items);
-    setSelectedFilter(items.at(0)?.TANGGAL_PENGIRIMAN as string);
-    const newUrl = urlQueryParams({
-      params: searchParams.toString(),
-      key: "filter",
-      value: items.at(0)?.TANGGAL_PENGIRIMAN as string,
-      removePage: true,
-    });
-  
-    router.push(newUrl, {
-      scroll: false,
-    });
-  }
-
   useEffect(() => {
-    getItemsKeranjang();
     if (selectedFilter !== "today") {
       const newUrl = urlQueryParams({
         params: searchParams.toString(),
         key: "filter",
-        value: selectedFilter,
+        value: selectedFilter!,
         removePage: true,
       });
       router.push(newUrl, {
@@ -71,21 +48,17 @@ const FilterDate = ({ filter }: Props) => {
       });
       // window.location.reload();
     }
-  }, [query, selectedFilter, router, searchParams, itemsInKeranjang]);
+  }, [query, selectedFilter, router, searchParams]);
 
   return (
     <div>
-      {selectedFilter === "today" && itemsInKeranjang.length === 0 ?
+      {selectedFilter === "today" ?
       <div className="font-poetsen italic text-red-500">Silahkan pilih tanggal pengiriman untuk mengetahui kuota pre order dan melakukan pre order</div>
-      : itemsInKeranjang.length !== 0 ? <div>
-        <div className="font-poetsen italic text-red-500">Anda sudah tidak bisa mengubah tanggal pengiriman jika sudah ada produk di dalam keranjang, silahkan kosongkan keranjang anda terlebih dahulu</div> 
-      </div> 
-        : <></>
+      : <></>
       }
       <Select
         onValueChange={(content) => setSelectedFilter(content)}
         defaultValue={selectedFilter}
-        disabled={itemsInKeranjang.length !== 0}
       >
         <SelectTrigger className="w-[180px] h-[46px]">
           <SelectValue placeholder="Select a filter" />
