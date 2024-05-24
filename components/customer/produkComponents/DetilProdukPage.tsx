@@ -137,7 +137,7 @@ const DetilProdukPage = ({ produk, dateDeliver }: { produk: PRODUK_FOR_CUSTOMER_
 
     useEffect(() => {
       isCustomerLoggedIn();
-    }, [produk]);
+    }, [produk, dateDeliver]);
 
   return (
     <Dialog>
