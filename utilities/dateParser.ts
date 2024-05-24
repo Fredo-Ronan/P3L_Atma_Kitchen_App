@@ -42,7 +42,7 @@ export function getDatesAfterTodayToN(endDate: Date): string[] {
     let dates: string[] = [];
 
     // Loop through the dates starting from tomorrow until reaching the end date
-    while (currentDate <= endDate) {
+    while (currentDate < endDate) {
         // console.log(currentDate.toLocaleDateString());
         
         // Move to the next day

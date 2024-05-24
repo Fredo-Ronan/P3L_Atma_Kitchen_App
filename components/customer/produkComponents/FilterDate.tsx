@@ -30,7 +30,22 @@ const FilterDate = ({ filter }: Props) => {
 
   const getItemsKeranjang = async () => {
     const items = await getItemsFromKeranjang();
+
+    if(items.length === 0){
+      return;
+    }
     setItemsInKeranjang(items);
+    setSelectedFilter(items.at(0)?.TANGGAL_PENGIRIMAN as string);
+    const newUrl = urlQueryParams({
+      params: searchParams.toString(),
+      key: "filter",
+      value: items.at(0)?.TANGGAL_PENGIRIMAN as string,
+      removePage: true,
+    });
+  
+    router.push(newUrl, {
+      scroll: false,
+    });
   }
 
   useEffect(() => {
@@ -56,13 +71,16 @@ const FilterDate = ({ filter }: Props) => {
       });
       // window.location.reload();
     }
-  }, [query, selectedFilter, router, searchParams]);
+  }, [query, selectedFilter, router, searchParams, itemsInKeranjang]);
 
   return (
     <div>
-      {selectedFilter === "today" ?
+      {selectedFilter === "today" && itemsInKeranjang.length === 0 ?
       <div className="font-poetsen italic text-red-500">Silahkan pilih tanggal pengiriman untuk mengetahui kuota pre order dan melakukan pre order</div>
-      : itemsInKeranjang.length !== 0 ? <div className="font-poetsen italic text-red-500">Anda sudah tidak bisa mengubah tanggal pengiriman jika sudah ada produk di dalam keranjang, silahkan kosongkan keranjang anda terlebih dahulu</div> : <></>
+      : itemsInKeranjang.length !== 0 ? <div>
+        <div className="font-poetsen italic text-red-500">Anda sudah tidak bisa mengubah tanggal pengiriman jika sudah ada produk di dalam keranjang, silahkan kosongkan keranjang anda terlebih dahulu</div> 
+      </div> 
+        : <></>
       }
       <Select
         onValueChange={(content) => setSelectedFilter(content)}
