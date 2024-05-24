@@ -169,3 +169,11 @@ export interface CUSTOMER{
   TANGGAL_LAHIR: string;
   TELEPON: string;
 }
+
+export interface POIN {
+  ID_POIN: number;
+  NAMA_POIN: string;
+  JUMLAH_POIN: number;
+  SYARAT: number;
+  KETERANGAN_POIN: string;
+}

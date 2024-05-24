@@ -1,10 +1,13 @@
+'use client';
 import React from 'react'
 import { IoMdMail, IoMdInformationCircle  } from "react-icons/io";
 import { FaLocationDot, FaInstagram } from "react-icons/fa6";
+import { usePathname } from 'next/navigation';
 
 const Footer = () => {
+    const pathname = usePathname();
   return (
-    <div className='mt-24 bg-slate-50 font-poetsen'>
+    <div className={pathname.includes("/sign-in") || pathname.includes("/sign-up") ? 'hidden' : 'mt-24 bg-slate-50 font-poetsen'}>
         <hr />
         {/* main wrapper */}
         <div className='py-14 px-28 flex gap-24'>

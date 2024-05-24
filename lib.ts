@@ -2,8 +2,9 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-import { ADMIN_SESSION_NAME, CUSTOMER_SESSION_NAME, MO_SESSION_NAME, OWNER_SESSION_NAME } from "./constants";
+import { ADMIN_SESSION_NAME, CUSTOMER_SESSION_NAME, MO_SESSION_NAME, OWNER_SESSION_NAME, POIN_DATA } from "./constants";
 import { StatusCodesP3L } from "./constants/statusCodesP3L";
+import axios from "axios";
 
 const secretKey = process.env.SECRET_APP_KEY;
 const key = new TextEncoder().encode(secretKey);
@@ -41,6 +42,11 @@ export async function login(formData: any) {
                     });
     
     const result = await loginRes.json();
+    const poinData = await fetch(`${process.env.BASE_URL}/api/poin`, { method: "GET", headers: {
+        "Content-Type": "application/json",
+    } });
+
+    const resultPoinData = await poinData.json();
 
     // make conditional if the login is success then execute the code below, if not then just return error response
     if(result?.status === StatusCodesP3L.NOT_OK){
@@ -62,6 +68,7 @@ export async function login(formData: any) {
         // save the session in a cookie
         cookies().set(CUSTOMER_SESSION_NAME, session, {expires, httpOnly: true});
         cookies().set("user_data", JSON.stringify(result.data));
+        cookies().set(POIN_DATA, JSON.stringify(resultPoinData.dataPoin));
         redirect("/");
     }
 

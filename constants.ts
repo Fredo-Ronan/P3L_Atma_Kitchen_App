@@ -3,3 +3,4 @@ export const CUSTOMER_SESSION_NAME = "_customer_session";
 export const MO_SESSION_NAME = "_mo_session";
 export const OWNER_SESSION_NAME = "_owner_session";
 export const KERANJANG = "_keranjang";
+export const POIN_DATA = "data_poin";
