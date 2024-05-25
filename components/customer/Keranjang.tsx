@@ -40,6 +40,7 @@ import { Textarea } from "../ui/textarea";
 import { ClipLoader } from "react-spinners";
 import { formatDateToYYYYMMDD } from "@/utilities/dateParser";
 import axios from "axios";
+import { invoiceMaker } from "@/utilities/invoiceMaker";
 
 interface Customer {
   role: string;
@@ -80,8 +81,13 @@ const Keranjang = () => {
 
   const checkout = async () => {
     setIsLoadingCheckout(true);
+    const resLastNoTransaksi = await axios.get(`/api/transaksiPesanan/getLastNoTransaksi`);
+
+    const lastNoUrut = parseInt(resLastNoTransaksi.data.lastNoTransaksi[0].NO_TRANSAKSI.split(".")[2]);
+
     const currentDate = new Date();
     const finalCurrentDate = formatDateToYYYYMMDD(currentDate);
+    const finalCurrentNoTransaksi = `${currentDate.getFullYear() % 100}.${(currentDate.getMonth() + 1).toString().padStart(2, '0')}.${lastNoUrut+1}`;
 
     if(pakePoin){
         // API query kurangi poin customer sesuai jumlah yang di pakai (variabel poinTerpakai)
@@ -103,6 +109,7 @@ const Keranjang = () => {
         },
         body: JSON.stringify({
             id_customer: userData?.id_customer,
+            no_transaksi: finalCurrentNoTransaksi,
             tanggal_pesanan: finalCurrentDate,
             alamat_pengiriman: selectedDeliveryType === "delivery" ? alamat : null,
             status_pesanan: "pending",
@@ -182,6 +189,7 @@ const Keranjang = () => {
     })
 
 
+    invoiceMaker(finalCurrentNoTransaksi, finalCurrentDate, items.at(0)?.TANGGAL_PENGIRIMAN! || itemsHampers.at(0)?.TANGGAL_PENGIRIMAN!, userData?.nama_customer!, alamat, selectedDeliveryType, items, itemsHampers, totalHarga, pakePoin ? poinTerpakai : 0);
     // delete all items from keranjang
     deleteAllItemInKeranjang();
   }
