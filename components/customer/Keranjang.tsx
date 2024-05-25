@@ -177,7 +177,7 @@ const Keranjang = () => {
         },
         body: JSON.stringify({
             id_customer: userData?.id_customer,
-            updatePoin: userData?.total_poin === null || userData?.total_poin === undefined ? totalPoin : userData?.total_poin! + totalPoin
+            updatePoin: userPoin + totalPoin
         })
     })
 
