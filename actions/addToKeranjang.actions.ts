@@ -1,6 +1,6 @@
 'use server';
-import { KERANJANG } from "@/constants";
-import { PRODUK_FOR_KERANJANG } from "@/types";
+import { KERANJANG, KERANJANG_HAMPERS } from "@/constants";
+import { HAMPERS_FOR_KERANJANG, PRODUK_FOR_KERANJANG } from "@/types";
 import { cookies } from "next/headers";
 
 export async function addToKeranjang(produk: PRODUK_FOR_KERANJANG[]){
@@ -23,4 +23,24 @@ export async function addToKeranjang(produk: PRODUK_FOR_KERANJANG[]){
 
     const stringifyNewProduk = JSON.stringify(oldKeranjang);
     cookies().set(KERANJANG, stringifyNewProduk);
+}
+
+export async function addToHampersKeranjang(hampers: HAMPERS_FOR_KERANJANG[]){
+    const keranjangHampersValue = cookies().get(KERANJANG_HAMPERS);
+
+    if(!keranjangHampersValue){
+        const stringifyHampers = JSON.stringify(hampers);
+
+        cookies().set(KERANJANG_HAMPERS, stringifyHampers);
+        return;
+    }
+
+    let oldKeranjangHampers = JSON.parse(keranjangHampersValue.value);
+
+    hampers.forEach((data) => {
+        oldKeranjangHampers.push(data);
+    })
+
+    const stringifyNewHampers = JSON.stringify(oldKeranjangHampers);
+    cookies().set(KERANJANG_HAMPERS, stringifyNewHampers);
 }

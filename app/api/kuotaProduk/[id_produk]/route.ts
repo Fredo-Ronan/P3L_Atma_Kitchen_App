@@ -41,3 +41,24 @@ export async function GET(req: NextRequest, { params }: { params: { id_produk: s
         throw error;
     }
 }
+
+export async function POST(req: NextRequest, { params }: { params: { id_produk: string } }){
+    try {
+        const connection = await connect();
+
+        const request = await req.json();
+        const { tanggalKuota } = JSON.parse(request.body);
+
+        const queryUpdateKuota = `UPDATE KUOTA_HARIAN SET KUOTA = KUOTA - 1 WHERE ID_PRODUK = ? AND TANGGAL_KUOTA = ?`;
+
+        const [resultUpdateKuota, fields] = await connection.execute(queryUpdateKuota, [params.id_produk, tanggalKuota]);
+        connection.end();
+
+        return NextResponse.json({
+            data: "OK"
+        }, { status: 200 });
+    }catch(error){
+        console.log(error);
+        throw error;
+    }
+}

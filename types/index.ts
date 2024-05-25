@@ -117,6 +117,14 @@ export interface HAMPERS {
   DESKRIPSI_HAMPERS: string;
 }
 
+export interface HAMPERS_FOR_KERANJANG {
+  ID_HAMPERS: number;
+  NAMA_HAMPERS: string;
+  HARGA_HAMPERS: number;
+  DESKRIPSI_HAMPERS: string;
+  TANGGAL_PENGIRIMAN: string;
+}
+
 
 export interface KARYAWAN {
   ID_KARYAWAN: number;

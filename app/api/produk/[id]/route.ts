@@ -66,3 +66,24 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         throw error;
     }
 }
+
+export async function POST(req: NextRequest, { params }: { params: { id: string } }){
+    try {
+        const connection = await connect();
+
+        const request = await req.json();
+        const { stokUpdate } = JSON.parse(request.body);
+
+        const queryUpdateStok = `UPDATE PRODUK SET STOK = ? WHERE ID_PRODUK = ?`;
+
+        const [resultUpdateStok, fields] = await connection.execute(queryUpdateStok, [stokUpdate, params.id]);
+        connection.end();
+
+        return NextResponse.json({
+
+        }, { status: 200 });
+    }catch(error){
+        console.log(error);
+        throw error;
+    }
+}

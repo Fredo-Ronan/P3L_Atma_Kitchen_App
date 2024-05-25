@@ -38,9 +38,6 @@ const ProdukReadyCarousel = ({ dataProdukReady }: { dataProdukReady: PRODUK[] })
                                         </div>
                                         <p className='font-poetsen text-lg'>Rp. {data.HARGA_PRODUK.toLocaleString('id-ID')}</p>
                                     </div>
-                                    <div className='mt-4'>
-                                        <Button className='bg-blue-500'>Beli Sekarang</Button>
-                                    </div>
                                 </CardContent>
                             </Card>
                         </div>

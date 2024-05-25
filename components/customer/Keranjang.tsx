@@ -1,5 +1,5 @@
-import { getItemsFromKeranjang } from "@/actions/getItemFromKeranjang.actions";
-import { PRODUK_FOR_KERANJANG } from "@/types";
+import { getItemsFromKeranjang, getItemsHampersFromKeranjang } from "@/actions/getItemFromKeranjang.actions";
+import { HAMPERS_FOR_KERANJANG, PRODUK_FOR_KERANJANG } from "@/types";
 import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa6";
 import { IconContext } from "react-icons/lib";
@@ -31,13 +31,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { deleteKeranjang, updateKeranjang } from "@/actions/updateKeranjang.actions";
+import { deleteHampersKeranjang, deleteKeranjang, updateHampersKeranjang, updateKeranjang } from "@/actions/updateKeranjang.actions";
 import { getCustomerDataTrigger } from "@/actions/getCustomerData.actions";
 import { countPoin } from "@/utilities/poinCounter";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { ClipLoader } from "react-spinners";
+import { formatDateToYYYYMMDD } from "@/utilities/dateParser";
+import axios from "axios";
 
 interface Customer {
   role: string;
@@ -52,6 +54,7 @@ interface Customer {
 
 const Keranjang = () => {
   const [items, setItems] = useState<PRODUK_FOR_KERANJANG[]>([]);
+  const [itemsHampers, setItemsHampers] = useState<HAMPERS_FOR_KERANJANG[]>([]);
   const [totalHarga, setTotalHarga] = useState(0);
   const [totalPoin, setTotalPoin] = useState(0);
   const [isBirthday, setIsBirthday] = useState(false);
@@ -60,7 +63,128 @@ const Keranjang = () => {
   const [poinTerpakai, setPoinTerpakai] = useState(1);
   const [alamat, setAlamat] = useState("");
   const [userData, setUserData] = useState<Customer>();
+  const [userPoin, setUserPoin] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
+  const [isLoadingUserPoin, setIsLoadingUserPoin] = useState(false);
+
+  const getUserPoin = async (userId: number) => {
+    setIsLoadingUserPoin(true);
+    const resGetPoin = await axios.get(`/api/customer/main/getPoin/${userId}`);
+
+    // console.log(resGetPoin);
+
+    setUserPoin(resGetPoin.data.poin[0].TOTAL_POIN);
+    setIsLoadingUserPoin(false);
+  }
+
+  const checkout = async () => {
+    setIsLoadingCheckout(true);
+    const currentDate = new Date();
+    const finalCurrentDate = formatDateToYYYYMMDD(currentDate);
+
+    if(pakePoin){
+        // API query kurangi poin customer sesuai jumlah yang di pakai (variabel poinTerpakai)
+        const resKurangiPoin = await axios.post(`/api/customer/main/kurangiPoin`, {
+            headers: {
+                "Content-Type": "application/json",
+            }, 
+            body: JSON.stringify({
+                id_customer: userData?.id_customer,
+                poinUpdate: userData?.total_poin! - poinTerpakai    
+            })
+        });
+    }
+
+    // API query insert transaksi pesanan
+    const resInsertTransaksiPesanan = await axios.post(`/api/transaksiPesanan/insertTransaksiPesanan`, {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id_customer: userData?.id_customer,
+            tanggal_pesanan: finalCurrentDate,
+            alamat_pengiriman: selectedDeliveryType === "delivery" ? alamat : null,
+            status_pesanan: "pending",
+            tipe_pengiriman: selectedDeliveryType,
+            total_item: items.length + itemsHampers.length,
+            status_transaksi: "checkout, menunggu konfirmasi",
+            tanggal_pengiriman: items.at(0)?.TANGGAL_PENGIRIMAN || itemsHampers.at(0)?.TANGGAL_PENGIRIMAN,
+            total_harga: totalHarga,
+            total_harus_dibayar: pakePoin ? totalHarga - (poinTerpakai * 100) : totalHarga
+        })
+    });
+
+    const insertIdTransaksiPesanan = resInsertTransaksiPesanan.data.insertId;
+
+    // API query insert detil transaksi
+    items.forEach(async (data) => {
+        const resInsert = await axios.post(`/api/detilTransaksi/insertDetilTransaksi`, {
+            headers: {
+                "Content-Type": "application/json"
+            }, 
+            body: JSON.stringify({
+                id_transaksi_pesanan: insertIdTransaksiPesanan,
+                id_produk: data.ID_PRODUK,
+                jumlah_pesanan: items.length + itemsHampers.length,
+                sub_total: totalHarga,
+                id_hampers: null,
+                id_customer: userData?.id_customer
+            })
+        })
+
+        const resUpdateKuota = await axios.post(`/api/kuotaProduk/${data.ID_PRODUK}`, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                tanggalKuota: data.TANGGAL_PENGIRIMAN
+            })
+        })
+
+        if(data.STOK > 0){
+            const resUpdateStok = await axios.post(`/api/produk/${data.ID_PRODUK}`, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    stokUpdate: data.STOK - 1
+                })
+            })
+        }
+    })
+
+    itemsHampers.forEach(async (data) => {
+        const resInsert = await axios.post(`/api/detilTransaksi/insertDetilTransaksi`, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id_transaksi_pesanan: insertIdTransaksiPesanan,
+                id_produk: null,
+                jumlah_pesanan: items.length + itemsHampers.length,
+                sub_total: totalHarga,
+                id_hampers: data.ID_HAMPERS,
+                id_customer: userData?.id_customer
+            })
+        })
+    })
+
+    // API query update poin customer
+    const resUpdatePoin = await axios.post(`/api/customer/main/tambahPoin`, {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id_customer: userData?.id_customer,
+            updatePoin: userData?.total_poin === null || userData?.total_poin === undefined ? totalPoin : userData?.total_poin! + totalPoin
+        })
+    })
+
+
+    // delete all items from keranjang
+    deleteAllItemInKeranjang();
+  }
 
   const deleteItemFromKeranjang = async (namaProduk: string) => {
     const indexToRemove = items.findIndex(data => data.NAMA_PRODUK === namaProduk);
@@ -73,8 +197,20 @@ const Keranjang = () => {
     }
   };
 
+  const deleteItemHampersFromKeranjang = async (namaHampers: string) => {
+    const indexToRemove = itemsHampers.findIndex(data => data.NAMA_HAMPERS === namaHampers);
+
+    if (indexToRemove !== -1) {
+      const newItems = itemsHampers.filter((_, index) => index !== indexToRemove);
+      setItemsHampers(newItems);
+      await updateHampersKeranjang(newItems);
+      window.location.reload();
+    }
+  }
+
   const deleteAllItemInKeranjang = async () => {
     await deleteKeranjang();
+    await deleteHampersKeranjang();
     window.location.reload();
   };
 
@@ -83,6 +219,10 @@ const Keranjang = () => {
     items.forEach((data) => {
       countHarga += data.HARGA_PRODUK;
     });
+
+    itemsHampers.forEach((data) => {
+        countHarga += data.HARGA_HAMPERS;
+    })
 
     setTotalHarga(countHarga);
     const poin = await countPoin(countHarga, userData?.tanggal_lahir);
@@ -104,13 +244,26 @@ const Keranjang = () => {
       countTotalHarga();
     };
 
+    const fetchHampersFromKeranjang = async () => {
+        const keranjangHampers = await getItemsHampersFromKeranjang();
+        setItemsHampers(keranjangHampers);
+        countTotalHarga();
+    }
+
     fetchFromKeranjang();
+    fetchHampersFromKeranjang();
     getCustomerData();
   }, []);
 
   useEffect(() => {
+    if (userData?.id_customer) {
+      getUserPoin(userData.id_customer);
+    }
+  }, [userData]);
+
+  useEffect(() => {
     countTotalHarga();
-  }, [items]);
+  }, [items, itemsHampers]);
 
   return (
     <div className="mx-24 my-9 font-poetsen">
@@ -122,7 +275,7 @@ const Keranjang = () => {
       ) : (
         <div>
           <div className="flex gap-4">
-            {items.length !== 0 ? (
+            {items.length !== 0 || itemsHampers.length !== 0 ? (
               <div className="overflow-y-scroll w-3/4 max-h-svh">
                 {items.map((data, index) => (
                   <div
@@ -140,7 +293,7 @@ const Keranjang = () => {
                     <IconContext.Provider value={{ color: "red" }}>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <div className="flex items-end">
+                          <div className="flex items-end hover:cursor-pointer">
                             <FaTrash size={20} />
                           </div>
                         </AlertDialogTrigger>
@@ -171,6 +324,53 @@ const Keranjang = () => {
                     </IconContext.Provider>
                   </div>
                 ))}
+
+                {itemsHampers.map((data, index) => (
+                    <div
+                    className="mb-4 flex gap-4 px-4 py-4 bg-slate-50 shadow-lg"
+                    key={index}
+                  >
+                    <div className="w-full">
+                      <div className="flex gap-2">
+                        <p>{data.NAMA_HAMPERS}</p>
+                        <p className="italic opacity-50">{data.DESKRIPSI_HAMPERS.split("+")[1]}</p>
+                      </div>
+                      <p>Rp. {data.HARGA_HAMPERS.toLocaleString("id-ID")}</p>
+                    </div>
+                    <IconContext.Provider value={{ color: "red" }}>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <div className="flex items-end hover:cursor-pointer">
+                            <FaTrash size={20} />
+                          </div>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Yakin ingin menghapus {data.NAMA_HAMPERS} dari keranjang?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Tindakan ini akan menghapus produk {data.NAMA_HAMPERS} dari keranjang pesanan anda
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="bg-red-500 hover:bg-red-700 text-white hover:text-white">
+                              Batal
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              className="bg-blue-500"
+                              onClick={() => {
+                                deleteItemHampersFromKeranjang(data.NAMA_HAMPERS);
+                              }}
+                            >
+                              Ya
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </IconContext.Provider>
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="w-3/4 max-h-svh flex justify-center items-center font-bold text-xl">
@@ -182,7 +382,7 @@ const Keranjang = () => {
               <div>
                 <h1 className="font-bold text-2xl">Detil Pesanan Anda</h1>
                 <p className="mt-2 text-lg">
-                  Tanggal Pengiriman : {items.at(0)?.TANGGAL_PENGIRIMAN}
+                  Tanggal Pengiriman : {items.at(0)?.TANGGAL_PENGIRIMAN || itemsHampers.at(0)?.TANGGAL_PENGIRIMAN}
                 </p>
               </div>
 
@@ -197,6 +397,15 @@ const Keranjang = () => {
                     <p>Rp. {data.HARGA_PRODUK.toLocaleString("id-ID")}</p>
                   </div>
                 ))}
+
+                {itemsHampers.map((data, index) => (
+                  <div className="flex w-1/2 justify-between" key={index}>
+                    <div className="flex gap-1">
+                      <p>{data.NAMA_HAMPERS}</p>
+                    </div>
+                    <p>Rp. {data.HARGA_HAMPERS.toLocaleString("id-ID")}</p>
+                  </div>
+                ))}
               </div>
 
               <div className="my-2">
@@ -209,8 +418,7 @@ const Keranjang = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectLabel>Pilih Tipe Pengiriman</SelectLabel>
-                      <SelectItem value="none">Pilih Tipe Pengiriman</SelectItem>
+                      <SelectItem value="none" disabled>Pilih Tipe Pengiriman</SelectItem>
                       <SelectItem value="delivery">Delivery</SelectItem>
                       <SelectItem value="pickup">Pickup</SelectItem>
                     </SelectGroup>
@@ -246,9 +454,12 @@ const Keranjang = () => {
                   Anda bisa menggunakan sisa poin yang anda miliki untuk memotong harga total anda
                 </p>
                 <p>Sisa poin anda :</p>
-                <p className="font-bold text-xl">
-                  {userData?.total_poin === null ? "0" : userData?.total_poin} poin
-                </p>
+                {isLoadingUserPoin ?
+                    <ClipLoader/>
+                    : <p className="font-bold text-xl">
+                    {userPoin} poin
+                  </p>
+                }
 
                 {userData?.total_poin === null ? (
                   <TooltipProvider>
@@ -299,7 +510,7 @@ const Keranjang = () => {
                           className="bg-green-500"
                           onClick={() => {
                             setPoinTerpakai(
-                              poinTerpakai < userData?.total_poin! ? poinTerpakai + 1 : poinTerpakai
+                              poinTerpakai < userPoin ? poinTerpakai + 1 : poinTerpakai
                             );
                           }}
                         >
@@ -308,7 +519,7 @@ const Keranjang = () => {
                         <Button
                           className="bg-blue-500 ml-4"
                           onClick={() => {
-                            setPoinTerpakai(userData?.total_poin!);
+                            setPoinTerpakai(userPoin);
                           }}
                         >
                           MAX
@@ -326,12 +537,13 @@ const Keranjang = () => {
                 <Button
                   className="bg-blue-500 mt-2"
                   disabled={
-                    items.length === 0 ||
+                    (items.length === 0 && itemsHampers.length === 0) ||
                     selectedDeliveryType === "none" ||
                     (alamat === "" && selectedDeliveryType !== "pickup")
                   }
+                  onClick={() => {checkout()}}
                 >
-                  Checkout
+                  {isLoadingCheckout ? <ClipLoader/> : "Checkout"}
                 </Button>
               </div>
             </div>
@@ -341,7 +553,7 @@ const Keranjang = () => {
               <div className="flex items-end">
                 <Button
                   className="bg-red-500 hover:bg-red-700"
-                  disabled={items.length !== 0 ? false : true}
+                  disabled={items.length !== 0 || itemsHampers.length !== 0 ? false : true}
                 >
                   Kosongkan Keranjang
                 </Button>
