@@ -73,7 +73,10 @@ const CustomerHomePage = () => {
           </div>
         : 
         <div className="font-poetsen">
-          <h1 className="text-xl mb-2 font-poetsen">Paket Hampers</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl mb-2 font-poetsen">Paket Hampers |</h1>
+            <a href="/hampers" className="text-xl mb-2 font-bold relative before:absolute before:inset-0 before:transition-all before:duration-300 duration-300 transition-all before:w-0 hover:before:w-full hover:text-white before:-z-10 hover:before:bg-blue-500">Lihat Semua</a>
+          </div>
           <HampersCarousel dataHampers={dataHampers}/>
           <div className="h-20"></div>
           <div className="flex items-center gap-2">
