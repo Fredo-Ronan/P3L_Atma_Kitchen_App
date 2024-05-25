@@ -40,7 +40,7 @@ export async function countPoin(totalHarga: number, tanggalLahirCustomer?: strin
         let pengurang: {jumlahPoin?: number, syarat?: number} = {jumlahPoin: 0, syarat: 0};
         let birthday = false;
 
-        console.log(dataPoin);
+        // console.log(dataPoin);
 
         while(pengurang.syarat !== -1){
             pengurang = isContinue(dataPoin, totalHargaDecrement);
