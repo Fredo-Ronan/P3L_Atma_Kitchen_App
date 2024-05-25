@@ -8,7 +8,7 @@ import DetilProdukPage from "./DetilProdukPage";
 import axios from "axios";
 import FilterDate from "./FilterDate";
 import { getDatesAfterTodayToN } from "@/utilities/dateParser";
-import { getItemsFromKeranjang } from "@/actions/getItemFromKeranjang.actions";
+import { getItemsFromKeranjang, getItemsHampersFromKeranjang } from "@/actions/getItemFromKeranjang.actions";
 import { urlQueryParams } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -42,22 +42,40 @@ const PreOrderProdukPage = ({
 
   const getItemsKeranjang = async () => {
     const items = await getItemsFromKeranjang();
+    const itemsHampers = await getItemsHampersFromKeranjang();
 
-    if(items.length === 0){
+    if(items.length === 0 && itemsHampers.length === 0){
       return;
     }
 
-    setSelectedDateInKeranjang(items.at(0)?.TANGGAL_PENGIRIMAN);
+    if(items.length > 0){
+      setSelectedDateInKeranjang(items.at(0)?.TANGGAL_PENGIRIMAN);
+  
+      const newUrl = urlQueryParams({
+        params: searchParams.toString(),
+        key: "filter",
+        value: items.at(0)?.TANGGAL_PENGIRIMAN!,
+        removePage: true,
+      });
+      router.push(newUrl, {
+        scroll: false,
+      });
+  
+    }
 
-    const newUrl = urlQueryParams({
-      params: searchParams.toString(),
-      key: "filter",
-      value: items.at(0)?.TANGGAL_PENGIRIMAN!,
-      removePage: true,
-    });
-    router.push(newUrl, {
-      scroll: false,
-    });
+    if(itemsHampers.length > 0){
+      setSelectedDateInKeranjang(itemsHampers.at(0)?.TANGGAL_PENGIRIMAN);
+
+      const newUrl = urlQueryParams({
+        params: searchParams.toString(),
+        key: "filter",
+        value: itemsHampers.at(0)?.TANGGAL_PENGIRIMAN!,
+        removePage: true,
+      });
+      router.push(newUrl, {
+        scroll: false,
+      });
+    }
 
     setIsKeranjang(true);
   }
