@@ -123,6 +123,10 @@ const HampersPage = ({ dataHampers, selectedDate }: { dataHampers: HAMPERS[], se
                             : <></>
                         }
 
+                        <div className='text-end'>
+                            <p className='text-2xl font-bold'>Rp. {data.HARGA_HAMPERS.toLocaleString("id-ID")}</p>
+                        </div>
+
                         <div className='mt-6'>
                         <Dialog>
                             <DialogTrigger asChild>

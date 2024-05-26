@@ -143,7 +143,7 @@ const DetilProdukPage = ({ produk, dateDeliver }: { produk: PRODUK_FOR_CUSTOMER_
     <Dialog>
       {customerData !== null ? 
       <DialogTrigger asChild>
-        <Button className='bg-blue-500' onClick={() => resetAll()}>Pesan Sekarang</Button>
+        <Button className='bg-blue-500' onClick={() => resetAll()}>Tambah ke Keranjang</Button>
       </DialogTrigger>
       : <div>
         <p className='font-bold text-red-500'>Login untuk memesan</p>

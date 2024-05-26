@@ -8,9 +8,11 @@ import { getDatesAfterTodayToN } from "@/utilities/dateParser";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getCustomerDataTrigger } from "@/actions/getCustomerData.actions";
 
 const ProdukReadyPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [userData, setUserData] = useState<string | null>();
   const [dataProdukReady, setDataProdukReady] = useState<PRODUK[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [tanggalPengiriman, setTanggalPengiriman] = useState<string>("");
@@ -55,8 +57,14 @@ const ProdukReadyPage = () => {
       }
     }
 
+    const isCustomerLoggedIn = async () => {
+      const customer = await getCustomerDataTrigger();
+      setUserData(customer);
+    }
+
   useEffect(() => {
     getDates();
+    isCustomerLoggedIn();
     getItemsKeranjang();
     fetchDataProdukReady();
   }, []);
@@ -64,28 +72,32 @@ const ProdukReadyPage = () => {
   return (
     <div className="font-poetsen px-16">
       <h1 className="text-2xl font-bold mt-4 mb-7">Ready Stock</h1>
-      {tanggalPengiriman === "" ?
-          <div className='my-4'>
-              <Select
-                  onValueChange={(content) => setSelectedDate(content)}
-                  defaultValue={selectedDate}
-              >
-                  <SelectTrigger className="w-[180px] h-[46px]">
-                  <SelectValue placeholder="Select a date" />
-                  </SelectTrigger>
-                  <SelectContent>
-                  <SelectItem value="today" disabled>Select Date</SelectItem>
-                  {dates.map((item) => (
-                      <SelectItem key={item} value={item}>
-                      {item}
-                      </SelectItem>
-                  ))}
-                  </SelectContent>
-              </Select>
-          </div> : <div className="mb-4">
-              <div className="font-poetsen italic">Tanggal Pengiriman : {tanggalPengiriman}</div>
-              <div className="font-poetsen italic text-red-500">Anda sudah tidak bisa mengubah tanggal pengiriman jika sudah ada produk di dalam keranjang, silahkan kosongkan keranjang anda terlebih dahulu</div> 
-          </div>
+      {userData === null ?
+        <div className="mb-4">
+          <p className="text-red-500 font-bold">Anda harus login untuk dapat memesan produk ready stock</p>
+        </div>
+        : tanggalPengiriman === "" ?
+        <div className='my-4'>
+            <Select
+                onValueChange={(content) => setSelectedDate(content)}
+                defaultValue={selectedDate}
+            >
+                <SelectTrigger className="w-[180px] h-[46px]">
+                <SelectValue placeholder="Select a date" />
+                </SelectTrigger>
+                <SelectContent>
+                <SelectItem value="today" disabled>Select Date</SelectItem>
+                {dates.map((item) => (
+                    <SelectItem key={item} value={item}>
+                    {item}
+                    </SelectItem>
+                ))}
+                </SelectContent>
+            </Select>
+        </div> : <div className="mb-4">
+            <div className="font-poetsen italic">Tanggal Pengiriman : {tanggalPengiriman}</div>
+            <div className="font-poetsen italic text-red-500">Anda sudah tidak bisa mengubah tanggal pengiriman jika sudah ada produk di dalam keranjang, silahkan kosongkan keranjang anda terlebih dahulu</div> 
+        </div>
       }
       {isLoading ? (
         <div className="flex flex-wrap gap-6 justify-center">

@@ -1,4 +1,5 @@
 'use client';
+import { getCustomerDataTrigger } from '@/actions/getCustomerData.actions';
 import { getItemsFromKeranjang, getItemsHampersFromKeranjang } from '@/actions/getItemFromKeranjang.actions';
 import HampersPage from '@/components/customer/hampersComponents/HampersPage';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -11,6 +12,7 @@ import { ClipLoader } from 'react-spinners';
 const HampersCustomerPage = () => {
 
     const [dataHampers, setDataHampers] = useState<HAMPERS_FOR_KERANJANG[]>([]);
+    const [userData, setUserData] = useState<string | null>();
     const [selectedDate, setSelectedDate] = useState("");
     const [dates, setDates] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -57,9 +59,15 @@ const HampersCustomerPage = () => {
         }
       }
 
+      const isCustomerLoggedIn = async () => {
+        const customer = await getCustomerDataTrigger();
+        setUserData(customer);
+      }
+
     useEffect(() => {
         getItemsKeranjang();
         getDates();
+        isCustomerLoggedIn();
         fetchDataHampers();
     }, [])
 
@@ -72,7 +80,11 @@ const HampersCustomerPage = () => {
             </div>
             :
             <div>
-                {tanggalPengiriman === "" ?
+                {userData === null ?
+                    <div className='my-4'>
+                        <p className="text-red-500 font-bold">Anda harus login untuk dapat memesan hampers</p>
+                    </div>
+                    : tanggalPengiriman === "" ?
                     <div className='my-4'>
                         <Select
                             onValueChange={(content) => setSelectedDate(content)}
