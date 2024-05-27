@@ -1,7 +1,12 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import qs from "query-string";
-import { date } from "zod";
+import { OurFileRouter } from "@/app/api/uploadthing/core";
+import { generateReactHelpers } from "@uploadthing/react";
+
+export const { useUploadThing, uploadFiles } =
+  generateReactHelpers<OurFileRouter>();
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

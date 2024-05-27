@@ -16,14 +16,18 @@ const NavbarP3L = ({ userData }: { userData: any }) => {
   const getItemKeranjang = async () => {
     const jumlahItem = await countItemKeranjang();
     setItemKeranjang(jumlahItem);
-  }
+  };
 
   useEffect(() => {
     getItemKeranjang();
-  }, [])
+  }, []);
 
   return (
-    <div className={currentPath === "/sign-in" || currentPath === "/sign-up" ? "hidden" : ""}>
+    <div
+      className={
+        currentPath === "/sign-in" || currentPath === "/sign-up" ? "hidden" : ""
+      }
+    >
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
         <Link
           className="text-3xl font-bold leading-none flex gap-4 items-center"
@@ -97,12 +101,13 @@ const NavbarP3L = ({ userData }: { userData: any }) => {
             <Link href={`/keranjang`}>
               <div className="relative">
                 <FaCartShopping size={30} />
-                {itemKeranjang > 0 ?
+                {itemKeranjang > 0 ? (
                   <Badge className="absolute top-0 right-0 -mt-4 -mr-2 bg-red-600 text-white rounded-full h-6 w-6 flex items-center justify-center hover:bg-red-600">
-                  {itemKeranjang}
-                </Badge>  
-                : <></>  
-              }
+                    {itemKeranjang}
+                  </Badge>
+                ) : (
+                  <></>
+                )}
               </div>
             </Link>
             <Link
