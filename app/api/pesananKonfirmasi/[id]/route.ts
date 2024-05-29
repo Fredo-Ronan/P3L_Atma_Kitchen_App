@@ -183,8 +183,12 @@ export async function PUT(
       ...produkResultsHampers,
     ];
 
-    const produkResults = produkNoFilters.filter(
+    const produktemp2 = produkNoFilters.filter(
       (produk: any) => produk !== undefined
+    );
+
+    const produkResults = produktemp2.filter(
+      (produk) => produk.JENIS_PRODUK !== "Titipan"
     );
 
     console.log("ini produk results", produkResults);
