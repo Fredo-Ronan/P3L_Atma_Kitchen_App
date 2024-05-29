@@ -1,8 +1,6 @@
 import { connect } from "@/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export const STATUS_TRANSAKSI = "checkout, belum bayar";
-
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -14,8 +12,8 @@ export async function GET(
     const connection = await connect();
 
     const [pesanan] = await connection.execute(
-      `SELECT * FROM TRANSAKSI_PESANAN WHERE ID_CUSTOMER = ? AND STATUS_TRANSAKSI = ?`,
-      [id, STATUS_TRANSAKSI]
+      `SELECT * FROM TRANSAKSI_PESANAN WHERE ID_CUSTOMER = ? AND STATUS_TRANSAKSI = 'checkout, belum bayar'`,
+      [id]
     );
 
     const ID_PESANAN: string[] = [];
@@ -98,12 +96,10 @@ export async function PUT(
     connection = await connect();
     const { id } = params;
 
-    console.log("ID", id);
-
     const res = await request.json();
 
     const { bukti_tf } = JSON.parse(res.body);
-  
+
     const [isExist] = await connection.execute(
       `SELECT * FROM TRANSAKSI_PESANAN WHERE ID_TRANSAKSI_PESANAN = ?`,
       [id]
@@ -118,8 +114,6 @@ export async function PUT(
         });
       }
     }
-
-    console.log("BUKTI_TF", bukti_tf);
 
     const [rows] = await connection.execute(
       `UPDATE TRANSAKSI_PESANAN SET BUKTI_TF = ? WHERE ID_TRANSAKSI_PESANAN = ?`,

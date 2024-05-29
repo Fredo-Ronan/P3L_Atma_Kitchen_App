@@ -11,7 +11,7 @@ const PesananPage = () => {
   const { id_customer } = JSON.parse(value);
 
   return (
-    <div className="max-w-screen-xl mx-auto py-20">
+    <div className="max-w-screen-xl mx-auto py-20 min-h-screen">
       <h2 className="text-4xl font-bold">Daftar Pesanan </h2>
       <p className="text-gray-600 text-sm mt-2">
         Berikut pesanan yang perlu dibayar

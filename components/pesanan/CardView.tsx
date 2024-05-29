@@ -21,8 +21,12 @@ import Dropzone, { FileRejection } from "react-dropzone";
 import { Progress } from "../ui/progress";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
-import { useUploadThing } from "@/lib/utils";
 import axios from "axios";
+import { OurFileRouter } from "@/app/api/uploadthing/core";
+import { generateReactHelpers } from "@uploadthing/react";
+
+export const { useUploadThing, uploadFiles } =
+  generateReactHelpers<OurFileRouter>();
 
 interface Props {
   data: any;

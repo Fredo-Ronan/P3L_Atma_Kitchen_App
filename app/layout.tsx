@@ -28,10 +28,10 @@ export default async function RootLayout({
       </Head>
       <EdgeStoreProvider>
         <body className={inter.className}>
-          <NavbarP3L userData={userData}/>
+          <NavbarP3L userData={userData} />
           {children}
-          <Toaster richColors/>
-          <Footer/>
+          <Toaster richColors />
+          <Footer />
         </body>
       </EdgeStoreProvider>
     </html>

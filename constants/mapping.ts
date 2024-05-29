@@ -46,7 +46,14 @@ export const bahanBakuTable = [
 ];
 
 export const satuanFilter = ["kg", "gram", "pcs", "ltr", "ml"];
-export const filterProduk = ["Titipan", "Pre Order", "Pre Order + 1 Loyang", "Pre Order + 1/2 Loyang", "Tersedia", "Kosong"];
+export const filterProduk = [
+  "Titipan",
+  "Pre Order",
+  "Pre Order + 1 Loyang",
+  "Pre Order + 1/2 Loyang",
+  "Tersedia",
+  "Kosong",
+];
 export const jenisProduk = ["Titipan", "Pre Order"];
 export const jenisMakanan = ["Cake", "Roti", "Minuman"];
 export const filterTersedia = ["Tersedia", "Kosong"];
@@ -76,6 +83,10 @@ export const sideBarMO = [
   {
     label: "Pembelian Bahan Baku",
     link: "/moView/pembelianBahanBaku",
+  },
+  {
+    label: "Konfirmasi Pesanan",
+    link: "/moView/konfirmasiPesanan",
   },
 ];
 
@@ -147,40 +158,31 @@ export const sideBarOwner = [
   },
 ];
 
-
 export const tabelKaryawan = [
   "ID KARYAWAN",
   "NAMA KARYAWAN",
   "EMAIL KARYAWAN",
   "ALAMAT KARYAWAN",
   "NO TELP KARYAWAN",
-]
+];
 
-export const tableGajiKaryawan = [
-  "ID ROLE",
-  "ROLE KARYAWAN",
-  "NOMINAL GAJI",
-]
+export const tableGajiKaryawan = ["ID ROLE", "ROLE KARYAWAN", "NOMINAL GAJI"];
 
 export const tableBonusKaryawan = [
   "ID BONUS",
   "NAMA KARYAWAN",
   "TANGGAL PEMBERIAN",
   "BONUS",
-]
+];
 
-export const resepTable = [
-  "NO",
-  "NAMA RESEP",
-  "DETAIL RESEP",
-]
+export const resepTable = ["NO", "NAMA RESEP", "DETAIL RESEP"];
 
 export const detailResepTable = [
   "ID DETAIL RESEP",
   "NAMA BAHAN",
   "JUMLAH DIBUTUHKAN",
   "SATUAN",
-]
+];
 
 export const customer = [
   "ID CUSTOMER",
@@ -188,5 +190,4 @@ export const customer = [
   "EMAIL CUSTOMER",
   "TANGGAL LAHIR",
   "TELEPON",
-]
-
+];

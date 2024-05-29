@@ -64,3 +64,4 @@ export async function countPoin(totalHarga: number, tanggalLahirCustomer?: strin
         throw error;
     }
 }
+

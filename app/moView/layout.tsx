@@ -1,5 +1,5 @@
 import SideBar from "@/components/admin/SideBar";
-import { sideBarAdmin, sideBarMO } from "@/constants/mapping";
+import { sideBarMO } from "@/constants/mapping";
 import { PropsWithChildren } from "react";
 
 const Layout = ({ children }: PropsWithChildren) => {
