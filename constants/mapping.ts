@@ -204,7 +204,7 @@ export const pengirimanTable = [
   "ID TRANSAKSI",
   "NAMA CUSTOMER",
   "ALAMAT CUSTOMER",
-  "JARAK CUSTOMER (meter)",
+  "JARAK CUSTOMER (km)",
   "ONGKIR CUSTOMER",
   "TOTAL HARGA",
 ]
