@@ -2,7 +2,7 @@ import { HAMPERS_FOR_KERANJANG, PRODUK_FOR_KERANJANG } from '@/types';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
-export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tanggalPengiriman: string, namaCustomer: string, alamatPengiriman: string, tipePengiriman: string, items: PRODUK_FOR_KERANJANG[], itemsHampers: HAMPERS_FOR_KERANJANG[], totalHarga: number, poin: number, poinDidapat: number, keterangan: string) {
+export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tanggalPengiriman: string, namaCustomer: string, alamatPengiriman: string, tipePengiriman: string, items: PRODUK_FOR_KERANJANG[], itemsHampers: HAMPERS_FOR_KERANJANG[], totalHarga: number, poin: number, poinDidapat: number, keterangan: string, ongkir: number) {
     const doc = new jsPDF();
 
     autoTable(doc, { 
@@ -99,6 +99,26 @@ export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tangg
                     }
                 }
             ],
+            tipePengiriman === "delivery" ?
+            ongkir !== 0 ?
+            [
+                {
+                    content: 'Ongkir',
+                    styles: {
+                        halign: 'right'
+                    }
+                }
+            ] : [] : [],
+            tipePengiriman === "delivery" ?
+            ongkir !== 0 ?
+            [
+                {
+                    content: `Rp. ${ongkir.toLocaleString("id-ID")}`,
+                    styles: {
+                        halign: 'right'
+                    }
+                }
+            ] : [] : [],
             [
                 {
                     content: 'Potongan',

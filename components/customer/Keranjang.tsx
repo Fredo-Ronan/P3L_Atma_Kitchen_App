@@ -191,7 +191,7 @@ const Keranjang = () => {
     // })
 
 
-    invoiceMaker(finalCurrentNoTransaksi, finalCurrentDate, items.at(0)?.TANGGAL_PENGIRIMAN! || itemsHampers.at(0)?.TANGGAL_PENGIRIMAN!, userData?.nama_customer!, alamat, selectedDeliveryType, items, itemsHampers, totalHarga, pakePoin ? poinTerpakai : 0, totalPoin, selectedDeliveryType === "delivery" ? "belum final" : "");
+    invoiceMaker(finalCurrentNoTransaksi, finalCurrentDate, items.at(0)?.TANGGAL_PENGIRIMAN! || itemsHampers.at(0)?.TANGGAL_PENGIRIMAN!, userData?.nama_customer!, alamat, selectedDeliveryType, items, itemsHampers, totalHarga, pakePoin ? poinTerpakai : 0, totalPoin, selectedDeliveryType === "delivery" ? "belum final" : "", 0);
     // delete all items from keranjang
     deleteAllItemInKeranjang();
   }

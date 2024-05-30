@@ -197,13 +197,13 @@ const Card = ({ item, nama_customer }: any) => {
           Total item: <span className="font-semibold">{item.TOTAL_ITEM}</span>
         </p>
         <p>
-          Total harga: <span className="font-semibold">{item.TOTAL_HARGA}</span>
+          Total harga: <span className="font-semibold">{item.TOTAL_HARUS_DIBAYAR}</span>
         </p>
       </div>
       <div className="flex justify-between">
         <Bayar item={item} />
         <Button disabled={isLoadingInvoice} onClick={() => {
-          invoiceMaker(item.NO_TRANSAKSI, item.TANGGAL_PESANAN.split("T")[0], item.TANGGAL_PENGIRIMAN.split("T")[0], nama_customer, item.ALAMAT_PENGIRIMAN, item.TIPE_PENGIRIMAN, detilProduk, detilHampers, item.TOTAL_HARGA, 0, item.POIN, "")
+          invoiceMaker(item.NO_TRANSAKSI, item.TANGGAL_PESANAN.split("T")[0], item.TANGGAL_PENGIRIMAN.split("T")[0], nama_customer, item.ALAMAT_PENGIRIMAN, item.TIPE_PENGIRIMAN, detilProduk, detilHampers, item.TOTAL_HARUS_DIBAYAR, 0, item.POIN, "", item.ONGKIR)
         }}>{isLoadingInvoice ? <ClipLoader color="#ffffff"/> : "Download Invoice"}</Button>
       </div>
     </div>
