@@ -185,3 +185,24 @@ export interface POIN {
   SYARAT: number;
   KETERANGAN_POIN: string;
 }
+
+export interface PENGIRIMAN{
+  ID_TRANSAKSI_PESANAN: number;
+  ID_CUSTOMER: number;
+  NAMA_CUSTOMER: string;
+  ALAMAT_PENGIRIMAN: string;
+  TOTAL_ITEM: number;
+  JARAK: number;
+  ONGKIR: number;
+  TOTAL_HARUS_DIBAYAR: number;
+}
+
+export interface PEMBAYARAN{
+  ID_TRANSAKSI_PESANAN: number;
+  ID_CUSTOMER: number;
+  NAMA_CUSTOMER: string;
+  STATUS_TRANSAKSI: string;
+  TOTAL_BAYAR_CUSTOMER: number;
+  JUMLAH_TIP: number;
+  BUKTI_TF: string;
+}

@@ -35,6 +35,14 @@ export const sideBarAdmin = [
     label: "Histori Pesanan",
     link: "/adminView/historiPesananCustomer",
   },
+  {
+    label: "Pengiriman",
+    link: "/adminView/pengiriman",
+  },
+  {
+    label: "Pembayaran",
+    link: "/adminView/pembayaran",
+  },
 ];
 
 export const bahanBakuTable = [
@@ -191,3 +199,21 @@ export const customer = [
   "TANGGAL LAHIR",
   "TELEPON",
 ];
+
+export const pengirimanTable = [
+  "ID TRANSAKSI",
+  "NAMA CUSTOMER",
+  "ALAMAT CUSTOMER",
+  "JARAK CUSTOMER (meter)",
+  "ONGKIR CUSTOMER",
+  "TOTAL HARGA",
+]
+
+export const pembayaranTable = [
+  "ID TRANSAKSI",
+  "NAMA CUSTOMER",
+  "STATUS TRANSAKSI",
+  "TOTAL BAYAR CUSTOMER",
+  "JUMLAH TIP",
+  "BUKTI TRANSFER",
+]

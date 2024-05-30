@@ -141,3 +141,12 @@ export const createBonusKaryawanSchema = z.object({
     message: "Bonus Harus Diisi!"
   }),
 });
+
+export const editPengirimanSchema = z.object({
+  jarak: z.string().min(1),
+  ongkir: z.string().min(1),
+});
+
+export const editPembayaranSchema = z.object({
+  total_bayar_customer: z.string().min(1),
+});
