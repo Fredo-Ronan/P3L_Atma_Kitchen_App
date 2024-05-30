@@ -10,24 +10,19 @@ export async function PUT(
     const res = await req.json();
     const { jarak} = JSON.parse(res.body);
 
+    const ongkir =
+      jarak <= 5 ? 10000 :
+      jarak <= 10 ? 15000 :
+      jarak <= 15 ? 20000 : 25000;
+
     const [rows] = await connection.execute(
       `UPDATE TRANSAKSI_PESANAN
       SET JARAK = ?, 
-          ONGKIR = CASE 
-                      WHEN ? <= 5 THEN 10000
-                      WHEN ? <= 10 THEN 15000
-                      WHEN ? <= 15 THEN 20000
-                      ELSE 25000
-                   END,
+          ONGKIR = ?, 
           STATUS_TRANSAKSI = 'checkout, belum bayar', 
-          TOTAL_HARUS_DIBAYAR = TOTAL_HARUS_DIBAYAR + CASE 
-                                                       WHEN ? <= 5 THEN 10000
-                                                       WHEN ? <= 10 THEN 15000
-                                                       WHEN ? <= 15 THEN 20000
-                                                       ELSE 25000
-                                                     END
+          TOTAL_HARUS_DIBAYAR = TOTAL_HARUS_DIBAYAR + ?
       WHERE ID_TRANSAKSI_PESANAN = ?`,
-      [jarak, params.id]
+      [jarak, ongkir, ongkir, params.id]
     );
 
     connection.end();
