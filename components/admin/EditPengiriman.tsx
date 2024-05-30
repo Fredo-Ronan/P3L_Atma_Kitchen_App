@@ -37,7 +37,7 @@ const EditPengiriman = ({ data, refreshData }: Props) => {
   useEffect(() => {
     form.reset({
       jarak: data?.JARAK?.toString() || "",
-      ongkir: data?.ONGKIR?.toString() || "",
+      // ongkir: data?.ONGKIR?.toString() || "",
     });
   }, [data]);
 
@@ -45,7 +45,7 @@ const EditPengiriman = ({ data, refreshData }: Props) => {
     resolver: zodResolver(editPengirimanSchema),
     defaultValues: {
       jarak: data?.JARAK?.toString() || "",
-      ongkir: data?.ONGKIR?.toString() || "",
+      // ongkir: data?.ONGKIR?.toString() || "",
     },
   });
 
@@ -66,7 +66,7 @@ const EditPengiriman = ({ data, refreshData }: Props) => {
             },
             body: JSON.stringify({
               jarak: values.jarak,
-              ongkir: values.ongkir,
+              // ongkir: values.ongkir,
             }),
           }
         );
@@ -120,7 +120,7 @@ const EditPengiriman = ({ data, refreshData }: Props) => {
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="ongkir"
               render={({ field }) => (
@@ -132,7 +132,7 @@ const EditPengiriman = ({ data, refreshData }: Props) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <Button
               type="submit"

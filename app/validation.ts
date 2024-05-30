@@ -146,9 +146,9 @@ export const editPengirimanSchema = z.object({
   jarak: z.string().min(1,{
     message: "Jarak Harus Diisi!"
   }),
-  ongkir: z.string().min(1,{
-    message: "Ongkir Harus Diisi!"
-  }),
+  // ongkir: z.string().min(1,{
+  //   message: "Ongkir Harus Diisi!"
+  // }),
 });
 
 export const editPembayaranSchema = z.object({
