@@ -13,7 +13,8 @@ export async function PUT(
     const [rows] = await connection.execute(
       `UPDATE TRANSAKSI_PESANAN
        SET JARAK = ?, 
-           ONGKIR = ?, 
+           ONGKIR = ?,
+           STATUS_TRANSAKSI = 'checkout, belum bayar', 
            TOTAL_HARUS_DIBAYAR = TOTAL_HARUS_DIBAYAR + ? 
        WHERE ID_TRANSAKSI_PESANAN = ?`,
       [jarak, ongkir, ongkir, params.id]

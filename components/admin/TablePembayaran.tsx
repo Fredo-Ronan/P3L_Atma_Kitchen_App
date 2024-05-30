@@ -51,6 +51,7 @@ const TablePengiriman = ({ data, refreshData }: Props) => {
               <TableCell>{item.ID_TRANSAKSI_PESANAN}</TableCell>
               <TableCell>{item.NAMA_CUSTOMER}</TableCell>
               <TableCell><Badge variant="secondary">{item.STATUS_TRANSAKSI}</Badge></TableCell>
+              <TableCell>Rp. {item.TOTAL_HARGA}</TableCell>
               <TableCell>Rp. {item.TOTAL_BAYAR_CUSTOMER}</TableCell>
               <TableCell>Rp. {item.JUMLAH_TIP}</TableCell>
               <TableCell>

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ data: [], totalData: 0 });
       }
   
-      let query = `SELECT * FROM TRANSAKSI_PESANAN TP JOIN CUSTOMER C ON TP.ID_CUSTOMER = C.ID_CUSTOMER WHERE TIPE_PENGIRIMAN = 'Delivery'`;
+      let query = `SELECT * FROM TRANSAKSI_PESANAN TP JOIN CUSTOMER C ON TP.ID_CUSTOMER = C.ID_CUSTOMER WHERE TIPE_PENGIRIMAN = 'delivery'`;
   
       const offset = (Number(page) - 1) * 10;
   

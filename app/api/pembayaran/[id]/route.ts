@@ -31,7 +31,7 @@ export async function PUT(
     return NextResponse.json({
       status: 200,
       message:
-        "Berhasil memperbarui total_bayar_customer dan menambahkan tip jika ada sisa",
+        "Berhasil memperbarui total bayar customer dan menambahkan tip jika ada sisa",
     });
   } catch (error) {
     console.log(error);

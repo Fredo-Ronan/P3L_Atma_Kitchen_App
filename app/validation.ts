@@ -143,10 +143,17 @@ export const createBonusKaryawanSchema = z.object({
 });
 
 export const editPengirimanSchema = z.object({
-  jarak: z.string().min(1),
-  ongkir: z.string().min(1),
+  jarak: z.string().min(1,{
+    message: "Jarak Harus Diisi!"
+  }),
+  ongkir: z.string().min(1,{
+    message: "Ongkir Harus Diisi!"
+  }),
 });
 
 export const editPembayaranSchema = z.object({
-  total_bayar_customer: z.string().min(1),
+  total_bayar_customer: z.string().min(1,{
+      message: "Masukkan Uang!"
+    }
+  ),
 });

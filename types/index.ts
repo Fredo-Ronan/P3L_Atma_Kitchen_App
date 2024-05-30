@@ -202,6 +202,7 @@ export interface PEMBAYARAN{
   ID_CUSTOMER: number;
   NAMA_CUSTOMER: string;
   STATUS_TRANSAKSI: string;
+  TOTAL_HARGA: string;
   TOTAL_BAYAR_CUSTOMER: number;
   JUMLAH_TIP: number;
   BUKTI_TF: string;

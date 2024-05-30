@@ -213,6 +213,7 @@ export const pembayaranTable = [
   "ID TRANSAKSI",
   "NAMA CUSTOMER",
   "STATUS TRANSAKSI",
+  "JUMLAH TAGIHAN",
   "TOTAL BAYAR CUSTOMER",
   "JUMLAH TIP",
   "BUKTI TRANSFER",
