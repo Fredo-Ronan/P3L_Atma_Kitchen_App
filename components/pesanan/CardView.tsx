@@ -24,6 +24,9 @@ import { useToast } from "../ui/use-toast";
 import axios from "axios";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
 import { generateReactHelpers } from "@uploadthing/react";
+import { Button } from "../ui/button";
+import { invoiceMaker } from "@/utilities/invoiceMaker";
+import { HAMPERS, PRODUK } from "@/types";
 
 export const { useUploadThing, uploadFiles } =
   generateReactHelpers<OurFileRouter>();
@@ -39,7 +42,7 @@ const CardView = ({ data }: Props) => {
   const fetchPesanan = async () => {
     setisLoading(true);
     try {
-      const response = await fetch(`/api/pesananBelumBayar/${data}`, {
+      const response = await fetch(`/api/pesananBelumBayar/${data.id_customer}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -68,13 +71,33 @@ const CardView = ({ data }: Props) => {
   ) : (
     <div className="flex flex-col space-y-8 py-12">
       {pesanan.map((item: any) => (
-        <Card item={item} key={item.ID_TRANSAKSI_PESANAN} />
+        <Card item={item} nama_customer={data.nama_customer} key={item.ID_TRANSAKSI_PESANAN} />
       ))}
     </div>
   );
 };
 
-const Card = ({ item }: any) => {
+const Card = ({ item, nama_customer }: any) => {
+  const [detilProduk, setDetilProduk] = useState<PRODUK[]>([]);
+  const [detilHampers, setDetilHampers] = useState<HAMPERS[]>([]);
+  const [detilTransaksi, setDetilTransaksi] = useState<{ID_PRODUK: number, ID_HAMPERS: number}[]>([]);
+
+  const getDetilTransaksi = async () => {
+    try {
+      console.log(item.ID_TRANSAKSI_PESANAN);
+      const resGetDetilTransaksi = await axios.get(`/api/getDetilTransaksi/${item.ID_TRANSAKSI_PESANAN}`);
+
+      console.log(resGetDetilTransaksi.data);
+    }catch(error){
+      console.log(error);
+      throw error;
+    }
+  }
+
+  useEffect(() => {
+    getDetilTransaksi();
+  }, []);
+
   return (
     <div className="w-full p-8 shadow-sm border rounded-2xl flex flex-col space-y-2">
       <span>
@@ -127,8 +150,11 @@ const Card = ({ item }: any) => {
           Total harga: <span className="font-semibold">{item.TOTAL_HARGA}</span>
         </p>
       </div>
-      <div>
+      <div className="flex justify-between">
         <Bayar item={item} />
+        <Button onClick={() => {
+          invoiceMaker(item.NO_TRANSAKSI, item.TANGGAL_PESANAN.split("T")[0], item.TANGGAL_PENGIRIMAN.split("T")[0], nama_customer, item.ALAMAT_PENGIRIMAN, item.TIPE_PENGIRIMAN, [], [], item.TOTAL_HARGA, 0, item.POIN, "")
+        }}>Download Invoice</Button>
       </div>
     </div>
   );

@@ -172,7 +172,7 @@ const DetilProdukPage = ({ produk, dateDeliver }: { produk: PRODUK_FOR_CUSTOMER_
                         <div className='flex items-center gap-2'>
                             <Checkbox onCheckedChange={() => setCheckSatuLoyang(!checkSatuLoyang)}/>
                             <p>1 Loyang</p>
-                            <p className='ml-12'>Rp. {produk.HARGA_PRODUK[0].toLocaleString('id-ID')}</p>
+                            <p className='ml-12'>Rp. {produk.HARGA_PRODUK[0]}</p>
                         </div>
 
 
@@ -187,7 +187,7 @@ const DetilProdukPage = ({ produk, dateDeliver }: { produk: PRODUK_FOR_CUSTOMER_
                         <div className='flex items-center gap-2'>
                             <Checkbox onCheckedChange={() => setCheckSetengahLoyang(!checkSetengahLoyang)}/>
                             <p>½ Loyang</p>
-                            <p className='ml-10'>Rp. {produk.HARGA_PRODUK[1].toLocaleString('id-ID')}</p>
+                            <p className='ml-10'>Rp. {produk.HARGA_PRODUK[1]}</p>
                         </div>
 
 

@@ -8,11 +8,11 @@ export async function POST(req: NextRequest){
 
         const request = await req.json();
 
-        const {id_customer, no_transaksi, tanggal_pesanan, alamat_pengiriman, status_pesanan, tipe_pengiriman, total_item, status_transaksi, tanggal_pengiriman, total_harga, total_harus_dibayar} = JSON.parse(request.body);
+        const {id_customer, no_transaksi, tanggal_pesanan, alamat_pengiriman, status_pesanan, tipe_pengiriman, total_item, status_transaksi, tanggal_pengiriman, total_harga, total_harus_dibayar, poin} = JSON.parse(request.body);
 
-        const queryInsertTransaksiPesanan = `INSERT INTO TRANSAKSI_PESANAN (ID_CUSTOMER, NO_TRANSAKSI, TANGGAL_PESANAN, ALAMAT_PENGIRIMAN, STATUS_PESANAN, TIPE_PENGIRIMAN, TOTAL_ITEM, STATUS_TRANSAKSI, TANGGAL_PENGIRIMAN, TOTAL_HARGA, TOTAL_HARUS_DIBAYAR) VALUES (?,?,?,?,?,?,?,?,?,?,?)`;
+        const queryInsertTransaksiPesanan = `INSERT INTO TRANSAKSI_PESANAN (ID_CUSTOMER, NO_TRANSAKSI, TANGGAL_PESANAN, ALAMAT_PENGIRIMAN, STATUS_PESANAN, TIPE_PENGIRIMAN, TOTAL_ITEM, STATUS_TRANSAKSI, TANGGAL_PENGIRIMAN, TOTAL_HARGA, TOTAL_HARUS_DIBAYAR, POIN) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`;
 
-        const [resultInsertTransaksiPesanan, fields] = await connection.execute(queryInsertTransaksiPesanan, [id_customer, no_transaksi, tanggal_pesanan, alamat_pengiriman, status_pesanan, tipe_pengiriman, total_item, status_transaksi, tanggal_pengiriman, total_harga, total_harus_dibayar]);
+        const [resultInsertTransaksiPesanan, fields] = await connection.execute(queryInsertTransaksiPesanan, [id_customer, no_transaksi, tanggal_pesanan, alamat_pengiriman, status_pesanan, tipe_pengiriman, total_item, status_transaksi, tanggal_pengiriman, total_harga, total_harus_dibayar, poin]);
         connection.end();
 
         const resultFinal = parseResultQuery(resultInsertTransaksiPesanan);

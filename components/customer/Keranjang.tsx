@@ -81,7 +81,7 @@ const Keranjang = () => {
 
   const checkout = async () => {
     setIsLoadingCheckout(true);
-    const resLastNoTransaksi = await axios.get(`/api/transaksiPesanan/getLastNoTransaksi`);
+    const resLastNoTransaksi = await axios.get(`/api/transaksiPesanan/getLastNoTransaksi/1`);
 
     const lastNoUrut = parseInt(resLastNoTransaksi.data.lastNoTransaksi[0].NO_TRANSAKSI.split(".")[2]);
 
@@ -115,10 +115,11 @@ const Keranjang = () => {
             status_pesanan: "pending",
             tipe_pengiriman: selectedDeliveryType,
             total_item: items.length + itemsHampers.length,
-            status_transaksi: "checkout, menunggu konfirmasi",
+            status_transaksi: selectedDeliveryType === "delivery" ? "checkout, menunggu konfirmasi" : "checkout, belum bayar",
             tanggal_pengiriman: items.at(0)?.TANGGAL_PENGIRIMAN || itemsHampers.at(0)?.TANGGAL_PENGIRIMAN,
             total_harga: totalHarga,
-            total_harus_dibayar: pakePoin ? totalHarga - (poinTerpakai * 100) : totalHarga
+            total_harus_dibayar: pakePoin ? totalHarga - (poinTerpakai * 100) : totalHarga,
+            poin: totalPoin
         })
     });
 
@@ -136,7 +137,8 @@ const Keranjang = () => {
                 jumlah_pesanan: items.length + itemsHampers.length,
                 sub_total: totalHarga,
                 id_hampers: null,
-                id_customer: userData?.id_customer
+                id_customer: userData?.id_customer,
+                keterangan: data.JENIS_PRODUK === "Pre Order" ? "PRE ORDER" : "READY"
             })
         })
 
@@ -178,18 +180,18 @@ const Keranjang = () => {
     })
 
     // API query update poin customer
-    const resUpdatePoin = await axios.post(`/api/customer/main/tambahPoin`, {
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id_customer: userData?.id_customer,
-            updatePoin: userPoin + totalPoin
-        })
-    })
+    // const resUpdatePoin = await axios.post(`/api/customer/main/tambahPoin`, {
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     },
+    //     body: JSON.stringify({
+    //         id_customer: userData?.id_customer,
+    //         updatePoin: userPoin + totalPoin
+    //     })
+    // })
 
 
-    invoiceMaker(finalCurrentNoTransaksi, finalCurrentDate, items.at(0)?.TANGGAL_PENGIRIMAN! || itemsHampers.at(0)?.TANGGAL_PENGIRIMAN!, userData?.nama_customer!, alamat, selectedDeliveryType, items, itemsHampers, totalHarga, pakePoin ? poinTerpakai : 0);
+    invoiceMaker(finalCurrentNoTransaksi, finalCurrentDate, items.at(0)?.TANGGAL_PENGIRIMAN! || itemsHampers.at(0)?.TANGGAL_PENGIRIMAN!, userData?.nama_customer!, alamat, selectedDeliveryType, items, itemsHampers, totalHarga, pakePoin ? poinTerpakai : 0, totalPoin, selectedDeliveryType === "delivery" ? "belum final" : "");
     // delete all items from keranjang
     deleteAllItemInKeranjang();
   }
@@ -465,7 +467,7 @@ const Keranjang = () => {
                 {isLoadingUserPoin ?
                     <ClipLoader/>
                     : <p className="font-bold text-xl">
-                    {userPoin} poin
+                    {pakePoin ? userPoin - poinTerpakai : userPoin} poin
                   </p>
                 }
 

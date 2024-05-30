@@ -8,7 +8,7 @@ const PesananPage = () => {
 
   if (!value) return null;
 
-  const { id_customer } = JSON.parse(value);
+  const dataCustomer = JSON.parse(value);
 
   return (
     <div className="max-w-screen-xl mx-auto py-20 min-h-screen">
@@ -16,7 +16,7 @@ const PesananPage = () => {
       <p className="text-gray-600 text-sm mt-2">
         Berikut pesanan yang perlu dibayar
       </p>
-      <CardView data={id_customer} />
+      <CardView data={dataCustomer} />
     </div>
   );
 };

@@ -4,16 +4,12 @@ export const NavbarRouteMap = [
     route: "/",
   },
   {
-    label: "Product",
-    route: "",
+    label: "Ready Stock",
+    route: "/produkReady",
   },
   {
     label: "Pre Order",
     route: "/produkPreOrder",
-  },
-  {
-    label: "Contact",
-    route: "",
   },
   {
     label: "Pesanan",

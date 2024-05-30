@@ -2,7 +2,7 @@ import { HAMPERS_FOR_KERANJANG, PRODUK_FOR_KERANJANG } from '@/types';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
-export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tanggalPengiriman: string, namaCustomer: string, alamatPengiriman: string, tipePengiriman: string, items: PRODUK_FOR_KERANJANG[], itemsHampers: HAMPERS_FOR_KERANJANG[], totalHarga: number, poin: number) {
+export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tanggalPengiriman: string, namaCustomer: string, alamatPengiriman: string, tipePengiriman: string, items: PRODUK_FOR_KERANJANG[], itemsHampers: HAMPERS_FOR_KERANJANG[], totalHarga: number, poin: number, poinDidapat: number, keterangan: string) {
     const doc = new jsPDF();
 
     autoTable(doc, { 
@@ -69,6 +69,38 @@ export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tangg
         body: [
             [
                 {
+                    content: 'Poin diperoleh',
+                    styles: {
+                        halign: 'right'
+                    }
+                }
+            ],
+            [
+                {
+                    content: `${poinDidapat} poin`,
+                    styles: {
+                        halign: 'right'
+                    }
+                }
+            ],
+            [
+                {
+                    content: 'Poin dipakai',
+                    styles: {
+                        halign: 'right'
+                    }
+                }
+            ],
+            [
+                {
+                    content: `${poin} poin`,
+                    styles: {
+                        halign: 'right'
+                    }
+                }
+            ],
+            [
+                {
                     content: 'Potongan',
                     styles: {
                         halign: 'right'
@@ -98,6 +130,17 @@ export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tangg
                     styles: {
                         halign: 'right',
                         fontSize: 20
+                    }
+                }
+            ],
+            [
+                {
+                    content: keterangan === "" ? "TOTAL INI SUDAH FINAL, SILAHKAN LAKUKAN PEMBAYARAN" : "TOTAL HARGA INI BELUM FINAL, SILAHKAN TUNGGU KONFIRMASI ADMIN TERLEBIH DAHULU SEBELUM MELAKUKAN PEMBAYARAN",
+                    styles: {
+                        halign: 'right',
+                        fontSize: 12,
+                        fontStyle: 'italic',
+                        textColor: "#ff1100",
                     }
                 }
             ]
