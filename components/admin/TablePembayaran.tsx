@@ -65,7 +65,8 @@ const TablePengiriman = ({ data, refreshData }: Props) => {
               <TableCell className="flex items-center gap-3 justify-center">
                 <EditPembayaran 
                   data={item} 
-                  refreshData={refreshData} 
+                  refreshData={refreshData}
+                  totalHarga={parseInt(item.TOTAL_HARGA)}
                   disabled={item.STATUS_TRANSAKSI === 'checkout, pembayaran terkonfirmasi'} 
                 />
               </TableCell>

@@ -32,9 +32,10 @@ interface Props {
   data?: PEMBAYARAN;
   refreshData: () => void;
   disabled?: boolean;
+  totalHarga: number;
 }
 
-const EditPembayaran = ({ data, refreshData, disabled }: Props) => {
+const EditPembayaran = ({ data, refreshData, disabled, totalHarga}: Props) => {
   useEffect(() => {
     form.reset({
       total_bayar_customer: data?.TOTAL_BAYAR_CUSTOMER?.toString() || "",
@@ -42,7 +43,16 @@ const EditPembayaran = ({ data, refreshData, disabled }: Props) => {
   }, [data]);
 
   const form = useForm<z.infer<typeof editPembayaranSchema>>({
-    resolver: zodResolver(editPembayaranSchema),
+    // resolver: zodResolver(editPembayaranSchema),
+    resolver: zodResolver(
+      editPembayaranSchema.refine(
+        (data) => parseFloat(data.total_bayar_customer) >= totalHarga,
+        {
+          message: "Total pembayaran customer tidak boleh kurang dari total harga",
+          path: ["total_bayar_customer"],
+        }
+      )
+    ),
     defaultValues: {
       total_bayar_customer: data?.TOTAL_BAYAR_CUSTOMER?.toString() || "",
     },
