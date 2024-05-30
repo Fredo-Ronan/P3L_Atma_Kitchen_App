@@ -203,7 +203,7 @@ const Card = ({ item, nama_customer }: any) => {
       <div className="flex justify-between">
         <Bayar item={item} />
         <Button disabled={isLoadingInvoice} onClick={() => {
-          invoiceMaker(item.NO_TRANSAKSI, item.TANGGAL_PESANAN.split("T")[0], item.TANGGAL_PENGIRIMAN.split("T")[0], nama_customer, item.ALAMAT_PENGIRIMAN, item.TIPE_PENGIRIMAN, detilProduk, detilHampers, item.TOTAL_HARUS_DIBAYAR, 0, item.POIN, "", item.ONGKIR)
+          invoiceMaker(item.NO_TRANSAKSI, item.TANGGAL_PESANAN.split("T")[0], item.TANGGAL_PENGIRIMAN.split("T")[0], nama_customer, item.ALAMAT_PENGIRIMAN, item.TIPE_PENGIRIMAN, detilProduk, detilHampers, item.TOTAL_HARUS_DIBAYAR, item.TOTAL_HARGA, 0, item.POIN, "", item.ONGKIR)
         }}>{isLoadingInvoice ? <ClipLoader color="#ffffff"/> : "Download Invoice"}</Button>
       </div>
     </div>

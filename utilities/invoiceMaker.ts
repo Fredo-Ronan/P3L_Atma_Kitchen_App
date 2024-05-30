@@ -2,7 +2,7 @@ import { HAMPERS_FOR_KERANJANG, PRODUK_FOR_KERANJANG } from '@/types';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
-export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tanggalPengiriman: string, namaCustomer: string, alamatPengiriman: string, tipePengiriman: string, items: PRODUK_FOR_KERANJANG[], itemsHampers: HAMPERS_FOR_KERANJANG[], totalHarga: number, poin: number, poinDidapat: number, keterangan: string, ongkir: number) {
+export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tanggalPengiriman: string, namaCustomer: string, alamatPengiriman: string, tipePengiriman: string, items: PRODUK_FOR_KERANJANG[], itemsHampers: HAMPERS_FOR_KERANJANG[], totalHarga: number, totalHargaAsli: number, poin: number, poinDidapat: number, keterangan: string, ongkir: number) {
     const doc = new jsPDF();
 
     autoTable(doc, { 
@@ -55,7 +55,7 @@ export function invoiceMaker(nomorTransaksi: string, tanggalPesan: string, tangg
         produkItems.push([data.NAMA_HAMPERS, `Rp. ${data.HARGA_HAMPERS.toLocaleString("id-ID")}`]);
      })
 
-     produkItems.push(["", `Rp ${totalHarga.toLocaleString("id-ID")}`])
+     produkItems.push(["", `Rp ${totalHargaAsli.toLocaleString("id-ID")}`])
 
      const [, ...finalProdukItems] = produkItems;
 
