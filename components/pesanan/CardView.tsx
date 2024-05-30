@@ -26,7 +26,7 @@ import { OurFileRouter } from "@/app/api/uploadthing/core";
 import { generateReactHelpers } from "@uploadthing/react";
 import { Button } from "../ui/button";
 import { invoiceMaker } from "@/utilities/invoiceMaker";
-import { HAMPERS, PRODUK } from "@/types";
+import { HAMPERS, HAMPERS_FOR_KERANJANG, PRODUK, PRODUK_FOR_KERANJANG } from "@/types";
 
 export const { useUploadThing, uploadFiles } =
   generateReactHelpers<OurFileRouter>();
@@ -77,17 +77,67 @@ const CardView = ({ data }: Props) => {
   );
 };
 
+interface TransaksiDetail {
+  ID_PRODUK: number;
+  ID_HAMPERS: number;
+}
+
 const Card = ({ item, nama_customer }: any) => {
-  const [detilProduk, setDetilProduk] = useState<PRODUK[]>([]);
-  const [detilHampers, setDetilHampers] = useState<HAMPERS[]>([]);
-  const [detilTransaksi, setDetilTransaksi] = useState<{ID_PRODUK: number, ID_HAMPERS: number}[]>([]);
+  const [detilProduk, setDetilProduk] = useState<PRODUK_FOR_KERANJANG[]>([]);
+  const [detilHampers, setDetilHampers] = useState<HAMPERS_FOR_KERANJANG[]>([]);
+  const [detilTransaksi, setDetilTransaksi] = useState<TransaksiDetail[]>([]);
+  const [isLoadingInvoice, setIsLoadingInvoice] = useState(false);
 
   const getDetilTransaksi = async () => {
+    setIsLoadingInvoice(true);
     try {
-      console.log(item.ID_TRANSAKSI_PESANAN);
-      const resGetDetilTransaksi = await axios.get(`/api/getDetilTransaksi/${item.ID_TRANSAKSI_PESANAN}`);
+      const resGetDetilTransaksi = await axios.get<{ dataDetilTransaksi: TransaksiDetail[] }>(
+        `/api/getDetilTransaksi/${item.ID_TRANSAKSI_PESANAN}`
+      );
+      const dataDetilTransaksi = resGetDetilTransaksi.data.dataDetilTransaksi;
+      setDetilTransaksi(dataDetilTransaksi);
 
-      console.log(resGetDetilTransaksi.data);
+      const produkPromises = dataDetilTransaksi.map(data =>
+        axios
+          .get<{ dataProduk: PRODUK[] }>(`/api/produk/getAllColumn/${data.ID_PRODUK}`)
+          .then(res => res.data.dataProduk[0])
+      );
+
+      const hampersPromises = dataDetilTransaksi.map(data =>
+        axios
+          .get<{ hampers: HAMPERS[] }>(`/api/hampers/${data.ID_HAMPERS}`)
+          .then(res => res.data.hampers[0])
+      );
+
+      const produkResults = await Promise.all(produkPromises);
+      const hampersResults = await Promise.all(hampersPromises);
+
+      const allProdukData: PRODUK_FOR_KERANJANG[] = produkResults.filter(Boolean).map(produk => ({
+        ID_PRODUK: produk.ID_PRODUK,
+        DESKRIPSI_PRODUK: produk.DESKRIPSI_PRODUK,
+        GAMBAR_PRODUK: produk.GAMBAR_PRODUK,
+        HARGA_PRODUK: produk.HARGA_PRODUK,
+        JENIS_MAKANAN: produk.JENIS_MAKANAN,
+        JENIS_PRODUK: produk.JENIS_PRODUK,
+        LOYANG: produk.LOYANG,
+        NAMA_PRODUK: produk.NAMA_PRODUK,
+        STATUS_PRODUK: produk.STATUS_PRODUK,
+        STOK: produk.STOK,
+        TANGGAL_PENGIRIMAN: ""
+      }));
+
+      const allHampersData: HAMPERS_FOR_KERANJANG[] = hampersResults.filter(Boolean).map(hampers => ({
+        ID_HAMPERS: hampers.ID_HAMPERS,
+        NAMA_HAMPERS: hampers.NAMA_HAMPERS,
+        DESKRIPSI_HAMPERS: hampers.DESKRIPSI_HAMPERS,
+        HARGA_HAMPERS: hampers.HARGA_HAMPERS,
+        TANGGAL_PENGIRIMAN: ""
+      }));
+
+      setDetilProduk(allProdukData);
+      setDetilHampers(allHampersData);
+
+      setIsLoadingInvoice(false);
     }catch(error){
       console.log(error);
       throw error;
@@ -96,7 +146,7 @@ const Card = ({ item, nama_customer }: any) => {
 
   useEffect(() => {
     getDetilTransaksi();
-  }, []);
+  }, [item, nama_customer]);
 
   return (
     <div className="w-full p-8 shadow-sm border rounded-2xl flex flex-col space-y-2">
@@ -152,9 +202,9 @@ const Card = ({ item, nama_customer }: any) => {
       </div>
       <div className="flex justify-between">
         <Bayar item={item} />
-        <Button onClick={() => {
-          invoiceMaker(item.NO_TRANSAKSI, item.TANGGAL_PESANAN.split("T")[0], item.TANGGAL_PENGIRIMAN.split("T")[0], nama_customer, item.ALAMAT_PENGIRIMAN, item.TIPE_PENGIRIMAN, [], [], item.TOTAL_HARGA, 0, item.POIN, "")
-        }}>Download Invoice</Button>
+        <Button disabled={isLoadingInvoice} onClick={() => {
+          invoiceMaker(item.NO_TRANSAKSI, item.TANGGAL_PESANAN.split("T")[0], item.TANGGAL_PENGIRIMAN.split("T")[0], nama_customer, item.ALAMAT_PENGIRIMAN, item.TIPE_PENGIRIMAN, detilProduk, detilHampers, item.TOTAL_HARGA, 0, item.POIN, "")
+        }}>{isLoadingInvoice ? <ClipLoader color="#ffffff"/> : "Download Invoice"}</Button>
       </div>
     </div>
   );
@@ -223,7 +273,7 @@ const Bayar = ({ item }: any) => {
         </DialogHeader>
         <div className="mt-2">
           {item.DETIL_TRANSAKSI.map((detil: any) => {
-            console.log(detil);
+            // console.log(detil);
             return (
               <div
                 className="flex flex-col justify-center gap-4"
