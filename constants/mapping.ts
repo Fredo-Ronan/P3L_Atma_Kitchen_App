@@ -96,6 +96,10 @@ export const sideBarMO = [
     label: "Konfirmasi Pesanan",
     link: "/moView/konfirmasiPesanan",
   },
+  {
+    label: "Pesanan Harus Diproses",
+    link: "/moView/pesananHarusDiproses",
+  }
 ];
 
 export const tablePenitip = [

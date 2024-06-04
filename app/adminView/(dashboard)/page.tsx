@@ -12,7 +12,7 @@ const Page = () => {
 
     const finalResCheckTanggal = await resCheckTanggal.json();
     
-    if(finalResCheckTanggal.isSame === true){
+    if(finalResCheckTanggal.isSame === true || finalResCheckTanggal.isEarlier === true){
       // brarti reset kuota harian semua produk
 
       // pertama delete all kuota harian
