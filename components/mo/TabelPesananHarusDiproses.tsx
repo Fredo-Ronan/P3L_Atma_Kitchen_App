@@ -9,169 +9,290 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { BAHAN_BAKU, DETAIL_RESEP, DETIL_TRANSAKSI, PRODUK, TRANSAKSI_PESANAN } from "@/types";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
 
 interface COLLECTION_DETIL_TRANSAKSI {
-    id_transaksi: number;
-    detil_transaksi: DETIL_TRANSAKSI[];
+  id_transaksi: number;
+  detil_transaksi: DETIL_TRANSAKSI[];
 }
 
-interface COLLECTION_PRODUK_PER_TRANSAKSI {
+interface COLLECTION_DETIL_RESEP {
     id_transaksi: number;
-    produk: PRODUK[];
+    detil_resep: DETAIL_RESEP[];
 }
+  
+interface BahanMapItem {
+    NAMA_BAHAN: string;
+    JUMLAH_DIBUTUHKAN: number;
+    SATUAN: string;
+  }
+  
+  interface BahanMap {
+    [key: string]: BahanMapItem;
+  }
 
 const TabelPesananHarusDiproses = ({ dataPesanan, dataBahan }: { dataPesanan?: TRANSAKSI_PESANAN[], dataBahan?: BAHAN_BAKU[] }) => {
-    const [isPilihSemua, setIsPilihSemua] = useState(false);
-    const [detilTiapDataPesanan, setDetilTiapDataPesanan] = useState<COLLECTION_DETIL_TRANSAKSI[]>([]);
-    const [detilProdukPerTransaksi, setDetilProdukPerTransaksi] = useState<COLLECTION_PRODUK_PER_TRANSAKSI[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+  const [isPilihSemua, setIsPilihSemua] = useState(false);
+  const [detilTiapDataPesanan, setDetilTiapDataPesanan] = useState<COLLECTION_DETIL_TRANSAKSI[]>([]);
+  const [detilBahanPerPesanan, setDetilBahanPerPesanan] = useState<COLLECTION_DETIL_RESEP[]>([]);
+  const [totalBahanDibutuhkan, setTotalBahanDibutuhkan] = useState<BahanMapItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isBahanKurang, setIsBahanKurang] = useState(false);
 
-    const getEachDetailTransaksi = async (): Promise<void> => {
-        setIsLoading(true);
-        try {
-            const promises: Promise<COLLECTION_DETIL_TRANSAKSI>[] = [];
-            dataPesanan?.forEach((data) => {
+  const getEachDetailTransaksi = async (): Promise<void> => {
+    setIsLoading(true);
+    try {
+      if (!dataPesanan || dataPesanan.length === 0) {
+        console.log("No dataPesanan available.");
+        return;
+      }
+
+      const promises: Promise<COLLECTION_DETIL_TRANSAKSI>[] = [];
+      dataPesanan.forEach((data) => {
+        promises.push(
+          (async () => {
+            const resDetilTransaksi = await axios.get(`/api/getDetilTransaksi/${data.ID_TRANSAKSI_PESANAN}`);
+            // console.log(resDetilTransaksi.data.dataDetilTransaksi);
+            const detilTransaksi: DETIL_TRANSAKSI[] = resDetilTransaksi.data.dataDetilTransaksi;
+            return {
+              id_transaksi: data.ID_TRANSAKSI_PESANAN,
+              detil_transaksi: detilTransaksi,
+            };
+          })()
+        );
+      });
+
+      const detilData = await Promise.all(promises);
+      setDetilTiapDataPesanan(detilData);
+    } catch (error) {
+      console.log("Error in getEachDetailTransaksi:", error);
+      throw error;
+    } finally {
+      
+    }
+  };
+
+  const getDetailBahanPerPesanan = async () => {
+    try {
+        const promises: Promise<COLLECTION_DETIL_RESEP>[] = [];
+        detilTiapDataPesanan.forEach((data) => {
+            data.detil_transaksi.forEach((dataDetil) => {
                 promises.push(
                     (async () => {
-                        const resDetilTransaksi = await axios.get(`/api/getDetilTransaksi/${data.ID_TRANSAKSI_PESANAN}`);
-                        const detilTransaksi: DETIL_TRANSAKSI[] = resDetilTransaksi.data.dataDetilTransaksi;
+                        const resBahanDibutuhkan = await axios.get(`/api/relasiBahanResep/getCertainDetailResep/${dataDetil.ID_RESEP}`);
+                        // console.log(resBahanDibutuhkan.data);
+                        const bahanDibutuhan = resBahanDibutuhkan.data.dataBahanDibutuhkan;
                         return {
-                            id_transaksi: data.ID_TRANSAKSI_PESANAN,
-                            detil_transaksi: detilTransaksi
-                        };
+                            id_transaksi: data.id_transaksi,
+                            detil_resep: bahanDibutuhan
+                        }
                     })()
                 );
             });
+        });
 
-            const detilData = await Promise.all(promises);
-            setDetilTiapDataPesanan(detilData);
-        } catch (error) {
-            console.log(error);
-            throw error;
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const getIdResepPerTransaksi = async () => {
-        console.log("HMMMMMMMMMMMMMMMMM")
-        try {
-            const updatedDetilProdukPerTransaksi: COLLECTION_PRODUK_PER_TRANSAKSI[] = [];
-
-            for (const data of detilTiapDataPesanan) {
-                let dataProduk: PRODUK[] = [];
-                for (const dataDetil of data.detil_transaksi) {
-                    const resProduk = await axios.get(`/api/produk/getCertainProduk/${dataDetil.ID_PRODUK}`);
-                    console.log(resProduk.data.dataProduk);
-                    dataProduk.push(resProduk.data.dataProduk);
-                }
-
-                console.log(dataProduk);
-                
-                const collectionProdukPerTransaksi: COLLECTION_PRODUK_PER_TRANSAKSI = {
-                    id_transaksi: data.id_transaksi,
-                    produk: dataProduk
-                };
-
-                updatedDetilProdukPerTransaksi.push(collectionProdukPerTransaksi);
-            }
-
-            setDetilProdukPerTransaksi(updatedDetilProdukPerTransaksi);
-        } catch (error) {
-            console.log(error);
-            throw error;
-        }
+        const detilBahanDibutuhkan = await Promise.all(promises);
+        const agregated = aggregateBahanDibutuhkan(detilBahanDibutuhkan);
+        // console.log(agregated);
+        isAdaBahanKurang(agregated);
+        setTotalBahanDibutuhkan(agregated);
+        setDetilBahanPerPesanan(detilBahanDibutuhkan);
+        setIsLoading(false);
+    }catch(error){
+        console.log(error);
+        throw error;
     }
+  }
 
-    useEffect(() => {
-        getEachDetailTransaksi();
-    }, []);
+  const aggregateBahanDibutuhkan = (detilBahanPerPesanan: COLLECTION_DETIL_RESEP[]): BahanMapItem[] => {
+    const bahanMap: BahanMap = {};
+  
+    detilBahanPerPesanan.forEach((dataDetil) => {
+      dataDetil.detil_resep.forEach((dataBahanDibutuhkan) => {
+        if (bahanMap[dataBahanDibutuhkan.NAMA_BAHAN]) {
+          bahanMap[dataBahanDibutuhkan.NAMA_BAHAN].JUMLAH_DIBUTUHKAN += dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN;
+        } else {
+          bahanMap[dataBahanDibutuhkan.NAMA_BAHAN] = { ...dataBahanDibutuhkan };
+        }
+      });
+    });
+  
+    return Object.values(bahanMap);
+  };
 
-    useEffect(() => {
-        console.log(detilTiapDataPesanan);
-        if (detilTiapDataPesanan.length > 0) {
-            getIdResepPerTransaksi();
+  const isAdaBahanKurang = (dataSemuaBahanHariIni: BahanMapItem[]) => {
+    dataSemuaBahanHariIni.map((dataBahanToday) => {
+        dataBahan?.forEach((dataBahanDB) => {
+            if(dataBahanDB.STOK_BAHAN < dataBahanToday.JUMLAH_DIBUTUHKAN && dataBahanDB.NAMA_BAHAN === dataBahanToday.NAMA_BAHAN){
+                setIsBahanKurang(true);
+            }
+        })
+    })
+  }
+
+  function removeDuplicatesUsingFilter(arr: any[] | undefined): any[] | undefined {
+    return arr?.filter((item, index) => arr?.indexOf(item) === index);
+  }
+  
+
+  const findProdukByIdResep = (idResep: number | null | undefined, indexDetil: number, index: number) => {
+    const transaksi = detilTiapDataPesanan.map((data) => {
+        data.detil_transaksi.map((dataTransaksi) => {
+            if(dataTransaksi.ID_RESEP === idResep){
+                return dataTransaksi;
+            }
+        })
+
+        return data.detil_transaksi;
+    })
+
+    // console.log(transaksi);
+
+    const produk = transaksi.at(index)?.map((data) => {
+        if(data.ID_RESEP === idResep){
+            return data.NAMA_PRODUK;
         }
 
-    }, [detilTiapDataPesanan]);
+        return data.NAMA_PRODUK;
+    })
 
-    return (
-        <div>
-            <div className="flex justify-end mb-6">
-                <Button className={isPilihSemua ? "bg-red-500" : "bg-blue-500"} onClick={() => { setIsPilihSemua(!isPilihSemua) }}>
-                    {isPilihSemua ? "Batal" : "Pilih Semua"}
+    const produkFiltered  = removeDuplicatesUsingFilter(produk);
+
+    // console.log(produk);
+    // console.log(produkFiltered)
+
+    return produkFiltered;
+  }
+
+  const checkKetersediaanBahan = (namaBahan: string) => {
+    let stok;
+    
+    dataBahan?.map((data) => {
+        if(data.NAMA_BAHAN === namaBahan){
+            stok = data.STOK_BAHAN;
+        }
+    })
+
+    // console.log(stok);
+
+    return stok;
+  }
+  
+
+  useEffect(() => {
+    // console.log("Running useEffect");
+    getEachDetailTransaksi();
+  }, [dataPesanan]);
+
+  useEffect(() => {
+    // console.log("RUNNING USE EFFECT DETAIL BAHAN");
+    getDetailBahanPerPesanan();
+  }, [detilTiapDataPesanan])
+
+  return (
+    <div>
+        <div className="flex justify-end mb-6 gap-4">
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button className="bg-blue-500">
+                    Lihat Rekap Bahan
                 </Button>
-            </div>
-            <Table>
-                <TableCaption>List pesanan harus di proses hari ini</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[150px]">No Transaksi</TableHead>
-                        <TableHead className="w-[150px]">Tanggal Pesanan</TableHead>
-                        <TableHead className="w-[170px]">Tanggal Pengiriman</TableHead>
-                        <TableHead>Alamat Pengiriman</TableHead>
-                        <TableHead className="w-[150px]">Tipe Pengiriman</TableHead>
-                        <TableHead className="w-[100px]">Total Item</TableHead>
-                        <TableHead>Status Transaksi</TableHead>
-                        <TableHead>Detil Transaksi</TableHead>
-                        <TableHead>Action</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {dataPesanan?.map((data, index) => (
-                        <TableRow key={index}>
-                            <TableCell className="font-medium">{data.NO_TRANSAKSI}</TableCell>
-                            <TableCell>{data.TANGGAL_PESANAN?.split("T")[0]}</TableCell>
-                            <TableCell>{data.TANGGAL_PENGIRIMAN?.split("T")[0]}</TableCell>
-                            <TableCell>{data.ALAMAT_PENGIRIMAN}</TableCell>
-                            <TableCell>{data.TIPE_PENGIRIMAN}</TableCell>
-                            <TableCell>{data.TOTAL_ITEM}</TableCell>
-                            <TableCell>{data.STATUS_TRANSAKSI}</TableCell>
-                            <TableCell>
-                                <Dialog>
-                                    <DialogTrigger asChild>
-                                        <p className="text-blue-500 underline hover:cursor-pointer">Detil Bahan Dibutuhkan</p>
-                                    </DialogTrigger>
-                                    <DialogContent>
-                                        <DialogHeader>
-                                            <DialogTitle>Detil Bahan Dibutuhkan</DialogTitle>
-                                            <DialogDescription>
-                                                {detilProdukPerTransaksi.map((dataDetilProduk, index) => {
-                                                    if (data.ID_TRANSAKSI_PESANAN === dataDetilProduk.id_transaksi) {
-                                                        return <>
-                                                            {dataDetilProduk.produk.map((produk, indexProduk) => (
-                                                                <p key={indexProduk}>{produk.NAMA_PRODUK}</p>
-                                                            ))}
-                                                        </>
-                                                    }
-                                                    return null;
-                                                })}
-                                            </DialogDescription>
-                                        </DialogHeader>
-                                    </DialogContent>
-                                </Dialog>
-                            </TableCell>
-                            <TableCell>
-                                <Button disabled={isPilihSemua} className={isPilihSemua ? "bg-green-500" : "bg-yellow-500"}>
-                                    {isPilihSemua ? "Terpilih" : "Proses"}
-                                </Button>
-                            </TableCell>
-                        </TableRow>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                <DialogTitle>Rekap Bahan Produksi Hari Ini</DialogTitle>
+                <DialogDescription>
+                    {totalBahanDibutuhkan.map((dataBahanDibutuhkan, index) => (
+                        <div key={index} className="flex gap-2">
+                            <p>{dataBahanDibutuhkan.NAMA_BAHAN} - {dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN} {dataBahanDibutuhkan.SATUAN}</p>
+                            <p className={checkKetersediaanBahan(dataBahanDibutuhkan.NAMA_BAHAN)! < dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN ? "text-red-500" : "text-black"}>{checkKetersediaanBahan(dataBahanDibutuhkan.NAMA_BAHAN)! < dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN ? `WARNING: STOK ${checkKetersediaanBahan(dataBahanDibutuhkan.NAMA_BAHAN)} ${dataBahanDibutuhkan.SATUAN}` : ""}</p>
+                        </div>
                     ))}
-                </TableBody>
-            </Table>
+                </DialogDescription>
+                </DialogHeader>
+            </DialogContent>
+        </Dialog>
+
+            <Button disabled={isBahanKurang || isLoading} className={isPilihSemua ? "bg-red-500" : "bg-blue-500"} onClick={() => { setIsPilihSemua(!isPilihSemua); }}>
+                {isPilihSemua ? "Batal" : "Proses Semua"}
+            </Button>
         </div>
-    );
+      <Table>
+        <TableCaption>List pesanan harus di proses hari ini</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[150px]">No Transaksi</TableHead>
+            <TableHead className="w-[150px]">Tanggal Pesanan</TableHead>
+            <TableHead className="w-[170px]">Tanggal Pengiriman</TableHead>
+            <TableHead>Alamat Pengiriman</TableHead>
+            <TableHead className="w-[150px]">Tipe Pengiriman</TableHead>
+            <TableHead className="w-[100px]">Total Item</TableHead>
+            <TableHead>Status Transaksi</TableHead>
+            <TableHead>Detil Transaksi</TableHead>
+            <TableHead>Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {dataPesanan?.map((data, index) => (
+            <TableRow key={index}>
+              <TableCell className="font-medium">{data.NO_TRANSAKSI}</TableCell>
+              <TableCell>{data.TANGGAL_PESANAN?.split("T")[0]}</TableCell>
+              <TableCell>{data.TANGGAL_PENGIRIMAN?.split("T")[0]}</TableCell>
+              <TableCell>{data.ALAMAT_PENGIRIMAN}</TableCell>
+              <TableCell>{data.TIPE_PENGIRIMAN}</TableCell>
+              <TableCell>{data.TOTAL_ITEM}</TableCell>
+              <TableCell>{data.STATUS_TRANSAKSI}</TableCell>
+              <TableCell>
+                <Dialog>
+                  <DialogTrigger>
+                    {isLoading ?
+                        <ClipLoader/> :
+                        <p className="text-blue-500 underline hover:cursor-pointer">Detil Bahan Produk</p>
+                    }
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Detil Bahan Produk</DialogTitle>
+                      <DialogDescription>
+                        {detilBahanPerPesanan.map((dataDetil, indexDetil) => {
+                          if (data.ID_TRANSAKSI_PESANAN === dataDetil.id_transaksi) {
+                            return (
+                              <div key={indexDetil} className="mb-6">
+                                <p className="text-lg">{findProdukByIdResep(dataDetil.detil_resep.at(indexDetil)?.ID_RESEP, indexDetil, index)}</p>
+                                {dataDetil.detil_resep.map((dataBahanDibutuhkan, indexBahan) => (
+                                    <p key={indexBahan}>{dataBahanDibutuhkan.NAMA_BAHAN} - {dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN} {dataBahanDibutuhkan.SATUAN}</p>
+                                ))}
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              </TableCell>
+              <TableCell>
+                <Button disabled={isPilihSemua || isLoading || isBahanKurang} className={isPilihSemua ? "bg-green-500" : "bg-yellow-500"}>
+                  {isPilihSemua ? "Terpilih" : "Proses"}
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
 };
 
 export default TabelPesananHarusDiproses;

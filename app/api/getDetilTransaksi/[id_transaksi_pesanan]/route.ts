@@ -5,7 +5,7 @@ export async function GET(req: NextRequest, { params }: { params: { id_transaksi
     try {
         const connection = await connect();
 
-        const queryGetDetilTransaksi = `SELECT * FROM DETIL_TRANSAKSI WHERE ID_TRANSAKSI_PESANAN = ?`;
+        const queryGetDetilTransaksi = `SELECT * FROM DETIL_TRANSAKSI DT JOIN PRODUK P ON DT.ID_PRODUK=P.ID_PRODUK WHERE DT.ID_TRANSAKSI_PESANAN = ?`;
 
         const [result, fields] = await connection.execute(queryGetDetilTransaksi, [params.id_transaksi_pesanan]);
         connection.end();

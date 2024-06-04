@@ -232,6 +232,8 @@ export interface DETIL_TRANSAKSI {
   ID_DETIL_TRANSAKSI: number;        // Primary key, auto-increment
   ID_TRANSAKSI_PESANAN: number;      // Index
   ID_PRODUK?: number | null;         // Index, nullable
+  ID_RESEP?: number | null;
+  NAMA_PRODUK?: number | null;
   JUMLAH_PESANAN?: number | null;    // Nullable
   SUBTOTAL?: number | null;          // Nullable
   ID_HAMPERS?: number | null;        // Index, nullable
