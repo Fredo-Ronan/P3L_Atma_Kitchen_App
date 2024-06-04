@@ -82,7 +82,7 @@ const PreOrderProdukPage = ({
 
   const getDates = async () => {
     try {
-      const resLastTanggal = await axios.get(`/api/getLastTanggalKuota`);
+      const resLastTanggal = await axios.get(`/api/getLastTanggalKuota/1`);
 
       const finalLastTanggalKuota = resLastTanggal.data.lastTanggal[0].LAST_TANGGAL.split("T")[0];
 
