@@ -207,3 +207,34 @@ export interface PEMBAYARAN{
   JUMLAH_TIP: number;
   BUKTI_TF: string;
 }
+
+export interface TRANSAKSI_PESANAN {
+  ID_TRANSAKSI_PESANAN: number; // ID_TRANSAKSI_PESANAN
+  NO_TRANSAKSI: string; // NO_TRANSAKSI
+  ID_CUSTOMER?: number | null; // ID_CUSTOMER
+  TANGGAL_PESANAN?: string | null; // TANGGAL_PESANAN
+  ALAMAT_PENGIRIMAN?: string | null; // ALAMAT_PENGIRIMAN
+  STATUS_PESANAN?: string | null; // STATUS_PESANAN
+  TIPE_PENGIRIMAN?: string | null; // TIPE_PENGIRIMAN
+  TOTAL_ITEM?: number | null; // TOTAL_ITEM
+  STATUS_TRANSAKSI: string; // STATUS_TRANSAKSI
+  TANGGAL_PENGIRIMAN?: string | null; // TANGGAL_PENGIRIMAN
+  TOTAL_HARGA: number; // TOTAL_HARGA
+  TOTAL_HARUS_DIBAYAR: number; // TOTAL_HARUS_DIBAYAR
+  TOTAL_BAYAR_CUSTOMER: number; // TOTAL_BAYAR_CUSTOMER
+  JARAK: number; // JARAK
+  ONGKIR: number; // ONGKIR
+  BUKTI_TF?: string | null; // BUKTI_TF
+  POIN?: number | null;
+}
+
+export interface DETIL_TRANSAKSI {
+  ID_DETIL_TRANSAKSI: number;        // Primary key, auto-increment
+  ID_TRANSAKSI_PESANAN: number;      // Index
+  ID_PRODUK?: number | null;         // Index, nullable
+  JUMLAH_PESANAN?: number | null;    // Nullable
+  SUBTOTAL?: number | null;          // Nullable
+  ID_HAMPERS?: number | null;        // Index, nullable
+  ID_CUSTOMER?: number | null;       // Nullable
+  KETERANGAN?: string | null;        // Nullable, varchar(255)
+}

@@ -54,4 +54,16 @@ export function getDatesAfterTodayToN(endDate: Date): string[] {
     // console.log(dates);
     return dates;
 }
+
+
+// get tomorrow date
+export function getDateTomorrow(): string {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const finalTomorrow = formatDateToYYYYMMDD(tomorrow);
+
+    return finalTomorrow;
+}
   
