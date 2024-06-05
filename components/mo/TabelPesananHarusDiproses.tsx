@@ -193,7 +193,43 @@ const TabelPesananHarusDiproses = ({ dataPesanan, dataBahan }: { dataPesanan?: T
 
 
   const prosesSemuaTrigger = async () => {
+    setIsLoadingProses(true);
+    try {
+      totalBahanDibutuhkan.forEach(async (dataBahan) => {
+        const resUpdateStok = await axios.put(`/api/bahanBaku/updateStok`, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            nama_bahan: dataBahan.NAMA_BAHAN,
+            stok_digunakan: dataBahan.JUMLAH_DIBUTUHKAN
+          })
+        });
+      });
 
+      totalBahanDibutuhkan.forEach(async (dataBahan) => {
+        const resInsertPenggunaanBahan = await axios.post(`/api/penggunaanBahan`, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            id_bahan: dataBahan.ID_BAHAN,
+            jumlah_digunakan: dataBahan.JUMLAH_DIBUTUHKAN,
+            tanggal_digunakan: formatDateToYYYYMMDD(new Date())
+          })
+        });
+      });
+
+      dataPesanan?.forEach(async (dataTransaksi) => {
+        const resUpdateStatusPesanan = await axios.put(`/api/transaksiPesanan/updateToProses/${dataTransaksi.ID_TRANSAKSI_PESANAN}`);
+      });
+
+      setIsLoadingProses(false);
+      window.location.reload();
+    }catch(error){
+      console.log(error);
+      throw error;
+    }
   }
 
   const prosesPesanan = async (dataTransaksi: TRANSAKSI_PESANAN) => {
@@ -311,8 +347,8 @@ const TabelPesananHarusDiproses = ({ dataPesanan, dataBahan }: { dataPesanan?: T
             </Button>
 
             {isPilihSemua ?
-              <Button className="bg-yellow-500">
-                Proses Semua
+              <Button className="bg-yellow-500" onClick={() => {prosesSemuaTrigger()}}>
+                {isLoadingProses ? <ClipLoader color="#ffffff"/> : "Proses Semua"}
               </Button> : <></>
             }
         </div>

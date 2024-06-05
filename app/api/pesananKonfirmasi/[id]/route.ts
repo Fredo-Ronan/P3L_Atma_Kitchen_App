@@ -283,7 +283,7 @@ export async function PUT(
     );
 
     await connection.execute(
-      `UPDATE TRANSAKSI_PESANAN SET STATUS_PESANAN = 'pesanan diproses' WHERE ID_TRANSAKSI_PESANAN = ?`,
+      `UPDATE TRANSAKSI_PESANAN SET STATUS_PESANAN = 'pesanan diterima' WHERE ID_TRANSAKSI_PESANAN = ?`,
       [id]
     );
 
