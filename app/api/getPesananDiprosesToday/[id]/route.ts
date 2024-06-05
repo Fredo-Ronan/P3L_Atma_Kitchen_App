@@ -9,7 +9,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         const currentDate = formatDateToYYYYMMDD(new Date());
         const tomorrowDate = getDateTomorrow();
 
-        const queryGetPesananDiprosesToday = `SELECT * FROM TRANSAKSI_PESANAN WHERE DATE(TANGGAL_PENGIRIMAN) >= DATE('${currentDate}') AND DATE(TANGGAL_PENGIRIMAN) <= DATE('${tomorrowDate}');`;
+        const queryGetPesananDiprosesToday = `SELECT * FROM TRANSAKSI_PESANAN WHERE DATE(TANGGAL_PENGIRIMAN) >= DATE('${currentDate}') AND DATE(TANGGAL_PENGIRIMAN) <= DATE('${tomorrowDate}') AND STATUS_TRANSAKSI = 'checkout, pembayaran terkonfirmasi';`;
 
         const [result, fields] = await connection.execute(queryGetPesananDiprosesToday);
         connection.end();

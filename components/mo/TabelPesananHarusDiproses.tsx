@@ -20,6 +20,7 @@ import { BAHAN_BAKU, DETAIL_RESEP, DETIL_TRANSAKSI, PRODUK, TRANSAKSI_PESANAN } 
 import { Button } from "../ui/button";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
+import { formatDateToYYYYMMDD } from "@/utilities/dateParser";
 
 interface COLLECTION_DETIL_TRANSAKSI {
   id_transaksi: number;
@@ -32,6 +33,7 @@ interface COLLECTION_DETIL_RESEP {
 }
   
 interface BahanMapItem {
+    ID_BAHAN: number;
     NAMA_BAHAN: string;
     JUMLAH_DIBUTUHKAN: number;
     SATUAN: string;
@@ -47,6 +49,7 @@ const TabelPesananHarusDiproses = ({ dataPesanan, dataBahan }: { dataPesanan?: T
   const [detilBahanPerPesanan, setDetilBahanPerPesanan] = useState<COLLECTION_DETIL_RESEP[]>([]);
   const [totalBahanDibutuhkan, setTotalBahanDibutuhkan] = useState<BahanMapItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingProses, setIsLoadingProses] = useState(false);
   const [isBahanKurang, setIsBahanKurang] = useState(false);
 
   const getEachDetailTransaksi = async (): Promise<void> => {
@@ -187,6 +190,81 @@ const TabelPesananHarusDiproses = ({ dataPesanan, dataBahan }: { dataPesanan?: T
 
     return stok;
   }
+
+
+  const prosesSemuaTrigger = async () => {
+
+  }
+
+  const prosesPesanan = async (dataTransaksi: TRANSAKSI_PESANAN) => {
+    setIsLoadingProses(true);
+    try {
+      const detilTransaksi = detilTiapDataPesanan.filter((data) => data.id_transaksi === dataTransaksi.ID_TRANSAKSI_PESANAN);
+
+      console.log(detilTransaksi);
+
+      const promises: Promise<COLLECTION_DETIL_RESEP>[] = [];
+      detilTransaksi.forEach((data) => {
+          data.detil_transaksi.forEach((dataDetil) => {
+              promises.push(
+                  (async () => {
+                      const resBahanDibutuhkan = await axios.get(`/api/relasiBahanResep/getCertainDetailResep/${dataDetil.ID_RESEP}`);
+                      // console.log(resBahanDibutuhkan.data);
+                      const bahanDibutuhan = resBahanDibutuhkan.data.dataBahanDibutuhkan;
+                      return {
+                          id_transaksi: data.id_transaksi,
+                          detil_resep: bahanDibutuhan
+                      }
+                  })()
+              );
+          });
+      });
+
+      const detilBahanDibutuhkan = await Promise.all(promises);
+      const agregated = aggregateBahanDibutuhkan(detilBahanDibutuhkan);
+
+      // console.log(detilBahanDibutuhkan);
+      // console.log(agregated);
+
+      agregated.forEach(async (dataBahan) => {
+        const resUpdateStok = await axios.put(`/api/bahanBaku/updateStok`, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            nama_bahan: dataBahan.NAMA_BAHAN,
+            stok_digunakan: dataBahan.JUMLAH_DIBUTUHKAN
+          })
+        });
+
+        // console.log(resUpdateStok);
+      })
+
+      agregated.forEach(async (dataBahan) => {
+        console.log(dataBahan.ID_BAHAN);
+        const resInsertPenggunaanBahan = await axios.post(`/api/penggunaanBahan`, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            id_bahan: dataBahan.ID_BAHAN,
+            jumlah_digunakan: dataBahan.JUMLAH_DIBUTUHKAN,
+            tanggal_digunakan: formatDateToYYYYMMDD(new Date())
+          })
+        });
+
+        console.log(resInsertPenggunaanBahan);
+      })
+
+      const resUpdateStatusPesanan = await axios.put(`/api/transaksiPesanan/updateToProses/${detilTransaksi.at(0)?.id_transaksi}`);
+
+      setIsLoadingProses(false);
+      window.location.reload();
+    }catch(error){
+      console.log(error);
+      throw error;
+    }
+  }
   
 
   useEffect(() => {
@@ -201,31 +279,42 @@ const TabelPesananHarusDiproses = ({ dataPesanan, dataBahan }: { dataPesanan?: T
 
   return (
     <div>
-        <div className="flex justify-end mb-6 gap-4">
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button className="bg-blue-500">
-                    Lihat Rekap Bahan
-                </Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                <DialogTitle>Rekap Bahan Produksi Hari Ini</DialogTitle>
-                <DialogDescription>
-                    {totalBahanDibutuhkan.map((dataBahanDibutuhkan, index) => (
-                        <div key={index} className="flex gap-2">
-                            <p>{dataBahanDibutuhkan.NAMA_BAHAN} - {dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN} {dataBahanDibutuhkan.SATUAN}</p>
-                            <p className={checkKetersediaanBahan(dataBahanDibutuhkan.NAMA_BAHAN)! < dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN ? "text-red-500" : "text-black"}>{checkKetersediaanBahan(dataBahanDibutuhkan.NAMA_BAHAN)! < dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN ? `WARNING: STOK ${checkKetersediaanBahan(dataBahanDibutuhkan.NAMA_BAHAN)} ${dataBahanDibutuhkan.SATUAN}` : ""}</p>
-                        </div>
-                    ))}
-                </DialogDescription>
-                </DialogHeader>
-            </DialogContent>
-        </Dialog>
+        <div className="flex justify-end items-center mb-6 gap-4">
+          {isBahanKurang ?
+            <p className="text-red-500 italic">
+              Ada bahan yang kurang!
+            </p> : <></>
+          }
+          <Dialog>
+              <DialogTrigger asChild>
+                  <Button className="bg-blue-500">
+                      Lihat Rekap Bahan
+                  </Button>
+              </DialogTrigger>
+              <DialogContent>
+                  <DialogHeader>
+                  <DialogTitle>Rekap Bahan Produksi Hari Ini</DialogTitle>
+                  <DialogDescription>
+                      {totalBahanDibutuhkan.map((dataBahanDibutuhkan, index) => (
+                          <div key={index} className="flex gap-2">
+                              <p>{dataBahanDibutuhkan.NAMA_BAHAN} - {dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN} {dataBahanDibutuhkan.SATUAN}</p>
+                              <p className={checkKetersediaanBahan(dataBahanDibutuhkan.NAMA_BAHAN)! < dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN ? "text-red-500" : "text-black"}>{checkKetersediaanBahan(dataBahanDibutuhkan.NAMA_BAHAN)! < dataBahanDibutuhkan.JUMLAH_DIBUTUHKAN ? `WARNING: STOK ${checkKetersediaanBahan(dataBahanDibutuhkan.NAMA_BAHAN)} ${dataBahanDibutuhkan.SATUAN}` : ""}</p>
+                          </div>
+                      ))}
+                  </DialogDescription>
+                  </DialogHeader>
+              </DialogContent>
+          </Dialog>
 
             <Button disabled={isBahanKurang || isLoading} className={isPilihSemua ? "bg-red-500" : "bg-blue-500"} onClick={() => { setIsPilihSemua(!isPilihSemua); }}>
-                {isPilihSemua ? "Batal" : "Proses Semua"}
+                {isPilihSemua ? "Batal" : "Pilih Semua"}
             </Button>
+
+            {isPilihSemua ?
+              <Button className="bg-yellow-500">
+                Proses Semua
+              </Button> : <></>
+            }
         </div>
       <Table>
         <TableCaption>List pesanan harus di proses hari ini</TableCaption>
@@ -283,8 +372,8 @@ const TabelPesananHarusDiproses = ({ dataPesanan, dataBahan }: { dataPesanan?: T
                 </Dialog>
               </TableCell>
               <TableCell>
-                <Button disabled={isPilihSemua || isLoading || isBahanKurang} className={isPilihSemua ? "bg-green-500" : "bg-yellow-500"}>
-                  {isPilihSemua ? "Terpilih" : "Proses"}
+                <Button disabled={isPilihSemua || isLoading || isBahanKurang} className={isPilihSemua ? "bg-green-500" : "bg-yellow-500"} onClick={() => {prosesPesanan(data)}}>
+                  {isPilihSemua ? "Terpilih" : isLoadingProses ? <ClipLoader color="#ffffff"/> : "Proses"}
                 </Button>
               </TableCell>
             </TableRow>
