@@ -16,6 +16,7 @@ import {
   } from "@/components/ui/table"
 import { Button } from '@/components/ui/button';
 import { laporanPenjualanProdukPDFMaker } from '@/utilities/laporan/laporanPenjualanProdukPDF';
+import Link from 'next/link';
   
 
 const LaporanPenjualanPerProduk = ({ searchParams }: { searchParams: QueryParams }) => {
@@ -62,14 +63,20 @@ const LaporanPenjualanPerProduk = ({ searchParams }: { searchParams: QueryParams
 
   return (
     <div>
+        <Link href={"/moView/laporan"}>
+            <Button>Back</Button>
+        </Link>
+        <div className='mb-6'></div>
         <FilterMO filter={bulanFilter}/>
         {isLoading ?
-            <ClipLoader/>
+            <div className='flex justify-center items-center'>
+                <ClipLoader/>
+            </div>
             :
             <div>
                 {dataLaporan.length === 0 ?
-                    <div>
-                        EMPTY
+                    <div className='flex justify-center items-center text-lg italic text-red-500'>
+                        Kosong
                     </div>
                     : <div className='mt-6'>
                         <div className='mb-6 flex justify-between items-end'>

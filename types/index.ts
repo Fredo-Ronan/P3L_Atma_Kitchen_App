@@ -277,3 +277,9 @@ export interface LAPORAN_PENJUALAN_PER_PRODUK {
   HARGA_PRODUK: number;
   JUMLAH_UANG: number;
 }
+
+export interface LAPORAN_STOK_BAHAN {
+  NAMA_BAHAN: string;
+  SATUAN: string;
+  STOK_BAHAN: number;
+}
