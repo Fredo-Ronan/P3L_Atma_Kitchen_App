@@ -240,3 +240,32 @@ export interface DETIL_TRANSAKSI {
   ID_CUSTOMER?: number | null;       // Nullable
   KETERANGAN?: string | null;        // Nullable, varchar(255)
 }
+
+export interface PESANAN{
+  ID_TRANSAKSI_PESANAN: number;
+  NAMA_CUSTOMER: string;
+  TOTAL_ITEM: number;
+  TOTAL_HARGA: number;
+  STATUS_PESANAN: string;
+  STATUS_TRANSAKSI: string;
+  TIPE_PENGIRIMAN: string;
+  TANGGAL_PENGIRIMAN: string;
+}
+
+export interface KONFIRMASI_PESANAN{
+  ID_CUSTOMER: number;
+  ID_TRANSAKSI_PESANAN: number;
+  NAMA_CUSTOMER: string;
+  TOTAL_ITEM: number;
+  TOTAL_HARGA: number;
+  STATUS_PESANAN: string;
+  TIPE_PENGIRIMAN: string;
+}
+
+export interface PENJUALAN_BULANAN{
+  TANGGAL_PESANAN: string;
+  TOTAL_HARGA: string;
+  BULAN: number;
+  TOTAL_TRANSAKSI: number;
+  TOTAL_HARGA_TAHUNAN: number;
+}

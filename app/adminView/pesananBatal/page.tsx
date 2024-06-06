@@ -1,13 +1,14 @@
-"use client";import Pagination from "@/components/admin/Pagination";
-import TablePengiriman from "@/components/admin/TablePengiriman";
-import { PENGIRIMAN, QueryParams } from "@/types";
+"use client";
+import Pagination from "@/components/admin/Pagination";
+import TablePesananBatal from "@/components/admin/TablePesananBatal";
+import { PESANAN, QueryParams } from "@/types";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
 
 const Page = ({ searchParams }: { searchParams: QueryParams }) => {
-  const [data, setData] = useState<PENGIRIMAN[]>([]);
+  const [data, setData] = useState<PESANAN[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [totalData, setTotalData] = useState(0);
@@ -21,7 +22,7 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
 
   const fetchData = async () => {
     setIsLoading(true);
-    const res = await axios.get("/api/pengiriman", { params: queryParams });
+    const res = await axios.get("/api/pesananBatal", { params: queryParams });
 
     if (res.data.data.length <= 0) {
       setIsLoading(false);
@@ -46,7 +47,7 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
   return (
     <>
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">List Pesanan Customer</h1>
+        <h1 className="text-2xl font-bold">List Pesanan Telat Bayar</h1>
       </div>
       <div className="mt-9">
         {isLoading ? (
@@ -54,7 +55,7 @@ const Page = ({ searchParams }: { searchParams: QueryParams }) => {
             <SyncLoader color="#2563eb" />
           </div>
         ) : (
-          <TablePengiriman
+          <TablePesananBatal
             data={data}
             refreshData={refreshData}
           />

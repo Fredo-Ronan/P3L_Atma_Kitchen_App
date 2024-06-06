@@ -43,6 +43,14 @@ export const sideBarAdmin = [
     label: "Pembayaran",
     link: "/adminView/pembayaran",
   },
+  {
+    label: "Pesanan",
+    link: "/adminView/pesanan",
+  },
+  {
+    label: "Pesanan Batal",
+    link: "/adminView/pesananBatal",
+  },
 ];
 
 export const bahanBakuTable = [
@@ -99,7 +107,11 @@ export const sideBarMO = [
   {
     label: "Pesanan Harus Diproses",
     link: "/moView/pesananHarusDiproses",
-  }
+  },
+  {
+    label: "Laporan",
+    link: "/moView/laporanPenjualanBulanan",
+  },
 ];
 
 export const tablePenitip = [
@@ -221,4 +233,22 @@ export const pembayaranTable = [
   "TOTAL BAYAR CUSTOMER",
   "JUMLAH TIP",
   "BUKTI TRANSFER",
+]
+
+export const pesananTable = [
+  "ID TRANSAKSI",
+  "NAMA CUSTOMER",
+  "TOTAL ITEM",
+  "TOTAL HARGA",
+  "STATUS PESANAN",
+]
+
+export const pesananBatalTable = [
+  "ID TRANSAKSI",
+  "NAMA CUSTOMER",
+  "TIPE PENGIRIMAN",
+  "TOTAL ITEM",
+  "TOTAL HARGA",
+  "STATUS TRANSAKSI",
+  "TANGGAL PENGIRIMAN",
 ]
