@@ -11,14 +11,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ data: [], totalData: 0 });
     }
 
-    let query = `SELECT *
-    FROM TRANSAKSI_PESANAN TP 
-    JOIN CUSTOMER C ON TP.ID_CUSTOMER = C.ID_CUSTOMER
-    WHERE STATUS_TRANSAKSI = 'checkout, belum bayar'
-    AND (
-        TANGGAL_PENGIRIMAN <= CURDATE()
-        OR TANGGAL_PENGIRIMAN = DATE_ADD(CURDATE(), INTERVAL 1 DAY)
-    )`;
+    let query = `SELECT * FROM TRANSAKSI_PESANAN TP 
+          JOIN CUSTOMER C ON TP.ID_CUSTOMER = C.ID_CUSTOMER
+          WHERE (STATUS_TRANSAKSI = 'checkout, belum bayar'
+                OR STATUS_TRANSAKSI = 'transaksi dibatalkan'
+          )
+          AND (
+              TANGGAL_PENGIRIMAN <= CURDATE()
+              OR TANGGAL_PENGIRIMAN = DATE_ADD(CURDATE(), INTERVAL 1 DAY)
+          )
+          ORDER BY 
+              CASE 
+                  WHEN STATUS_TRANSAKSI = 'checkout, belum bayar' THEN 1
+                  ELSE 2
+              END `;
 
     const offset = (Number(page) - 1) * 10;
 
