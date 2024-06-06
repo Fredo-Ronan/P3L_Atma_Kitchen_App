@@ -50,7 +50,7 @@ const LaporanPageMO = () => {
                 </Card>
             </Link>
 
-            <Link href={""}>
+            <Link href={"laporan/laporanPenggunaanBahanBaku"}>
                 <Card className='w-96 hover:cursor-pointer hover:shadow-xl hover:bg-blue-50 transition-all duration-300'>
                     <CardHeader>
                         <CardTitle>Laporan penggunaan bahan baku</CardTitle>
