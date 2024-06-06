@@ -181,6 +181,10 @@ export const sideBarOwner = [
     label: "Bonus Karyawan",
     link: "/ownerView/bonusKaryawan",
   },
+  {
+    label: "Laporan",
+    link: "/ownerView/laporan"
+  }
 ];
 
 export const tabelKaryawan = [
