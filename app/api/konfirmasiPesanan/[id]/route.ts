@@ -1,3 +1,4 @@
+import { StatusCodesP3L } from "@/constants/statusCodesP3L";
 import { connect } from "@/db";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -74,7 +75,7 @@ import { NextRequest, NextResponse } from "next/server";
 // }
 
 export async function GET(
-  request: NextRequest,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
@@ -111,7 +112,7 @@ export async function GET(
     });
 
     return new Response(
-      JSON.stringify({ status: 200, data: pesananData })
+      JSON.stringify({ status: StatusCodesP3L.OK, data: pesananData })
     );
   } catch (error) {
     console.error(error);
