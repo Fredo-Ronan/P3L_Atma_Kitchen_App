@@ -25,7 +25,7 @@ const PesananHarusDiProsesPage = () => {
 
     const getBahan = async () => {
         try {
-            const resBahan = await axios.get(`/api/getAllBahan`);
+            const resBahan = await axios.get(`/api/getAllBahan/1`);
 
             setDataBahan(resBahan.data.dataBahan);
         }catch(error){

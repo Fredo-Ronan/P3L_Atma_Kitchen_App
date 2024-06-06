@@ -26,7 +26,7 @@ const PembelianBahanBakuPage = ({ searchParams }: { searchParams: QueryParams })
   const fetchAllBahan = async () => {
     setIsLoading(true);
 
-    const resGetAllBahan = await axios.get(`/api/getAllBahan`);
+    const resGetAllBahan = await axios.get(`/api/getAllBahan/1`);
 
     setDataAllBahan(resGetAllBahan.data.dataBahan);
   }
