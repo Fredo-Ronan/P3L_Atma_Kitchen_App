@@ -72,13 +72,6 @@ const TablePesananBatal = ({ data, refreshData }: Props) => {
             <TableCell>{item.STATUS_TRANSAKSI}</TableCell>
             <TableCell>{formatTanggal(String(item.TANGGAL_PENGIRIMAN))}</TableCell>
             <TableCell className="flex items-center gap-3 justify-center">
-              {/* <button
-                onClick={() => handleDelete(item.ID_TRANSAKSI_PESANAN)}
-                className="bg-red-500 text-white px-3 py-1 rounded"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Loading...' : 'Delete'}
-              </button> */}
               {item.STATUS_TRANSAKSI === "checkout, belum bayar"&& (
                   <KonfirmasiBtn
                     handleClick={() =>
@@ -129,7 +122,7 @@ const KonfirmasiBtn = ({
         <AlertDialogHeader>
           <AlertDialogTitle>Apakah kamu yakin?</AlertDialogTitle>
           <AlertDialogDescription>
-            Ingin Membatalkan Transaksi Pesanan INI?
+            Ingin Membatalkan Transaksi Pesanan Ini?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

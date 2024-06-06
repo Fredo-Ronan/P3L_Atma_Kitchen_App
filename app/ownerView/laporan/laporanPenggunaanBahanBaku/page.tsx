@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { laporanPenggunaanBahanPDFMaker } from '@/utilities/laporan/laporanPenggunaanBahanBaku';
   
 
-const laporanPenggunaanBahanBaku = ({ searchParams }: { searchParams: QueryParams }) => {
+const LaporanPenggunaanBahanBaku = ({ searchParams }: { searchParams: QueryParams }) => {
 
     const [penggunaanBahan, setPenggunaanBahan] = useState<PENGGUNAAN_BAHAN_BAKU[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -106,4 +106,4 @@ const laporanPenggunaanBahanBaku = ({ searchParams }: { searchParams: QueryParam
   )
 }
 
-export default laporanPenggunaanBahanBaku
+export default LaporanPenggunaanBahanBaku
