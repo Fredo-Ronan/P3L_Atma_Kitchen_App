@@ -23,7 +23,7 @@ const LaporanStokBahanBakuPageMO = () => {
 
     const fetchStokBahan = async () => {
         setIsLoading(true);
-        const res = await axios.get(`/api/laporan/stokBahanBaku`);
+        const res = await axios.get(`/api/laporan/stokBahanBaku/1`);
 
         setDataBahan(res.data.data);
         setIsLoading(false);
