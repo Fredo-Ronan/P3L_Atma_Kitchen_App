@@ -269,3 +269,11 @@ export interface PENJUALAN_BULANAN{
   TOTAL_TRANSAKSI: number;
   TOTAL_HARGA_TAHUNAN: number;
 }
+
+export interface LAPORAN_PENJUALAN_PER_PRODUK {
+  NAMA_PRODUK: string;
+  TANGGAL_PESANAN: string;
+  JUMLAH_TERJUAL: number;
+  HARGA_PRODUK: number;
+  JUMLAH_UANG: number;
+}

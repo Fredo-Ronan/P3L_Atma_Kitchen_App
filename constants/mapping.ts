@@ -61,6 +61,7 @@ export const bahanBakuTable = [
   "SATUAN",
 ];
 
+export const bulanFilter = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 export const satuanFilter = ["kg", "gram", "pcs", "ltr", "ml"];
 export const filterProduk = [
   "Titipan",
@@ -110,7 +111,7 @@ export const sideBarMO = [
   },
   {
     label: "Laporan",
-    link: "/moView/laporanPenjualanBulanan",
+    link: "/moView/laporan",
   },
 ];
 
