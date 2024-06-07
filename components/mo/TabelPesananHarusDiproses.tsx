@@ -143,11 +143,6 @@ const TabelPesananHarusDiproses = ({ dataPesanan, dataBahan }: { dataPesanan?: T
     })
   }
 
-  function removeDuplicatesUsingFilter(arr: any[] | undefined): any[] | undefined {
-    return arr?.filter((item, index) => arr?.indexOf(item) === index);
-  }
-  
-
   const findProdukByIdResep = (idResep: number | null | undefined, indexDetil: number, index: number) => {
     const transaksi = detilTiapDataPesanan.map((data) => {
         data.detil_transaksi.map((dataTransaksi) => {
@@ -159,22 +154,9 @@ const TabelPesananHarusDiproses = ({ dataPesanan, dataBahan }: { dataPesanan?: T
         return data.detil_transaksi;
     })
 
-    // console.log(transaksi);
+    const produk = transaksi.at(index)?.find((data) => data.ID_RESEP === idResep)?.NAMA_PRODUK;
 
-    const produk = transaksi.at(index)?.map((data) => {
-        if(data.ID_RESEP === idResep){
-            return data.NAMA_PRODUK;
-        }
-
-        return data.NAMA_PRODUK;
-    })
-
-    const produkFiltered  = removeDuplicatesUsingFilter(produk);
-
-    // console.log(produk);
-    // console.log(produkFiltered)
-
-    return produkFiltered;
+    return produk;
   }
 
   const checkKetersediaanBahan = (namaBahan: string) => {

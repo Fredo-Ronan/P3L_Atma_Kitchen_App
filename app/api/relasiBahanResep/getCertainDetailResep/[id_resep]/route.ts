@@ -5,7 +5,7 @@ export async function GET(req: NextRequest, { params }: { params: { id_resep: st
     try {
         const connection = await connect();
 
-        const queryGetCertainDetailResep = `SELECT RB.ID_RELASI_BAHAN_RESEP, B.ID_BAHAN, B.NAMA_BAHAN, RB.JUMLAH_DIBUTUHKAN, RB.SATUAN
+        const queryGetCertainDetailResep = `SELECT RB.ID_RELASI_BAHAN_RESEP, B.ID_BAHAN, B.NAMA_BAHAN, RB.ID_RESEP, RB.JUMLAH_DIBUTUHKAN, RB.SATUAN
         FROM RELASI_BAHAN_RESEP AS RB
         JOIN BAHAN AS B ON RB.id_bahan = B.id_bahan
         JOIN RESEP AS R ON RB.id_resep = R.id_resep
