@@ -264,7 +264,7 @@ export interface KONFIRMASI_PESANAN{
 
 export interface PENJUALAN_BULANAN{
   TANGGAL_PESANAN: string;
-  TOTAL_HARGA: string;
+  TOTAL_HARGA: number;
   BULAN: number;
   TOTAL_TRANSAKSI: number;
   TOTAL_HARGA_TAHUNAN: number;
@@ -282,4 +282,13 @@ export interface LAPORAN_STOK_BAHAN {
   NAMA_BAHAN: string;
   SATUAN: string;
   STOK_BAHAN: number;
+}
+
+export interface PENGGUNAAN_BAHAN_BAKU{
+  ID_PENGGUNAAN_BAHAN: number;
+  ID_BAHAN: number;
+  NAMA_BAHAN: string;
+  JUMLAH_DIGUNAKAN: number;
+  TANGGAL_DIGUNAKAN: string;
+  SATUAN: string;
 }
