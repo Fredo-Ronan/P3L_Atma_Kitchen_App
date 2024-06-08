@@ -10,10 +10,10 @@ export async function GET(request: NextRequest) {
     const month = parseInt(date.split("-")[1], 10);
 
     if (isNaN(year) || isNaN(month)) {
-      return {
-        status: "fail",
-        message: "Invalid date",
-      };
+      return NextResponse.json(
+        { status: "fail", message: "Invalid date" },
+        { status: 400 }
+      );
     }
 
     const [results]: any = await connection.execute(
@@ -48,8 +48,6 @@ export async function GET(request: NextRequest) {
       [year, month]
     );
 
-    console.log(results);
-
     const object: any = {};
 
     results.forEach((result: any) => {
@@ -76,14 +74,16 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    console.log(object);
-
     return NextResponse.json(object || [], { status: 200 });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return NextResponse.json(
+      { status: "error", message: "Internal Server Error" },
+      { status: 500 }
+    );
   } finally {
     if (connection) {
-      connection.end();
+      await connection.end();
     }
   }
 }
