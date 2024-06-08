@@ -15,4 +15,8 @@ export const NavbarRouteMap = [
     label: "Pesanan",
     route: "/pesanan",
   },
+  {
+    label: "Saldo",
+    route: "/saldo",
+  },
 ];

@@ -51,6 +51,10 @@ export const sideBarAdmin = [
     label: "Pesanan Batal",
     link: "/adminView/pesananBatal",
   },
+  {
+    label: "Penarikan Saldo",
+    link: "/adminView/penarikanSaldo",
+  },
 ];
 
 export const bahanBakuTable = [

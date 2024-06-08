@@ -69,3 +69,16 @@ export function formatTanggal(tanggalIso: string): string {
 
   return `${tahun}-${bulan}-${hari}`;
 }
+
+export function getMonths() {
+  const months = [];
+  const date = new Date();
+  const currentYear = date.getFullYear();
+  const bulanIni = date.getMonth() + 1;
+
+  for (let i = 1; i <= bulanIni; i++) {
+    months.push(new Date(currentYear, i, 1).toISOString().slice(0, 7));
+  }
+
+  return months;
+}

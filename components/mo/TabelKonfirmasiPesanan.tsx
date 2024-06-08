@@ -121,12 +121,6 @@ const TabelKonfirmasiPesanan = () => {
                 >
                   Kembali
                 </button>
-                <Link
-                  className="text-blue-500 underline"
-                  href="/moView/pembelianBahanBaku"
-                >
-                  Beli Bahan
-                </Link>
               </TableCell>
             </TableRow>
           ))}

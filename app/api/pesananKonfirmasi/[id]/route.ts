@@ -71,10 +71,22 @@ export async function POST(
       }
     }
 
-    await connection.execute(
-      `UPDATE CUSTOMER SET SALDO = SALDO + ${pesanan[0].TOTAL_BAYAR_CUSTOMER} WHERE ID_CUSTOMER = ?`,
+    const [customer]: any = await connection.execute(
+      `SELECT * FROM CUSTOMER WHERE ID_CUSTOMER = ?`,
       [pesanan[0].ID_CUSTOMER]
     );
+
+    if (customer[0].SALDO !== null) {
+      await connection.execute(
+        `UPDATE CUSTOMER SET SALDO = SALDO + ${pesanan[0].TOTAL_BAYAR_CUSTOMER} WHERE ID_CUSTOMER = ?`,
+        [pesanan[0].ID_CUSTOMER]
+      );
+    } else {
+      await connection.execute(
+        `UPDATE CUSTOMER SET SALDO = ${pesanan[0].TOTAL_BAYAR_CUSTOMER} WHERE ID_CUSTOMER = ?`,
+        [pesanan[0].ID_CUSTOMER]
+      );
+    }
 
     await connection.execute(
       `UPDATE TRANSAKSI_PESANAN SET STATUS_PESANAN = 'pesanan ditolak' WHERE ID_TRANSAKSI_PESANAN = ?`,
@@ -275,6 +287,8 @@ export async function PUT(
       });
     }
 
+    console.log("masuk ke sini");
+
     const poin = pesanan[0].POIN;
 
     await connection.execute(
@@ -283,7 +297,7 @@ export async function PUT(
     );
 
     await connection.execute(
-      `UPDATE TRANSAKSI_PESANAN SET STATUS_PESANAN = 'pesanan diterima' WHERE ID_TRANSAKSI_PESANAN = ?`,
+      `UPDATE TRANSAKSI_PESANAN SET STATUS_PESANAN = 'pesanan diproses' WHERE ID_TRANSAKSI_PESANAN = ?`,
       [id]
     );
 

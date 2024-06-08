@@ -61,7 +61,7 @@ const LaporanPageMO = () => {
                 </Card>
             </Link>
 
-            <Link href={""}>
+            <Link href={"laporan/laporanKaryawan"}>
                 <Card className='w-96 hover:cursor-pointer hover:shadow-xl hover:bg-blue-50 transition-all duration-300'>
                     <CardHeader>
                         <CardTitle>Laporan presensi dan gaji</CardTitle>
@@ -73,7 +73,7 @@ const LaporanPageMO = () => {
             </Link>
 
 
-            <Link href={""}>
+            <Link href={"laporan/laporanPengeluaran"}>
                 <Card className='w-96 hover:cursor-pointer hover:shadow-xl hover:bg-blue-50 transition-all duration-300'>
                     <CardHeader>
                         <CardTitle>Laporan pemasukan dan pengeluaran</CardTitle>
@@ -84,7 +84,7 @@ const LaporanPageMO = () => {
                 </Card>
             </Link>
 
-            <Link href={""}>
+            <Link href={"laporan/laporanPenitip"}>
                 <Card className='w-96 hover:cursor-pointer hover:shadow-xl hover:bg-blue-50 transition-all duration-300'>
                     <CardHeader>
                         <CardTitle>Laporan transaksi penitip</CardTitle>
