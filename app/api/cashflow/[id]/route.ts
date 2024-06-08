@@ -2,7 +2,7 @@ import { connect } from "@/db";
 import console from "console";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   let connection: any;
   try {
     connection = await connect();

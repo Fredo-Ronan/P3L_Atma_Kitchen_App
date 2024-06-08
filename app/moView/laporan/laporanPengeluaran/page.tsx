@@ -31,7 +31,7 @@ const Page = () => {
   const fetchData = async (queryParams: any) => {
     setLoading(true);
     try {
-      const res = await axios.get("/api/cashflow", { params: queryParams });
+      const res = await axios.get("/api/cashflow/1", { params: queryParams });
       setData(res.data);
     } catch (error) {
       console.log(error);
