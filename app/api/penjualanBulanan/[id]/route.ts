@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { connect } from "@/db";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const connection = await connect();
 

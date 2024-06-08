@@ -24,7 +24,7 @@ const LaporanPenjualanBulananKeseluruhan = () => {
     const fetchLaporan = async () => {
         setIsLoading(true);
         try {
-            const res = await axios.get(`/api/penjualanBulanan`);
+            const res = await axios.get(`/api/penjualanBulanan/1`);
 
             if (res.data.data === null) {
                 setIsLoading(false);
