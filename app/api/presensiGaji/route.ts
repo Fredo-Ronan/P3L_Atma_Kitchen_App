@@ -37,12 +37,12 @@ export async function GET(request: NextRequest) {
         })
       );
       return NextResponse.json(data || [], { status: 200 });
-    } else {
-      return NextResponse.json({
-        status: "fail",
-        message: "Invalid date",
-      });
     }
+
+    return NextResponse.json({
+      status: "fail",
+      message: "Invalid date",
+    }, { status: 200 });
   } catch (error) {
     console.log(error);
   } finally {
