@@ -60,9 +60,7 @@ const LaporanPenitipPDF = ({ data, month }: { data: any; month: any }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View>
-        <Text style={styles.headerSubtitle}>
-          Laporan Pemasukan dan Pengeluaran Bulanan
-        </Text>
+        <Text style={styles.headerSubtitle}>Laporan Transaksi Penitip</Text>
         <Text style={styles.headerTitle}>{month}</Text>
       </View>
       <Text style={styles.smallText}>
