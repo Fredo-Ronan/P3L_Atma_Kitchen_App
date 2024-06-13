@@ -38,7 +38,7 @@ export default function ChartPenjualan() {
   const fetchPenjualan = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get("/api/penjualanBulanan");
+      const res = await axios.get("/api/penjualanBulanan/1");
       const fetchedData = res.data.data.map((item: PENJUALAN_BULANAN) => ({
         ...item,
         date:
