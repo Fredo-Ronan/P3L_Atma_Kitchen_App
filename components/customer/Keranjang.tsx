@@ -83,7 +83,7 @@ const Keranjang = () => {
     setIsLoadingCheckout(true);
     const resLastNoTransaksi = await axios.get(`/api/transaksiPesanan/getLastNoTransaksi/1`);
 
-    const lastNoUrut = parseInt(resLastNoTransaksi.data.lastNoTransaksi[0].NO_TRANSAKSI.split(".")[2]);
+    const lastNoUrut = resLastNoTransaksi.data.lastNoTransaksi === 0 ? 0 : parseInt(resLastNoTransaksi.data.lastNoTransaksi[0].NO_TRANSAKSI.split(".")[2]);
 
     const currentDate = new Date();
     const finalCurrentDate = formatDateToYYYYMMDD(currentDate);

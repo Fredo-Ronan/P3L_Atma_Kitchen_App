@@ -1,4 +1,5 @@
 import { connect } from "@/db";
+import { parseResultQuery } from "@/utilities/resultQueryParser";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }){
@@ -9,6 +10,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
         const [result, fields] = await connection.execute(queryGetLastNoTransaksi);
         connection.end();
+
+        if(parseResultQuery(result) === ""){
+            return NextResponse.json({
+                lastNoTransaksi: 0
+            }, { status: 200 });
+        }
 
         return NextResponse.json({
             lastNoTransaksi: result
