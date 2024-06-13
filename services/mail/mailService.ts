@@ -11,6 +11,7 @@ declare global {
             MAIL_USERNAME: string;
             MAIL_PASSWORD: string;
             MAIL_SENDER: string;
+            DB_PORT: number
             // Add other environment variables if needed
         }
     }
