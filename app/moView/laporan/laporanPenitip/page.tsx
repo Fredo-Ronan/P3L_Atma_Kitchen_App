@@ -73,9 +73,7 @@ const Page = () => {
     );
   return (
     <div className="p-5 flex flex-col ">
-      <h2 className="text-xl font-bold">
-        Laporan Pemasukan dan Pengeluaran Bulanan
-      </h2>
+      <h2 className="text-xl font-bold">Laporan Transaksi Penitip</h2>
       <div className="mt-4">
         <Select
           onValueChange={(value) => handleSelectChange(value)}
