@@ -2,7 +2,10 @@
 
 This project is a university project given by the lecturer in one of the course at Computer Science. This website is about something like bakery 
 that offer cakes, bread, and some drinks with pre order mechanism for customer who want to buy it. This also include with some administration functionality.
+
 <br>
+<br>
+
 Here are the actor of this website:
 - Customer
 - Admin
@@ -10,13 +13,13 @@ Here are the actor of this website:
 - Owner of the atma kitchen
 <br>
 
-> NOTE!
+> NOTE!<br>
 > This Atma Kitchen thing i'm not sure if there is any real company or something like that with exactly the same products and all the system created in this website
 > so this is in my opinion just for a sake of problem solving test on my university.
 
 <br>
 
-#### _This project actually not perfect yet, but most of the needs is done. Maybe there will be some bug fixing and adding feature again later on. So stay tune_
+#### _This project actually not perfect yet, but most of the needs is done. Maybe there will be some bug fixing and adding feature again later on. So stay tune... :)_
 
 <hr>
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
